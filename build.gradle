@@ -1,13 +1,53 @@
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
 
-sourceCompatibility = 1.8
+jar {
+    baseName = 'travelcompare'
+    version =  '0.1.0'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
+configurations {
+    dev
+}
+
+bootRepackage {
+    mainClass = 'travelcompare.restapi.SpringStarter'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile("org.springframework.boot:spring-boot-starter-web")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+bootRun {
+    classpath = sourceSets.main.runtimeClasspath + configurations.dev
+}
+
+bootRepackage {
+    mainClass = 'travelcompare.restapi.SpringStarter'
+    executable = true
+}
+
+springBoot {
+    executable = true
 }
