@@ -42,7 +42,7 @@ dependencies {
     testCompile "junit:junit:4.12"
     testCompile "org.springframework.boot:spring-boot-starter-test"
 
-    provided "org.projectlombok:lombok:1.16.18"
+    compileOnly "org.projectlombok:lombok:1.16.18"
 }
 
 bootRun {
