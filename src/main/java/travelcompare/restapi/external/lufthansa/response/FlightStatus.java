@@ -7,10 +7,11 @@ import lombok.ToString;
 import travelcompare.restapi.external.lufthansa.model.Flight;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @ToString
 @EqualsAndHashCode
 public class FlightStatus {
-    private Flight[] flights;
+    private List<Flight> flights;
 }
