@@ -42,7 +42,7 @@ dependencies {
     compile 'com.google.maps:google-maps-services:0.2.4'
     compile 'org.slf4j:slf4j-nop:1.7.25'
     compile 'com.mashape.unirest:unirest-java:1.4.9'
-
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.2'
 
     testCompile "junit:junit:4.12"
     testCompile "org.springframework.boot:spring-boot-starter-test"
