@@ -19,11 +19,4 @@ public class LufthansaConsumerTest {
         FlightStatusResponse response = consumer.consumeFlightStatus("LH400", "2017-10-31");
         System.out.println(response);
     }
-
-    @Test
-    public void testAuthenticate() throws UnirestException {
-        LufthansaConsumer consumer = new LufthansaConsumer();
-        AuthenticationResponse response = consumer.authenticate();
-        System.out.println(response);
-    }
 }

@@ -10,7 +10,14 @@ public class LufthansaConsumer extends Consumer {
 
     public static final String clientId = "q8mtx3rptwnjr3a2k9fvne6p";
     public static final String clientSecret = "cz4UKEkjtP";
-    public static String accessToken;
+    private String accessToken;
+    private String tokenType = "Bearer";
+    private long expiresIn;
+
+
+    public LufthansaConsumer() {
+        authenticate();
+    }
 
     @Override
     protected String getBaseURL() {
@@ -19,22 +26,26 @@ public class LufthansaConsumer extends Consumer {
 
     public FlightStatusResponse consumeFlightStatus(String flightNumber, String date) throws UnirestException {
         return Unirest.get(getBaseURL() + "operations/flightstatus/" + flightNumber + "/" + date).
-                header("Authorization", "Bearer " + accessToken).
+                header("Authorization", tokenType + " " + accessToken).
                 asObject(FlightStatusResponse.class).
                 getBody();
     }
 
-    public AuthenticationResponse authenticate() throws UnirestException {
+    private void authenticate() {
         AuthenticationResponse response =
-                Unirest.post(getBaseURL() + "oauth/token").
-                field("client_id", clientId).
-                field("client_Secret", clientSecret).
-                field("grant_type", "client_credentials").
-                asObject(AuthenticationResponse.class).
-                getBody();
+                null;
+        try {
+            response = Unirest.post(getBaseURL() + "oauth/token").
+            field("client_id", clientId).
+            field("client_Secret", clientSecret).
+            field("grant_type", "client_credentials").
+            asObject(AuthenticationResponse.class).
+            getBody();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
 
         accessToken = response.getAccessToken();
-
-        return response;
+        expiresIn = response.getExpiresIn();
     }
 }
