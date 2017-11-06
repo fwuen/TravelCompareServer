@@ -1,8 +1,8 @@
-package travelcompare.restapi.external.lufthansa.model.flightstatus;
+package travelcompare.restapi.external.lufthansa.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Departure {
+public class Arrival {
     @JsonProperty(value = "AirportCode")
     private String airportCode;
 
@@ -11,6 +11,12 @@ public class Departure {
 
     @JsonProperty(value = "ScheduledTimeUTC")
     private ScheduledTimeUtc scheduledTimeUtc;
+
+    @JsonProperty(value = "EstimatedTimeLocal")
+    private EstimatedTimeLocal estimatedTimeLocal;
+
+    @JsonProperty(value = "EstimatedTimeUTC")
+    private EstimatedTimeUtc estimatedTimeUtc;
 
     @JsonProperty(value = "ActualTimeLocal")
     private ActualTimeLocal actualTimeLocal;
