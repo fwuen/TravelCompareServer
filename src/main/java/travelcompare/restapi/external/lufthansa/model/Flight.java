@@ -20,4 +20,7 @@ public class Flight {
 
     @JsonProperty(value = "FlightStatus")
     private FlightStatus flightStatus;
+
+    @JsonProperty(value = "Details")
+    private Details details;
 }

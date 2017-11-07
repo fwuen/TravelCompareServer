@@ -22,5 +22,5 @@ public class AuthenticationResponse {
     private long expiresIn;
 
     @JsonIgnoreProperties
-    private Date now = new Date();
+    private Date lastAuthenticated = new Date();
 }

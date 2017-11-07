@@ -4,7 +4,11 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.Consumer;
 import travelcompare.restapi.external.lufthansa.response.AuthenticationResponse;
+import travelcompare.restapi.external.lufthansa.response.FlightScheduleResponse;
 import travelcompare.restapi.external.lufthansa.response.FlightStatusResponse;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class LufthansaConsumer extends Consumer {
 
@@ -12,6 +16,7 @@ public class LufthansaConsumer extends Consumer {
     public static final String clientSecret = "cz4UKEkjtP";
     private String accessToken;
     private String tokenType = "Bearer";
+    private Date lastAuthenticated;
     private long expiresIn;
 
 
@@ -25,9 +30,18 @@ public class LufthansaConsumer extends Consumer {
     }
 
     public FlightStatusResponse consumeFlightStatus(String flightNumber, String date) throws UnirestException {
+        if(!stillAuthenticated()) authenticate();
         return Unirest.get(getBaseURL() + "operations/flightstatus/" + flightNumber + "/" + date).
                 header("Authorization", tokenType + " " + accessToken).
                 asObject(FlightStatusResponse.class).
+                getBody();
+    }
+
+    public FlightScheduleResponse consumeFlightSchedule(String origin, String destination, String date) throws UnirestException {
+        if(!stillAuthenticated()) authenticate();
+        return Unirest.get(getBaseURL() + "operations/schedules/" + origin + "/" + destination + "/" + date + "?directFlights=1").
+                header("Authorization", tokenType + " " + accessToken).
+                asObject(FlightScheduleResponse.class).
                 getBody();
     }
 
@@ -36,16 +50,31 @@ public class LufthansaConsumer extends Consumer {
                 null;
         try {
             response = Unirest.post(getBaseURL() + "oauth/token").
-            field("client_id", clientId).
-            field("client_Secret", clientSecret).
-            field("grant_type", "client_credentials").
-            asObject(AuthenticationResponse.class).
-            getBody();
+                    field("client_id", clientId).
+                    field("client_Secret", clientSecret).
+                    field("grant_type", "client_credentials").
+                    asObject(AuthenticationResponse.class).
+                    getBody();
         } catch (UnirestException e) {
             e.printStackTrace();
         }
 
+        lastAuthenticated = response.getLastAuthenticated();
         accessToken = response.getAccessToken();
         expiresIn = response.getExpiresIn();
+    }
+
+    private long getTimestampFromDate(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.getTimeInMillis();
+    }
+
+    private boolean stillAuthenticated() {
+        if(getTimestampFromDate(lastAuthenticated) + expiresIn < getTimestampFromDate(new Date())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
