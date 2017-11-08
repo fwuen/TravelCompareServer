@@ -6,6 +6,7 @@ import travelcompare.restapi.external.Consumer;
 import travelcompare.restapi.external.lufthansa.response.AuthenticationResponse;
 import travelcompare.restapi.external.lufthansa.response.FlightScheduleResponse;
 import travelcompare.restapi.external.lufthansa.response.FlightStatusResponse;
+import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -39,9 +40,17 @@ public class LufthansaConsumer extends Consumer {
 
     public FlightScheduleResponse consumeFlightSchedule(String origin, String destination, String date) throws UnirestException {
         if(!stillAuthenticated()) authenticate();
-        return Unirest.get(getBaseURL() + "operations/schedules/" + origin + "/" + destination + "/" + date + "?directFlights=1").
+        return Unirest.get(getBaseURL() + "operations/schedules/" + origin + "/" + destination + "/" + date).
                 header("Authorization", tokenType + " " + accessToken).
                 asObject(FlightScheduleResponse.class).
+                getBody();
+    }
+
+    public NearestAirportResponse consumeNearestAirport(String lat, String lon) throws UnirestException {
+        if(!stillAuthenticated()) authenticate();
+        return Unirest.get(getBaseURL() + "references/airports/nearest/" + lat + "," + lon).
+                header("Authorization", tokenType + " " + accessToken).
+                asObject(NearestAirportResponse.class).
                 getBody();
     }
 

@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public class EstimatedTimeLocal {
-    @JsonProperty(value = "EstimatedTimeLocal")
+    @JsonProperty(value = "DateTime")
     private Date dateTime;
 }
