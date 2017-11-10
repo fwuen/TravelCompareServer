@@ -9,6 +9,9 @@ import travelcompare.restapi.external.lufthansa.response.FlightScheduleResponse;
 import travelcompare.restapi.external.lufthansa.response.FlightStatusResponse;
 import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class LufthansaConsumerTest {
     @Before
     public void init() {
@@ -18,14 +21,16 @@ public class LufthansaConsumerTest {
     @Test
     public void testConsumeLufthansaFlightStatus() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
-        FlightStatusResponse response = consumer.consumeFlightStatus("LH400", "2017-11-08");
+        String today = new SimpleDateFormat("YYYY-MM-dd").format(new Date());
+        FlightStatusResponse response = consumer.consumeFlightStatus("LH400", today);
         System.out.println(response);
     }
 
     @Test
     public void testConsumeLufthansaFlightSchedule() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
-        FlightScheduleResponse response = consumer.consumeFlightSchedule("FRA", "JFK", "2017-11-06");
+        String today = new SimpleDateFormat("YYYY-MM-dd").format(new Date());
+        FlightScheduleResponse response = consumer.consumeFlightSchedule("FRA", "JFK", today);
         System.out.println(response);
     }
 
