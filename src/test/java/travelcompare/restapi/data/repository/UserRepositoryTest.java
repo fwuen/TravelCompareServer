@@ -3,24 +3,17 @@ package travelcompare.restapi.data.repository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.model.User;
 
 import java.util.Optional;
 
 @Transactional
-public class UserRepositoryTest extends SpringTest {
+public class UserRepositoryTest extends RepositoryTest {
 
     private static final String firstName = "Dominic";
     private static final String lastName = "Fuchs";
     private static final String email = "syntarex@gmail.com";
-
-
-
-    @Autowired
-    private UserRepository userRepository;
 
 
 
