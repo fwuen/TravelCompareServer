@@ -2,6 +2,7 @@ package travelcompare.restapi.external.lufthansa;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.configuration.UnirestConfiguration;
 import travelcompare.restapi.external.lufthansa.response.AuthenticationResponse;
@@ -18,6 +19,7 @@ public class LufthansaConsumerTest {
         UnirestConfiguration.init();
     }
 
+    @Ignore
     @Test
     public void testConsumeLufthansaFlightStatus() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
@@ -26,6 +28,7 @@ public class LufthansaConsumerTest {
         System.out.println(response);
     }
 
+    @Ignore
     @Test
     public void testConsumeLufthansaFlightSchedule() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
@@ -34,6 +37,7 @@ public class LufthansaConsumerTest {
         System.out.println(response);
     }
 
+    @Ignore
     @Test
     public void testConsumeLufthansaNearestAirport() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
