@@ -13,8 +13,8 @@ import java.util.Date;
 
 public class LufthansaConsumer extends Consumer {
 
-    public static final String clientId = "q8mtx3rptwnjr3a2k9fvne6p";
-    public static final String clientSecret = "cz4UKEkjtP";
+    public static final String clientId = "utj2w984ec8utsps5jky9fxp";
+    public static final String clientSecret = "bX9kw4CpG6";
     private String accessToken;
     private String tokenType = "Bearer";
     private Date lastAuthenticated;

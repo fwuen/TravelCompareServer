@@ -19,7 +19,6 @@ public class LufthansaConsumerTest {
         UnirestConfiguration.init();
     }
 
-    @Ignore
     @Test
     public void testConsumeLufthansaFlightStatus() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
@@ -28,7 +27,6 @@ public class LufthansaConsumerTest {
         System.out.println(response);
     }
 
-    @Ignore
     @Test
     public void testConsumeLufthansaFlightSchedule() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
@@ -37,7 +35,6 @@ public class LufthansaConsumerTest {
         System.out.println(response);
     }
 
-    @Ignore
     @Test
     public void testConsumeLufthansaNearestAirport() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();

@@ -2,8 +2,6 @@ package travelcompare.restapi.external.lufthansa.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import travelcompare.restapi.external.lufthansa.util.FlightDeserializer;
 
 import java.util.List;
 
