@@ -3,10 +3,8 @@ package travelcompare.restapi.external.lufthansa;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.Consumer;
-import travelcompare.restapi.external.lufthansa.response.AuthenticationResponse;
-import travelcompare.restapi.external.lufthansa.response.FlightScheduleResponse;
-import travelcompare.restapi.external.lufthansa.response.FlightStatusResponse;
-import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
+import travelcompare.restapi.external.lufthansa.model.FaresResponse;
+import travelcompare.restapi.external.lufthansa.response.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -51,6 +49,18 @@ public class LufthansaConsumer extends Consumer {
         return Unirest.get(getBaseURL() + "references/airports/nearest/" + lat + "," + lon).
                 header("Authorization", tokenType + " " + accessToken).
                 asObject(NearestAirportResponse.class).
+                getBody();
+    }
+    
+    public AllFaresResponse consumeAllFares(String catalogues, String origin, String destination, String travelDate) throws UnirestException {
+        if(!stillAuthenticated()) authenticate();
+        return Unirest.get(getBaseURL() + "offers/fares/allfares").
+                header("Authorization", tokenType + " " + "h5k24v9u58e2sgpr99jusbrc").
+                queryString("catalogues", catalogues).
+                queryString("origin", origin).
+                queryString("destination", destination).
+                queryString("travel-date", travelDate).
+                asObject(AllFaresResponse.class).
                 getBody();
     }
 
