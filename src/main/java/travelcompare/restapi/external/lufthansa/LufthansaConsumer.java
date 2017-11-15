@@ -69,38 +69,35 @@ public class LufthansaConsumer extends Consumer {
     }
 
     private void authenticate(boolean isPartnerRequest) {
-        AuthenticationResponse response =
-                null;
         if(isPartnerRequest) {
             try {
-                response = Unirest.post(getBaseURL() + "partners/oauth/token").
+                AuthenticationResponse response = Unirest.post(getBaseURL() + "partners/oauth/token").
                         field("client_id", clientId).
                         field("client_Secret", clientSecret).
                         field("grant_type", "client_credentials").
                         asObject(AuthenticationResponse.class).
                         getBody();
-            } catch (UnirestException e) {
-                e.printStackTrace();
-            }
-            publicExpiresIn = response.getExpiresIn();
-            publicLastAuthenticated = response.getLastAuthenticated();
-            publicAccessToken = response.getAccessToken();
-        } else {
-            try {
-                response = Unirest.post(getBaseURL() + "oauth/token").
-                        field("client_id", clientId).
-                        field("client_Secret", clientSecret).
-                        field("grant_type", "client_credentials").
-                        asObject(AuthenticationResponse.class).
-                        getBody();
-            } catch (UnirestException e) {
-                e.printStackTrace();
-            }
             partnerExpiresIn = response.getExpiresIn();
             partnerLastAuthenticated = response.getLastAuthenticated();
             partnerAccessToken = response.getAccessToken();
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                AuthenticationResponse response = Unirest.post(getBaseURL() + "oauth/token").
+                        field("client_id", clientId).
+                        field("client_Secret", clientSecret).
+                        field("grant_type", "client_credentials").
+                        asObject(AuthenticationResponse.class).
+                        getBody();
+            publicExpiresIn = response.getExpiresIn();
+            publicLastAuthenticated = response.getLastAuthenticated();
+            publicAccessToken = response.getAccessToken();
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
         }
-        
     }
     private long getTimestampFromDate(Date date) {
         Calendar c = Calendar.getInstance();
