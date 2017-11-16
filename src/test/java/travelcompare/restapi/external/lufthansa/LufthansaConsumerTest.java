@@ -7,6 +7,7 @@ import travelcompare.restapi.configuration.UnirestConfiguration;
 import travelcompare.restapi.external.lufthansa.response.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class LufthansaConsumerTest {
@@ -41,8 +42,12 @@ public class LufthansaConsumerTest {
     @Test
     public void testConsumeLufthansaAllFares() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
-        String today = new SimpleDateFormat("YYYY-MM-dd").format(new Date());
-        AllFaresResponse response = consumer.consumeAllFares("EW", "DUS", "TXL", "2017-11-22");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, 6);
+        Date todayPlusOneYear = c.getTime();
+        String date = new SimpleDateFormat("YYYY-MM-dd").format(todayPlusOneYear);
+        AllFaresResponse response = consumer.consumeAllFares("EW", "DUS", "TXL", date);
         System.out.println(response);
     }
 }
