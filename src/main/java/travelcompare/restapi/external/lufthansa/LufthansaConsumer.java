@@ -67,6 +67,18 @@ public class LufthansaConsumer extends Consumer {
                 asObject(AllFaresResponse.class).
                 getBody();
     }
+    
+    public LowestFaresResponse consumeLowestFares(String catalogues, String origin, String destination, String travelDate) throws UnirestException {
+        if(!partnerStillAuthenticated()) authenticate(true);
+        return Unirest.get(getBaseURL() + "offers/fares/lowestfares").
+                header("Authorization", tokenType + " " + partnerAccessToken).
+                queryString("catalogues", catalogues).
+                queryString("origin", origin).
+                queryString("destination", destination).
+                queryString("travel-date", travelDate).
+                asObject(LowestFaresResponse.class).
+                getBody();
+    }
 
     private void authenticate(boolean isPartnerRequest) {
         if(isPartnerRequest) {
