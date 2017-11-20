@@ -1,5 +1,9 @@
 package travelcompare.restapi.external.google.OAuth2;
 
+import com.google.api.client.auth.oauth2.TokenResponse;
+import com.google.api.client.googleapis.auth.oauth2.*;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -12,7 +16,7 @@ import java.io.*;
 import java.security.GeneralSecurityException;
 
 /**
- * Endpunkt zur Verifizierung des AccessTokens, welcher vom Frontend kommmt
+ * Endpunkt für Google Oauth2
  */
 public class GoogleAuthConsumer extends Consumer {
 
@@ -35,8 +39,8 @@ public class GoogleAuthConsumer extends Consumer {
      * @throws UnirestException         exception
      * @todo Fehlerklassen anlegen für die möglicherweise auftretenden Fehler
      */
-    public GoogleAuthResponse verifyToken(String accessToken) throws IOException, GeneralSecurityException, UnirestException {
-        HttpResponse httpResponse = Unirest.get(getBaseURL()).
+    public GoogleAuthResponse getUserInfo(String accessToken) throws IOException, GeneralSecurityException, UnirestException {
+        HttpResponse httpResponse = Unirest.get(getBaseURL() + GoogleAuthConstants.USERINFO_URL).
                 header("Authorization", GoogleAuthConstants.TOKEN_TYPE + " " + accessToken).
                 header("Content-length", "0").
                 header("Host", "www.googleapis.com").
@@ -44,8 +48,59 @@ public class GoogleAuthConsumer extends Consumer {
 
         String jsonResponseString = httpResponse.getBody().toString();
         JSONObject jsonObject = new JSONObject(jsonResponseString);
-        GoogleAuthResponse googleAuthResponse = new GoogleAuthHelper().createGoogleAuthResponse(jsonObject);
 
-        return googleAuthResponse;
+        return new GoogleAuthHelper().createGoogleAuthResponse(jsonObject);
+    }
+
+    /**
+     * Einlösen des Auth Codes von Google gegen eine GoogleTokenReponse bestehend aus access_token, expires_in, id_token, refresh_token, token_type
+     *
+     * @param authCode String
+     * @return GoogleTokenResponse;
+     * @throws IOException exception
+     */
+    public GoogleTokenResponse redeemAuthToken(String authCode) throws IOException {
+
+        return new GoogleAuthorizationCodeTokenRequest(
+                new NetHttpTransport(),
+                JacksonFactory.getDefaultInstance(),
+                "https://www.googleapis.com/oauth2/v4/token",
+                GoogleAuthConstants.CLIENT_ID,
+                GoogleAuthConstants.SECRET,
+                authCode,
+                "http://localhost:63342")  // Specify the same redirect URI that you use with your web app
+                .execute();
+    }
+
+    /**
+     * Refreshen des AccessTokens durch den gespeicherten RefreshToken
+     *
+     * @param refreshToken String
+     * @return String
+     */
+    public String refreshAccessToken(String refreshToken) throws UnirestException, IOException, GeneralSecurityException {
+
+        GoogleCredential credential = createCredentialWithRefreshToken(new NetHttpTransport(), new JacksonFactory(), new TokenResponse().setRefreshToken(refreshToken));
+        credential.refreshToken();
+
+        return credential.getAccessToken();
+    }
+
+
+    /**
+     * Erstellen der GoogleCredentials anhand des gespeicherten RefreshTokens
+     *
+     * @param transport     NetHttptTransport
+     * @param jsonFactory   JacksonFactory
+     * @param tokenResponse TokenResponse
+     * @return GoogleCredential
+     */
+    private GoogleCredential createCredentialWithRefreshToken(NetHttpTransport transport,
+                                                              JacksonFactory jsonFactory, TokenResponse tokenResponse) {
+        return new GoogleCredential.Builder().setTransport(transport)
+                .setJsonFactory(jsonFactory)
+                .setClientSecrets(GoogleAuthConstants.CLIENT_ID, GoogleAuthConstants.SECRET)
+                .build()
+                .setFromTokenResponse(tokenResponse);
     }
 }

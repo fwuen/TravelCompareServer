@@ -1,10 +1,8 @@
 package travelcompare.restapi.external.tankerkoenig;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import travelcompare.restapi.SpringTest;
-import travelcompare.restapi.configuration.UnirestConfiguration;
 import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 
 public class TankerkoenigConsumerTest extends SpringTest {
