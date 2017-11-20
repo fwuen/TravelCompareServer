@@ -39,7 +39,7 @@ public class LufthansaConsumerTest {
         NearestAirportResponse response = consumer.consumeNearestAirport("50.212932", "11.943976");
         System.out.println(response);
     }
-    
+
     @Test
     public void testConsumeLufthansaAllFares() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
@@ -51,7 +51,7 @@ public class LufthansaConsumerTest {
         AllFaresResponse response = consumer.consumeAllFares("EW", "DUS", "TXL", date);
         System.out.println(response);
     }
-    
+
     @Test
     public void testConsumeLufthansaLowestFares() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
