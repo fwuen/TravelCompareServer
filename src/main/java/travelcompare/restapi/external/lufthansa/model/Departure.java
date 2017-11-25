@@ -1,6 +1,9 @@
 package travelcompare.restapi.external.lufthansa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
 
 public class Departure {
     @JsonProperty(value = "AirportCode")
@@ -23,4 +26,12 @@ public class Departure {
 
     @JsonProperty(value = "Terminal")
     private Terminal terminal;
+    
+    @JsonProperty(value = "Date")
+    @JsonIgnoreProperties
+    private Date date;
+    
+    @JsonProperty(value = "Time")
+    @JsonIgnoreProperties
+    private String time;
 }
