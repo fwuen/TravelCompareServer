@@ -49,13 +49,35 @@ public class ViaMichelinConsumer extends Consumer {
      * @param latitudeStart  double
      * @param longitudeDest  double
      * @param latitudeDest   double
+     * @param itit           int
      * @return RouteResponse
      * @throws UnirestException Exception
      */
+    RouteResponse getRoute(double longitudeStart, double latitudeStart, double longitudeDest, double latitudeDest, int itit, double fuelCosts) throws UnirestException {
+        String url = ViaMichelinConstants.BASE_URL + ViaMichelinConstants.ROUTE_URL;
 
+        ViaMichelinHelper helper = new ViaMichelinHelper();
+        if (helper.checkCoordinates(longitudeStart, latitudeStart) == null || helper.checkCoordinates(latitudeDest, longitudeDest) == null) {
+            return null;
+        }
+        String startCoordinates = helper.checkCoordinates(longitudeStart, latitudeStart);
+        String endCoordinates = helper.checkCoordinates(longitudeDest, latitudeDest);
+        if (itit < 1 || itit > 4) {
+            return null;
+        }
 
-    RouteResponse getRoute(double longitudeStart, double latitudeStart, double longitudeDest, double latitudeDest) throws UnirestException {
-        HttpResponse httpResponse = Unirest.get("http://apir.viamichelin.com/apir/1/" + ViaMichelinConstants.ROUTE_URL + ".xml/deu?steps=1:e:" + longitudeStart + ":" + latitudeStart + ";1:e:" + longitudeDest + ":" + latitudeDest + "&data=roadsheet&itit=3&authkey=" + ViaMichelinConstants.API_KEY).asString();
+        // Zur Not den Default Wert verwenden
+        String fuelCost = "&fuelCost=" + fuelCosts;
+        if (fuelCosts == 0) {
+            fuelCost = "";
+        }
+
+        HttpResponse httpResponse = Unirest.get(url +
+                ".xml/deu?steps=" + startCoordinates + ";" + endCoordinates
+                + "&itit=" + itit +
+                fuelCost +
+                "&authkey=" + ViaMichelinConstants.API_KEY).asString();
+
         JSONObject response = XML.toJSONObject(httpResponse.getBody().toString());
         return new ViaMichelinHelper().createResponseModel(response.getJSONObject("response"));
     }
