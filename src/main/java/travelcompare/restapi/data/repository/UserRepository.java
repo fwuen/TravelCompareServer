@@ -2,7 +2,7 @@ package travelcompare.restapi.data.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import travelcompare.restapi.api.model.User;
+import travelcompare.restapi.data.model.User;
 
 import java.util.Optional;
 
