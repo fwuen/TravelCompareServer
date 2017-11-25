@@ -3,7 +3,7 @@ package travelcompare.restapi.provider.model;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Airport extends Geo {
+public class TrainStation extends Geo {
 
     @Getter
     @Setter

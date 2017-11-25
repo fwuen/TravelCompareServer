@@ -1,7 +1,9 @@
 package travelcompare.restapi.external.google.OAuth2;
 
 import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.*;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.mashape.unirest.http.HttpResponse;
@@ -12,7 +14,7 @@ import travelcompare.restapi.external.Consumer;
 import travelcompare.restapi.external.google.OAuth2.response.GoogleAuthResponse;
 import travelcompare.restapi.external.google.OAuth2.util.GoogleAuthHelper;
 
-import java.io.*;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 /**
