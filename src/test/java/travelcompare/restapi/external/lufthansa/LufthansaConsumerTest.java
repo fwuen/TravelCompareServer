@@ -52,7 +52,6 @@ public class LufthansaConsumerTest {
         System.out.println(response);
     }
 
-    @Ignore
     @Test
     public void testConsumeLufthansaAirports() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();

@@ -9,7 +9,4 @@ public class Airports {
     @JsonProperty(value = "Airport")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Airport> airport;
-
-    @JsonProperty(value = "Meta")
-    private Meta meta;
 }
