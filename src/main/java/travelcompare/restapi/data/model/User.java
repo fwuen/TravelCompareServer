@@ -1,13 +1,14 @@
-package travelcompare.restapi.api.model;
+package travelcompare.restapi.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import travelcompare.restapi.provider.model.Geo;
 
 import javax.persistence.*;
 
 @Entity
 @ToString
 @EqualsAndHashCode
-@RequiredArgsConstructor
 public class User {
 
     @Id
@@ -32,15 +33,22 @@ public class User {
     @NonNull
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Getter
     @Setter
     @NonNull
     private String email;
 
-    @Column
+    @Column(nullable = false)
     @Getter
     @Setter
-    private String originCountry;
+    @NonNull
+    @JsonIgnore
+    private String password;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private Geo geo;
 
 }

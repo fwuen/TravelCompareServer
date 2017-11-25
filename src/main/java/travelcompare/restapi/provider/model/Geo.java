@@ -1,11 +1,24 @@
 package travelcompare.restapi.provider.model;
 
-import lombok.Getter;
+import lombok.*;
 
-public abstract class Geo {
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
+public class Geo {
+
+    public Geo(
+            double lat,
+            double lon
+    ) {
+        this.lat = lat;
+        this.lon = lon;
+    }
+
     @Getter
     protected double lat;
 
     @Getter
     protected double lon;
+
 }
