@@ -12,6 +12,7 @@ import travelcompare.restapi.provider.model.TrainStation;
 import java.io.IOException;
 
 public class TrainRouteProvider implements RouteProvider<TrainStation> {
+
     @Override
     public Route getRoute(TrainStation start, TrainStation destination) throws InterruptedException, ApiException, IOException {
         LatLng startLatLng = new LatLng(start.getLat(), start.getLon());

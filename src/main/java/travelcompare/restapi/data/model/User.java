@@ -46,15 +46,17 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @Column(nullable = false)
+    @Column
     private double lat;
 
-    @Column(nullable = false)
+    @Column
     private double lon;
 
-    public void setGeo(@NonNull Geo geo) {
-        this.lat = geo.getLat();
-        this.lon = geo.getLon();
+    public void setGeo(Geo geo) {
+        if(geo != null) {
+            this.lat = geo.getLat();
+            this.lon = geo.getLon();
+        }
     }
 
     public Geo getGeo() {

@@ -4,7 +4,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
 import travelcompare.restapi.external.lufthansa.response.LowestFaresResponse;
 import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
-import travelcompare.restapi.provider.model.Geo;
+import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Route;
 
 import java.text.ParseException;
@@ -13,11 +13,11 @@ import java.util.Date;
 
 import static travelcompare.restapi.provider.model.Transport.AIRCRAFT;
 
-public class AircraftRouteProvider implements RouteProvider {
+public class AircraftRouteProvider implements RouteProvider<Airport> {
     private String cataloguesForFlightSearch = "EW";
 
     @Override
-    public Route getRoute(Geo start, Geo destination) throws UnirestException, ParseException {
+    public Route getRoute(Airport start, Airport destination) throws UnirestException, ParseException {
         Date travelDate = new Date();
 
         NearestAirportResponse startNearestAirportResponse = null;
