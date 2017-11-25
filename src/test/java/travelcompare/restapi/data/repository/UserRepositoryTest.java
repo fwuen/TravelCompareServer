@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
-import travelcompare.restapi.model.User;
+import travelcompare.restapi.api.model.User;
 
 import java.util.Optional;
 

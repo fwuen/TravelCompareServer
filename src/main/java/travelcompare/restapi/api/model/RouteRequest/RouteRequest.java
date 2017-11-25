@@ -1,4 +1,4 @@
-package travelcompare.restapi.model.RouteRequest;
+package travelcompare.restapi.api.model.RouteRequest;
 
 import lombok.Getter;
 import lombok.Setter;

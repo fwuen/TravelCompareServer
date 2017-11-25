@@ -1,4 +1,4 @@
-package travelcompare.restapi.model;
+package travelcompare.restapi.api.model;
 
 import lombok.*;
 

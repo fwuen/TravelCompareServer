@@ -1,4 +1,4 @@
-package travelcompare.restapi.model.RouteRequest;
+package travelcompare.restapi.api.model.RouteRequest;
 
 public enum RouteResultType {
     FASTEST, CHEAPEST

@@ -5,7 +5,7 @@ import lombok.NonNull;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import travelcompare.restapi.data.repository.UserRepository;
-import travelcompare.restapi.model.User;
+import travelcompare.restapi.api.model.User;
 
 import java.util.Optional;
 
