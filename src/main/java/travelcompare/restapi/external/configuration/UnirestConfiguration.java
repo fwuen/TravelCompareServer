@@ -1,4 +1,4 @@
-package travelcompare.restapi.configuration;
+package travelcompare.restapi.external.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.ObjectMapper;

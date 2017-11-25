@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import travelcompare.restapi.configuration.UnirestConfiguration;
+import travelcompare.restapi.external.configuration.UnirestConfiguration;
 
 @SpringBootTest
 @AutoConfigureMockMvc
