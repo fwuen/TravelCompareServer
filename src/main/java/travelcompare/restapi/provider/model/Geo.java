@@ -1,6 +1,10 @@
 package travelcompare.restapi.provider.model;
 
-import lombok.*;
+import com.google.api.client.repackaged.com.google.common.base.Preconditions;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
@@ -11,6 +15,9 @@ public class Geo {
             double lat,
             double lon
     ) {
+        Preconditions.checkArgument(lat > -85 && lat < 85);
+        Preconditions.checkArgument(lon > -180 && lat < 180);
+
         this.lat = lat;
         this.lon = lon;
     }

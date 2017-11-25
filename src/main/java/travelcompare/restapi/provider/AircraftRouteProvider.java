@@ -1,6 +1,5 @@
 package travelcompare.restapi.provider;
 
-import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
 

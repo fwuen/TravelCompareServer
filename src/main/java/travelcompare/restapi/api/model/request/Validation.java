@@ -1,6 +1,9 @@
 package travelcompare.restapi.api.model.request;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 
 @Getter
 @ToString

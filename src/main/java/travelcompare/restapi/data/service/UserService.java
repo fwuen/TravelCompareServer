@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import travelcompare.restapi.api.model.request.RegisterData;
 import travelcompare.restapi.api.model.request.Validation;
-import travelcompare.restapi.data.repository.UserRepository;
 import travelcompare.restapi.data.model.User;
+import travelcompare.restapi.data.repository.UserRepository;
 
 import java.util.Optional;
 

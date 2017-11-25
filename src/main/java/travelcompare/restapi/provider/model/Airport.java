@@ -1,10 +1,10 @@
 package travelcompare.restapi.provider.model;
 
-import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Airport extends Geo {
+
     @Getter
     @Setter
     private String name;
@@ -13,10 +13,4 @@ public class Airport extends Geo {
     @Setter
     private String city;
 
-    public Airport(double lat, double lon) {
-        Preconditions.checkArgument(lat > -85 && lat < 85);
-        Preconditions.checkArgument(lon > -180 && lat < 180);
-        this.lat = lat;
-        this.lon = lon;
-    }
 }

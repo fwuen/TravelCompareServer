@@ -4,8 +4,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.Ignore;
 import org.junit.Test;
-import travelcompare.restapi.external.google.OAuth2.GoogleAuthConsumer;
 import travelcompare.restapi.external.google.OAuth2.GoogleAuthConstants;
+import travelcompare.restapi.external.google.OAuth2.GoogleAuthConsumer;
 import travelcompare.restapi.external.google.OAuth2.response.GoogleAuthResponse;
 
 import java.io.IOException;
