@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import travelcompare.restapi.api.model.request.RegisterData;
 import travelcompare.restapi.api.model.request.Validation;
+import travelcompare.restapi.api.model.response.MessageResponse;
 import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.service.UserService;
 
@@ -21,13 +22,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> register(
-            @RequestBody RegisterData body
+            @RequestBody RegisterData requestBody
     ) {
-        Validation validation = body.valid();
+        if(!requestBody.valid().isValid()) {
+            return ResponseEntity.status(400).build();
+        }
 
-        Preconditions.checkArgument(validation.isValid(), validation.getMessage());
+        if(userService.getUserByEmail(requestBody.getEmail()).isPresent()) {
+            return ResponseEntity.status(409).build();
+        }
 
-        User user = userService.register(body);
+        User user = userService.register(requestBody);
 
         return ResponseEntity.ok(user);
     }
