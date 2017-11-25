@@ -18,14 +18,15 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
 
     @Override
     public Route getRoute(Airport start, Airport destination) throws UnirestException, ParseException {
+        LufthansaConsumer consumer = new LufthansaConsumer();
         Date travelDate = new Date();
 
         NearestAirportResponse startNearestAirportResponse = null;
         NearestAirportResponse destinationNearestAirportsResponse = null;
         LowestFaresResponse lowestFaresResponse = null;
 
-        startNearestAirportResponse = new LufthansaConsumer().consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
-        destinationNearestAirportsResponse = new LufthansaConsumer().consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+        startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+        destinationNearestAirportsResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
 
 
         String startAirport = getAirportCodeFromResponse(startNearestAirportResponse);
