@@ -28,8 +28,8 @@ public class AircraftRouteProvider implements RouteProvider {
         destinationNearestAirportsResponse = new LufthansaConsumer().consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
 
 
-        String startAirport = getStartAirportFromResponse(startNearestAirportResponse);
-        String destinationAirport = getDestinationAirportFromResponse(destinationNearestAirportsResponse);
+        String startAirport = getAirportCodeFromResponse(startNearestAirportResponse);
+        String destinationAirport = getAirportCodeFromResponse(destinationNearestAirportsResponse);
 
         lowestFaresResponse = new LufthansaConsumer().consumeLowestFares(cataloguesForFlightSearch, startAirport, destinationAirport, travelDate.toString());
 
@@ -52,9 +52,7 @@ public class AircraftRouteProvider implements RouteProvider {
 
     private Date convertStringToDate(String dateString) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-
-        date = format.parse(dateString);
+        Date date = format.parse(dateString);;
 
         return date;
     }
@@ -65,22 +63,13 @@ public class AircraftRouteProvider implements RouteProvider {
         return diffMinutes;
     }
 
-    private String getStartAirportFromResponse(NearestAirportResponse response) {
+    private String getAirportCodeFromResponse(NearestAirportResponse response) {
         return response.
                 getNearestAirportResource().
                 getAirports().
                 getAirport().
                 get(0).
-                toString();
-    }
-
-    private String getDestinationAirportFromResponse(NearestAirportResponse response) {
-        return response.
-                getNearestAirportResource().
-                getAirports().
-                getAirport().
-                get(0).
-                toString();
+                getAirportCode();
     }
 
     private double getPriceFromResponse(LowestFaresResponse response) {
