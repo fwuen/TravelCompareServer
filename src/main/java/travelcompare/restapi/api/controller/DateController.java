@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-public class PingController {
+public class DateController {
 
     @GetMapping("/date")
-    public ResponseEntity<Date> ping() {
+    public ResponseEntity<Date> date() {
         return ResponseEntity.ok(new Date());
     }
 
