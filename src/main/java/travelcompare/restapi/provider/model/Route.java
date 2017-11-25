@@ -1,9 +1,12 @@
 package travelcompare.restapi.provider.model;
 
+import com.google.maps.model.DirectionsRoute;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 public class Route {
     @Getter
     @Setter
@@ -21,10 +24,14 @@ public class Route {
 
     @Getter
     @Setter
-    private int duration;
+    private long duration;
 
     @Getter
     @Setter
     @NonNull
     private Transport transport;
+
+    @Getter
+    @Setter
+    private DirectionsRoute routeRepresentation;
 }
