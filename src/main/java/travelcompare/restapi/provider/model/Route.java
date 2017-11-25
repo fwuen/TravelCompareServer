@@ -21,7 +21,7 @@ public class Route {
 
     @Getter
     @Setter
-    private int duration;
+    private long duration;
 
     @Getter
     @Setter

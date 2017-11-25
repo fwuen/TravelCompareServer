@@ -4,5 +4,5 @@ import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
 
 public interface RouteProvider {
-    public Route getRoute(Geo start, Geo destination);
+    public Route getRoute(Geo start, Geo destination) throws Exception;
 }

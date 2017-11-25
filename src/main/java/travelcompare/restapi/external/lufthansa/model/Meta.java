@@ -2,9 +2,14 @@ package travelcompare.restapi.external.lufthansa.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
-
+@Getter
+@EqualsAndHashCode
+@ToString
 public class Meta {
     @JsonProperty(value = "@Version")
     private String version;
