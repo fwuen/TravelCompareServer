@@ -38,6 +38,7 @@ public class UserService {
         Validation validation = registerData.valid();
 
         Preconditions.checkArgument(validation.isValid(), validation.getMessage());
+        Preconditions.checkArgument(!repository.findFirstByEmailEqualsIgnoreCase(registerData.getEmail()).isPresent());
 
         User user = new User();
         user.setFirstName(registerData.getFirstName());

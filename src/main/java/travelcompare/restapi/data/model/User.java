@@ -47,8 +47,18 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    @Getter
-    @Setter
-    private Geo geo;
+    private double lat;
+
+    @Column(nullable = false)
+    private double lon;
+
+    public void setGeo(@NonNull Geo geo) {
+        this.lat = geo.getLat();
+        this.lon = geo.getLon();
+    }
+
+    public Geo getGeo() {
+        return new Geo(this.lat, this.lon);
+    }
 
 }
