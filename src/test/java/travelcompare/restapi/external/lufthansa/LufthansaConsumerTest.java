@@ -2,7 +2,6 @@ package travelcompare.restapi.external.lufthansa;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.external.configuration.UnirestConfiguration;
 import travelcompare.restapi.external.lufthansa.response.*;
