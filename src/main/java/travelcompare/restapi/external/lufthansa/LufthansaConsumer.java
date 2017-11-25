@@ -80,6 +80,14 @@ public class LufthansaConsumer extends Consumer {
                 getBody();
     }
 
+    public AirportsResponse consumeAirports(String airportCode) throws UnirestException {
+        if(!publicStillAuthenticated()) authenticate(true);
+        return Unirest.get(getBaseURL() + "references/airports/" + airportCode).
+                header("Authorization", tokenType + " " + publicAccessToken).
+                asObject(AirportsResponse.class).
+                getBody();
+    }
+
     private void authenticate(boolean isPartnerRequest) {
         if(isPartnerRequest) {
             try {

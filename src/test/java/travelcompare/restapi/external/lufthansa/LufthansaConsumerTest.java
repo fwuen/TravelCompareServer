@@ -2,6 +2,7 @@ package travelcompare.restapi.external.lufthansa;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.configuration.UnirestConfiguration;
 import travelcompare.restapi.external.lufthansa.response.*;
@@ -48,6 +49,14 @@ public class LufthansaConsumerTest {
         Date todayPlusOneYear = c.getTime();
         String date = new SimpleDateFormat("YYYY-MM-dd").format(todayPlusOneYear);
         AllFaresResponse response = consumer.consumeAllFares("EW", "DUS", "TXL", date);
+        System.out.println(response);
+    }
+
+    @Ignore
+    @Test
+    public void testConsumeLufthansaAirports() throws UnirestException {
+        LufthansaConsumer consumer = new LufthansaConsumer();
+        AirportsResponse response = consumer.consumeAirports("TXL");
         System.out.println(response);
     }
 

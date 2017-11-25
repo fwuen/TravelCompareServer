@@ -1,5 +1,7 @@
 package travelcompare.restapi.external.lufthansa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Airport {
@@ -23,4 +25,12 @@ public class Airport {
 
     @JsonProperty(value = "Distance")
     private Distance distance;
+
+    @JsonProperty(value = "UtcOffset")
+    @JsonIgnoreProperties
+    private int utcOffset;
+
+    @JsonProperty(value = "TimeZoneId")
+    @JsonIgnoreProperties
+    private String timeZoneId;
 }
