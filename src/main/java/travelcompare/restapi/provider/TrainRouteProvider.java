@@ -3,17 +3,17 @@ package travelcompare.restapi.provider;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
 import travelcompare.restapi.external.google.GeoApiContextFactory;
-import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
-import travelcompare.restapi.provider.model.Trainstation;
+import travelcompare.restapi.provider.model.TrainStation;
+
+import java.io.IOException;
 
 public class TrainRouteProvider implements RouteProvider<TrainStation> {
     @Override
-    public Route getRoute(Geo start, Geo destination) throws InterruptedException, ApiException, IOException {
+    public Route getRoute(TrainStation start, TrainStation destination) throws InterruptedException, ApiException, IOException {
         LatLng startLatLng = new LatLng(start.getLat(), start.getLon());
         LatLng destLatLng = new LatLng(destination.getLat(), destination.getLon());
 
@@ -28,12 +28,17 @@ public class TrainRouteProvider implements RouteProvider<TrainStation> {
         DirectionsResult requestResult = request.await();
         DirectionsRoute route = requestResult.routes[0];
 
-        Trainstation trainstationStart = new Trainstation(start.getLat(), start.getLon());
+        Route returnRoute = new Route();
 
-        return new Route().setStart(start)
-                .setDestination(destination)
-                .setDuration((route.legs[0].duration.inSeconds) / 60)
-                .setRouteRepresentation(route)
-                .setPrice(route.fare.value.intValue());
+        returnRoute.setStart(start)
+            .setDestination(destination)
+            .setDuration((route.legs[0].duration.inSeconds) / 60)
+            .setRouteRepresentation(route);
+
+        if (route.fare != null) {
+            returnRoute.setPrice(route.fare.value.doubleValue());
+        }
+
+        return returnRoute;
     }
 }
