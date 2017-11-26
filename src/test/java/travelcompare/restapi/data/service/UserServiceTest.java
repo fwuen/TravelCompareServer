@@ -30,11 +30,14 @@ public class UserServiceTest extends SpringTest {
         userService.register(null);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void registerWithEmptyData() {
+        userService.register(RegisterData.builder().build());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void registerWithInvalidData() {
-        RegisterData registerData = RegisterData.builder().build();
-
-        userService.register(registerData);
+        userService.register(getInvalidRegisterData());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -54,6 +57,17 @@ public class UserServiceTest extends SpringTest {
         Assert.assertEquals(EMAIL, user.getEmail());
         Assert.assertTrue(passwordEncoder.matches(PASSWORD, user.getPassword()));
         Assert.assertEquals(GEO, user.getGeo());
+    }
+
+    private RegisterData getInvalidRegisterData() {
+        return RegisterData.builder()
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .email("keine email")
+                .password(PASSWORD)
+                .password2(PASSWORD)
+                .location(GEO)
+                .build();
     }
 
     private RegisterData getValidRegisterData() {

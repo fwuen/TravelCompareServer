@@ -46,9 +46,21 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @Column(nullable = false)
-    @Getter
-    @Setter
-    private Geo geo;
+    @Column
+    private double lat;
+
+    @Column
+    private double lon;
+
+    public void setGeo(Geo geo) {
+        if(geo != null) {
+            this.lat = geo.getLat();
+            this.lon = geo.getLon();
+        }
+    }
+
+    public Geo getGeo() {
+        return new Geo(this.lat, this.lon);
+    }
 
 }

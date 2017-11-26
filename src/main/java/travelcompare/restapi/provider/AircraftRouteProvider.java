@@ -4,7 +4,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
 import travelcompare.restapi.external.lufthansa.response.LowestFaresResponse;
 import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
-import travelcompare.restapi.provider.model.Geo;
+import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Route;
 
 import java.text.ParseException;
@@ -13,23 +13,24 @@ import java.util.Date;
 
 import static travelcompare.restapi.provider.model.Transport.AIRCRAFT;
 
-public class AircraftRouteProvider implements RouteProvider {
+public class AircraftRouteProvider implements RouteProvider<Airport> {
     private String cataloguesForFlightSearch = "EW";
 
     @Override
-    public Route getRoute(Geo start, Geo destination) throws UnirestException, ParseException {
+    public Route getRoute(Airport start, Airport destination) throws UnirestException, ParseException {
+        LufthansaConsumer consumer = new LufthansaConsumer();
         Date travelDate = new Date();
 
         NearestAirportResponse startNearestAirportResponse = null;
         NearestAirportResponse destinationNearestAirportsResponse = null;
         LowestFaresResponse lowestFaresResponse = null;
 
-        startNearestAirportResponse = new LufthansaConsumer().consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
-        destinationNearestAirportsResponse = new LufthansaConsumer().consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+        startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+        destinationNearestAirportsResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
 
 
-        String startAirport = getStartAirportFromResponse(startNearestAirportResponse);
-        String destinationAirport = getDestinationAirportFromResponse(destinationNearestAirportsResponse);
+        String startAirport = getAirportCodeFromResponse(startNearestAirportResponse);
+        String destinationAirport = getAirportCodeFromResponse(destinationNearestAirportsResponse);
 
         lowestFaresResponse = new LufthansaConsumer().consumeLowestFares(cataloguesForFlightSearch, startAirport, destinationAirport, travelDate.toString());
 
@@ -52,9 +53,7 @@ public class AircraftRouteProvider implements RouteProvider {
 
     private Date convertStringToDate(String dateString) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-
-        date = format.parse(dateString);
+        Date date = format.parse(dateString);;
 
         return date;
     }
@@ -65,22 +64,13 @@ public class AircraftRouteProvider implements RouteProvider {
         return diffMinutes;
     }
 
-    private String getStartAirportFromResponse(NearestAirportResponse response) {
+    private String getAirportCodeFromResponse(NearestAirportResponse response) {
         return response.
                 getNearestAirportResource().
                 getAirports().
                 getAirport().
                 get(0).
-                toString();
-    }
-
-    private String getDestinationAirportFromResponse(NearestAirportResponse response) {
-        return response.
-                getNearestAirportResource().
-                getAirports().
-                getAirport().
-                get(0).
-                toString();
+                getAirportCode();
     }
 
     private double getPriceFromResponse(LowestFaresResponse response) {
