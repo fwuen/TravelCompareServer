@@ -21,12 +21,6 @@ public class LufthansaConsumer extends Consumer {
     private long partnerExpiresIn;
     private String partnerAccessToken;
 
-
-    public LufthansaConsumer() {
-        authenticate(false);
-        authenticate(true);
-    }
-
     @Override
     protected String getBaseURL() {
         return "https://api.lufthansa.com/v1/";
@@ -81,7 +75,7 @@ public class LufthansaConsumer extends Consumer {
     }
 
     public AirportsResponse consumeAirports(String airportCode) throws UnirestException {
-        if(!publicStillAuthenticated()) authenticate(true);
+        if(!publicStillAuthenticated()) authenticate(false);
         return Unirest.get(getBaseURL() + "references/airports/" + airportCode).
                 header("Authorization", tokenType + " " + publicAccessToken).
                 asObject(AirportsResponse.class).
@@ -126,7 +120,7 @@ public class LufthansaConsumer extends Consumer {
     }
 
     private boolean publicStillAuthenticated() {
-        if(getTimestampFromDate(publicLastAuthenticated) + publicExpiresIn < getTimestampFromDate(new Date())) {
+        if(publicLastAuthenticated != null && getTimestampFromDate(publicLastAuthenticated) + publicExpiresIn < getTimestampFromDate(new Date())) {
             return true;
         } else {
             return false;
@@ -134,7 +128,7 @@ public class LufthansaConsumer extends Consumer {
     }
     
     private boolean partnerStillAuthenticated() {
-        if(getTimestampFromDate(partnerLastAuthenticated) + partnerExpiresIn < getTimestampFromDate(new Date())) {
+        if(partnerLastAuthenticated != null && getTimestampFromDate(partnerLastAuthenticated) + partnerExpiresIn < getTimestampFromDate(new Date())) {
             return true;
         } else {
             return false;

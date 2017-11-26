@@ -21,13 +21,9 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
         LufthansaConsumer consumer = new LufthansaConsumer();
         Date travelDate = new Date();
 
-        NearestAirportResponse startNearestAirportResponse = null;
-        NearestAirportResponse destinationNearestAirportsResponse = null;
-        LowestFaresResponse lowestFaresResponse = null;
-
-        startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
-        destinationNearestAirportsResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
-
+        NearestAirportResponse startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+        NearestAirportResponse destinationNearestAirportsResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+        LowestFaresResponse lowestFaresResponse;
 
         String startAirport = getAirportCodeFromResponse(startNearestAirportResponse);
         String destinationAirport = getAirportCodeFromResponse(destinationNearestAirportsResponse);
