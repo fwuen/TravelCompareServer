@@ -2,11 +2,11 @@ package travelcompare.restapi.provider;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Route;
 
-public class AircraftRouteProviderTest {
-    @Ignore
+public class AircraftRouteProviderTest extends SpringTest {
     @Test
     public void testGetRoute() {
         AircraftRouteProvider provider = new AircraftRouteProvider();

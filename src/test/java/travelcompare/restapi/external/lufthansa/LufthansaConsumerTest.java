@@ -3,6 +3,7 @@ package travelcompare.restapi.external.lufthansa;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.Before;
 import org.junit.Test;
+import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.external.configuration.UnirestConfiguration;
 import travelcompare.restapi.external.lufthansa.response.*;
 
@@ -10,12 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class LufthansaConsumerTest {
-    @Before
-    public void init() {
-        UnirestConfiguration.init();
-    }
-
+public class LufthansaConsumerTest extends SpringTest {
     @Test
     public void testConsumeLufthansaFlightStatus() throws UnirestException {
         LufthansaConsumer consumer = new LufthansaConsumer();
