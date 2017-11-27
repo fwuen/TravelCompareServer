@@ -27,6 +27,7 @@ public class AircraftRouteProviderTest extends SpringTest {
             System.out.println(route.getDestination());
             System.out.println(route.getDuration());
             System.out.println(route.getPrice());
+            System.out.println(route.getFlightSegments().size());
         }
     }
     
@@ -52,7 +53,9 @@ public class AircraftRouteProviderTest extends SpringTest {
         if(route != null) {
             System.out.println(route.getStart());
             System.out.println(route.getDestination());
+            System.out.println(route.getPrice());
             System.out.println(route.getDuration());
+            System.out.println(route.getFlightSegments().size());
         }
     }
 }

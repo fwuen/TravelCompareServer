@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import travelcompare.restapi.external.lufthansa.model.FlightSegment;
+
+import java.util.List;
 
 @Accessors(chain = true)
 public class Route {
@@ -34,4 +37,8 @@ public class Route {
     @Getter
     @Setter
     private DirectionsRoute routeRepresentation;
+    
+    @Getter
+    @Setter
+    private List<FlightSegment> flightSegments;
 }

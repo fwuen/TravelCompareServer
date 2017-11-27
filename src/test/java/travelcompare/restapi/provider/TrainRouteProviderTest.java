@@ -24,7 +24,7 @@ public class TrainRouteProviderTest {
     }
 
     @Test
-    public void testWithValidData() throws InterruptedException, ApiException, IOException, NoRouteFoundException {
+    public void testWithValidData() throws InterruptedException, ApiException, IOException {
         TrainRouteProvider provider = new TrainRouteProvider();
 
         Route result = provider.getRoute(HOF_HBF, OBERKOTZAU);

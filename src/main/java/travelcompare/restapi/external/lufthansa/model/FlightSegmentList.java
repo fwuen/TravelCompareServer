@@ -13,5 +13,5 @@ import java.util.List;
 public class FlightSegmentList {
     @JsonProperty(value = "FlightSegment")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    private List<FlightSegment> flightSegmentList;
+    private List<FlightSegment> flightSegments;
 }

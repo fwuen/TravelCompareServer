@@ -3,6 +3,8 @@ package travelcompare.restapi.provider;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
+import travelcompare.restapi.external.lufthansa.model.FlightSegment;
+import travelcompare.restapi.external.lufthansa.model.FlightSegmentReference;
 import travelcompare.restapi.external.lufthansa.response.LowestFaresResponse;
 import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
 import travelcompare.restapi.provider.model.Airport;
@@ -10,8 +12,10 @@ import travelcompare.restapi.provider.model.Route;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static travelcompare.restapi.provider.model.Transport.AIRCRAFT;
 
@@ -27,8 +31,8 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
     public Route getRouteOnDate(Airport start, Airport destination, Date travelDate) {
         LufthansaConsumer consumer = new LufthansaConsumer();
         LowestFaresResponse lowestFaresResponse;
-        
         String dateString = new SimpleDateFormat("YYYY-MM-dd").format(travelDate);
+        List<FlightSegment> flightSegments;
     
         try {
             NearestAirportResponse startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
@@ -43,9 +47,11 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
             return null;
         }
         
+        flightSegments = getFlightSegmentsForFlight(lowestFaresResponse);
+        
         double price = getPriceFromResponse(lowestFaresResponse);
-        String departureTimeString = getDepartureTimeStringFromResponse(lowestFaresResponse);
-        String arrivalTimeString = getArrivalTimeStringFromResponse(lowestFaresResponse);
+        String departureTimeString = getDepartureTimeStringFromResponse(flightSegments);
+        String arrivalTimeString = getArrivalTimeStringFromResponse(flightSegments);
         Date departureTime;
         Date arrivalTime;
         
@@ -62,9 +68,49 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
         aircraftRoute.setDestination(destination);
         aircraftRoute.setDuration(duration);
         aircraftRoute.setPrice(price);
+        aircraftRoute.setFlightSegments(flightSegments);
         aircraftRoute.setTransport(AIRCRAFT);
     
         return aircraftRoute;
+    }
+    
+    private List<FlightSegment> getFlightSegmentsForFlight(LowestFaresResponse response) {
+        List<FlightSegmentReference> flightSegmentReferences = response.getLowestFaresResponse().
+                getAirShoppingResponse().
+                getOffersGroup().
+                getAirlineOffers().
+                getAirlineOfferList().
+                get(0).
+                getPricedOffer().
+                getAssociations().
+                getApplicableFlight().
+                getFlightSegmentReference();
+        
+        List<String> flightSegmentReferenceKeys = new ArrayList<>();
+        
+        for (FlightSegmentReference flightSegmentReference :
+             flightSegmentReferences) {
+            flightSegmentReferenceKeys.add(flightSegmentReference.getRef());
+        }
+        
+        List<FlightSegment> flightSegments = response.
+                getLowestFaresResponse().
+                getAirShoppingResponse().
+                getDataLists().
+                getFlightSegmentList().
+                getFlightSegments();
+        
+        List<FlightSegment> filteredFlightSegments = new ArrayList<>();
+        
+        for(FlightSegment flightSegment : flightSegments) {
+            for(String flightSegmentReferenceKey : flightSegmentReferenceKeys) {
+                if(flightSegmentReferenceKey.equals(flightSegment.getSegmentKey())) {
+                    filteredFlightSegments.add(flightSegment);
+                }
+            }
+        }
+        
+        return filteredFlightSegments;
     }
     
     private Date convertStringToDate(String dateString) throws ParseException {
@@ -109,26 +155,16 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
                 getValue());
     }
 
-    private String getDepartureTimeStringFromResponse(LowestFaresResponse response) {
-        return response.
-                getLowestFaresResponse().
-                getAirShoppingResponse().
-                getDataLists().
-                getFlightSegmentList().
-                getFlightSegmentList().
+    private String getDepartureTimeStringFromResponse(List<FlightSegment> flightSegments) {
+        return flightSegments.
                 get(0).
                 getDeparture().
                 getTime();
     }
 
-    private String getArrivalTimeStringFromResponse(LowestFaresResponse response) {
-        return response.
-                getLowestFaresResponse().
-                getAirShoppingResponse().
-                getDataLists().
-                getFlightSegmentList().
-                getFlightSegmentList().
-                get(0).
+    private String getArrivalTimeStringFromResponse(List<FlightSegment> flightSegments) {
+        return flightSegments.
+                get(flightSegments.size()-1).
                 getArrival().
                 getTime();
     }
