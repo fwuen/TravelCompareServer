@@ -29,13 +29,14 @@ public class TrainRouteProvider implements RouteProvider<TrainStation> {
 
         DirectionsResult requestResult = request.await();
         DirectionsRoute route = requestResult.routes[0];
-
+        
         Route returnRoute = new Route();
 
         returnRoute.setStart(start)
-            .setDestination(destination)
-            .setDuration((route.legs[0].duration.inSeconds) / 60)
-            .setRouteRepresentation(route);
+                .setStart(start)
+                .setDestination(destination)
+                .setDuration((route.legs[0].duration.inSeconds) / 60)
+                .setRouteRepresentation(route);
 
         if (route.fare != null) {
             returnRoute.setPrice(route.fare.value.doubleValue());
