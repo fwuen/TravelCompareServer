@@ -33,7 +33,9 @@ public class AircraftRouteProviderTest extends SpringTest {
     @Test
     public void testGetRouteOnDate() {
         AircraftRouteProvider provider = new AircraftRouteProvider();
+        //Geocoordinates of DUS
         Airport start = new Airport(51.281111, 6.752777);
+        //Geocoordinates of TXL
         Airport destination = new Airport(52.560277, 13.295555);
         Route route = null;
         
