@@ -14,7 +14,7 @@ import java.io.IOException;
 public class TrainRouteProvider implements RouteProvider<TrainStation> {
 
     @Override
-    public Route getRoute(TrainStation start, TrainStation destination) throws InterruptedException, ApiException, IOException, NoRouteFoundException {
+    public Route getRoute(TrainStation start, TrainStation destination) throws InterruptedException, ApiException, IOException {
         LatLng startLatLng = new LatLng(start.getLat(), start.getLon());
         LatLng destLatLng = new LatLng(destination.getLat(), destination.getLon());
 
@@ -28,10 +28,7 @@ public class TrainRouteProvider implements RouteProvider<TrainStation> {
 
         DirectionsResult requestResult = request.await();
         DirectionsRoute route = requestResult.routes[0];
-
-        if (route == null) {
-            throw new NoRouteFoundException();
-        }
+        
         Route returnRoute = new Route();
 
         returnRoute.setStart(start)
