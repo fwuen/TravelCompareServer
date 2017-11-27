@@ -1,5 +1,6 @@
 package travelcompare.restapi.external.lufthansa.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,5 +22,6 @@ public class AirlineOffers {
     private String owner;
     
     @JsonProperty(value = "AirlineOffer")
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<AirlineOffer> airlineOfferList;
 }

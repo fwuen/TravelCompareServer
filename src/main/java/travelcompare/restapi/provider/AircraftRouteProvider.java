@@ -1,5 +1,6 @@
 package travelcompare.restapi.provider;
 
+import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
 import travelcompare.restapi.external.lufthansa.response.LowestFaresResponse;
@@ -9,6 +10,7 @@ import travelcompare.restapi.provider.model.Route;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static travelcompare.restapi.provider.model.Transport.AIRCRAFT;
@@ -17,46 +19,70 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
     private String cataloguesForFlightSearch = "EW";
 
     @Override
-    public Route getRoute(Airport start, Airport destination) throws UnirestException, ParseException {
+    public Route getRoute(Airport start, Airport destination) {
+        return getRouteOnDate(start, destination, new Date());
+    }
+    
+    @Override
+    public Route getRouteOnDate(Airport start, Airport destination, Date travelDate) {
         LufthansaConsumer consumer = new LufthansaConsumer();
-        Date travelDate = new Date();
-
-        NearestAirportResponse startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
-        NearestAirportResponse destinationNearestAirportsResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
         LowestFaresResponse lowestFaresResponse;
-
-        String startAirport = getAirportCodeFromResponse(startNearestAirportResponse);
-        String destinationAirport = getAirportCodeFromResponse(destinationNearestAirportsResponse);
-
-        lowestFaresResponse = new LufthansaConsumer().consumeLowestFares(cataloguesForFlightSearch, startAirport, destinationAirport, travelDate.toString());
-
+        
+        String dateString = new SimpleDateFormat("YYYY-MM-dd").format(travelDate);
+    
+        try {
+            NearestAirportResponse startNearestAirportResponse = consumer.consumeNearestAirport(String.valueOf(start.getLat()), String.valueOf(start.getLon()));
+            NearestAirportResponse destinationNearestAirportsResponse = consumer.consumeNearestAirport(String.valueOf(destination.getLat()), String.valueOf(destination.getLon()));
+    
+            String startAirport = getAirportCodeFromResponse(startNearestAirportResponse);
+            String destinationAirport = getAirportCodeFromResponse(destinationNearestAirportsResponse);
+    
+            lowestFaresResponse = new LufthansaConsumer().consumeLowestFares(cataloguesForFlightSearch, startAirport, destinationAirport, dateString);
+    
+        } catch (UnirestException e) {
+            return null;
+        }
+        
         double price = getPriceFromResponse(lowestFaresResponse);
         String departureTimeString = getDepartureTimeStringFromResponse(lowestFaresResponse);
         String arrivalTimeString = getArrivalTimeStringFromResponse(lowestFaresResponse);
-        Date departureTime = convertStringToDate(departureTimeString);
-        Date arrivalTime = convertStringToDate(arrivalTimeString);
+        Date departureTime;
+        Date arrivalTime;
+        
+        try {
+            departureTime = convertStringToDate(departureTimeString);
+            arrivalTime = convertStringToDate(arrivalTimeString);
+        } catch(ParseException e) {
+            return null;
+        }
         long duration = getDifferenceFromDates(departureTime, arrivalTime);
-
+    
         Route aircraftRoute = new Route();
         aircraftRoute.setStart(start);
         aircraftRoute.setDestination(destination);
         aircraftRoute.setDuration(duration);
         aircraftRoute.setPrice(price);
         aircraftRoute.setTransport(AIRCRAFT);
-
+    
         return aircraftRoute;
     }
-
+    
     private Date convertStringToDate(String dateString) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
         Date date = format.parse(dateString);;
 
         return date;
     }
 
     private long getDifferenceFromDates(Date date1, Date date2) {
-        long diff = date1.getTime() - date1.getTime();
-        long diffMinutes = diff / (60 * 1000) % 60;
+        Calendar c = Calendar.getInstance();
+        c.setTime(date2);
+        long date2Millis = c.getTimeInMillis();
+        c.setTime(date1);
+        long date1Millis = c.getTimeInMillis();
+        
+        long diff = date2Millis - date1Millis;
+        long diffMinutes = diff / 60000;
         return diffMinutes;
     }
 

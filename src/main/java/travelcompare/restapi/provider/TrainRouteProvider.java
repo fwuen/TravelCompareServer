@@ -10,6 +10,7 @@ import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.model.TrainStation;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class TrainRouteProvider implements RouteProvider<TrainStation> {
 
@@ -41,5 +42,10 @@ public class TrainRouteProvider implements RouteProvider<TrainStation> {
         }
 
         return returnRoute;
+    }
+    
+    @Override
+    public Route getRouteOnDate(TrainStation start, TrainStation destination, Date travelDate) throws Exception {
+        return null;
     }
 }

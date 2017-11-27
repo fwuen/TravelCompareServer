@@ -41,9 +41,9 @@ public class LufthansaConsumerTest extends SpringTest {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.MONTH, 6);
-        Date todayPlusOneYear = c.getTime();
-        String date = new SimpleDateFormat("YYYY-MM-dd").format(todayPlusOneYear);
-        AllFaresResponse response = consumer.consumeAllFares("EW", "DUS", "TXL", date);
+        Date travelDate = c.getTime();
+        String dateString = new SimpleDateFormat("YYYY-MM-dd").format(travelDate);
+        AllFaresResponse response = consumer.consumeAllFares("EW", "DUS", "TXL", dateString);
         System.out.println(response);
     }
 
