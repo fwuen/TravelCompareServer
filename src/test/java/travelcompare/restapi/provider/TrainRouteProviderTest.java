@@ -1,9 +1,10 @@
-package travelcompare.restapi.external.google;
+package travelcompare.restapi.provider;
 
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 import org.junit.Assert;
 import org.junit.Test;
+import travelcompare.restapi.provider.NoRouteFoundException;
 import travelcompare.restapi.provider.TrainRouteProvider;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
@@ -27,7 +28,7 @@ public class TrainRouteProviderTest {
     }
 
     @Test
-    public void testWithValidData() throws InterruptedException, ApiException, IOException {
+    public void testWithValidData() throws InterruptedException, ApiException, IOException, NoRouteFoundException {
         TrainRouteProvider provider = new TrainRouteProvider();
 
         Route result = provider.getRoute(HOF_HBF, OBERKOTZAU);
@@ -35,6 +36,7 @@ public class TrainRouteProviderTest {
         Assert.assertNotNull(result.getStart());
         Assert.assertNotNull(result.getDestination());
         Assert.assertNotNull(result.getRouteRepresentation());
+
     }
 
 }
