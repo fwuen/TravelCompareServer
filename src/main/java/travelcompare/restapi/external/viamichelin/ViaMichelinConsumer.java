@@ -53,7 +53,7 @@ public class ViaMichelinConsumer extends Consumer {
      * @return RouteResponse
      * @throws UnirestException Exception
      */
-    RouteResponse getRoute(double longitudeStart, double latitudeStart, double longitudeDest, double latitudeDest, int itit, double fuelCosts) throws UnirestException {
+     public RouteResponse getRoute(double longitudeStart, double latitudeStart, double longitudeDest, double latitudeDest, int itit, double fuelCosts) throws UnirestException {
         String url = ViaMichelinConstants.BASE_URL + ViaMichelinConstants.ROUTE_URL;
 
         ViaMichelinHelper helper = new ViaMichelinHelper();
@@ -68,7 +68,7 @@ public class ViaMichelinConsumer extends Consumer {
 
         // Zur Not den Default Wert verwenden
         String fuelCost = "&fuelCost=" + fuelCosts;
-        if (fuelCosts == 0) {
+        if (fuelCosts == 0.0) {
             fuelCost = "";
         }
 
