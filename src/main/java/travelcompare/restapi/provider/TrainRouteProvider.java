@@ -10,6 +10,7 @@ import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.model.TrainStation;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class TrainRouteProvider implements RouteProvider<TrainStation> {
 
@@ -28,18 +29,24 @@ public class TrainRouteProvider implements RouteProvider<TrainStation> {
 
         DirectionsResult requestResult = request.await();
         DirectionsRoute route = requestResult.routes[0];
-
+        
         Route returnRoute = new Route();
 
         returnRoute.setStart(start)
-            .setDestination(destination)
-            .setDuration((route.legs[0].duration.inSeconds) / 60)
-            .setRouteRepresentation(route);
+                .setStart(start)
+                .setDestination(destination)
+                .setDuration((route.legs[0].duration.inSeconds) / 60)
+                .setRouteRepresentation(route);
 
         if (route.fare != null) {
             returnRoute.setPrice(route.fare.value.doubleValue());
         }
 
         return returnRoute;
+    }
+    
+    @Override
+    public Route getRouteOnDate(TrainStation start, TrainStation destination, Date travelDate) throws Exception {
+        return null;
     }
 }
