@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import java.util.Date;
 
-public class CarRouteProvider implements RouteProvider {
+public class CarRouteProvider implements RouteProvider<Geo> {
 
     @Override
     public Route getRoute(Geo start, Geo destination) throws UnirestException {

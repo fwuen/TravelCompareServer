@@ -11,10 +11,6 @@ public class TrainStation extends Geo {
     @Setter
     private String name;
 
-    @Getter
-    @Setter
-    private String city;
-
     public TrainStation(double lat, double lon) {
         super(lat, lon);
     }

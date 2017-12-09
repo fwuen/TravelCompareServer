@@ -9,10 +9,6 @@ public class Airport extends Geo {
     @Setter
     private String name;
 
-    @Getter
-    @Setter
-    private String city;
-
     public Airport(double lat, double lon) {
         super(lat, lon);
     }
