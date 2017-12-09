@@ -10,42 +10,38 @@ import travelcompare.restapi.provider.model.TrainStation;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class TrainPerimeterSearchProviderTest {
+public class PerimeterSearchProviderTest {
 
     private final Geo HOF;
 
-    public TrainPerimeterSearchProviderTest() {
+    public PerimeterSearchProviderTest() {
         HOF = new Geo(50.31297, 11.91261);
     }
 
     @Test
 
     public void test() throws InterruptedException, ApiException, IOException {
-        TrainPerimeterSearchProvider trainPerimeterSearchProvider = new TrainPerimeterSearchProvider();
+        PerimeterSearchProvider perimeterSearchProvider = new PerimeterSearchProvider();
 
-        ArrayList<TrainStation> results = trainPerimeterSearchProvider.findTrainstations(HOF);
+        ArrayList<TrainStation> results = perimeterSearchProvider.find(HOF);
 
         Assert.assertFalse(results.isEmpty());
         for (TrainStation trainStation :
                 results) {
             Assert.assertNotNull(trainStation.getName());
-            Assert.assertNotNull(trainStation.getLat());
-            Assert.assertNotNull(trainStation.getLon());
         }
     }
 
     @Test
     public void testWitchRadius() throws InterruptedException, ApiException, IOException {
-        TrainPerimeterSearchProvider trainPerimeterSearchProvider = new TrainPerimeterSearchProvider();
+        PerimeterSearchProvider perimeterSearchProvider = new PerimeterSearchProvider();
 
-        ArrayList<TrainStation> results = trainPerimeterSearchProvider.findTrainstations(HOF, 50000);
+        ArrayList<TrainStation> results = perimeterSearchProvider.find(HOF, 50000);
 
         Assert.assertFalse(results.isEmpty());
         for (TrainStation trainStation :
                 results) {
             Assert.assertNotNull(trainStation.getName());
-            Assert.assertNotNull(trainStation.getLat());
-            Assert.assertNotNull(trainStation.getLon());
         }
     }
 }
