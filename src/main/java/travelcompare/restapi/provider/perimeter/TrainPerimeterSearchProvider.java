@@ -17,11 +17,11 @@ import travelcompare.restapi.provider.model.TrainStation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class TrainPerimeterSearchProvider {
+public class TrainPerimeterSearchProvider implements PerimeterSearchProvider<TrainStation> {
 
-
-    public ArrayList<TrainStation> find(Geo geoPosition, int radius) throws InterruptedException, ApiException, IOException {
+    public List<TrainStation> find(Geo geoPosition, int radius) throws InterruptedException, ApiException, IOException {
         Preconditions.checkArgument(radius <= 50000, "50000m Radius ist das Maximum.");
 
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
@@ -45,7 +45,4 @@ public class TrainPerimeterSearchProvider {
         return results;
     }
 
-    public ArrayList<TrainStation> find(Geo geoPosition, PlaceType placeType) throws InterruptedException, ApiException, IOException {
-        return find(geoPosition, 25);
-    }
 }
