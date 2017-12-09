@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static travelcompare.restapi.provider.model.Transport.AIRCRAFT;
 
@@ -109,19 +110,22 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
                 }
             }
         }
-        
+
         return filteredFlightSegments;
     }
     
     private Date convertStringToDate(String dateString) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
-        Date date = format.parse(dateString);;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        Date date = format.parse(dateString);
 
         return date;
     }
 
     private long getDifferenceFromDates(Date date1, Date date2) {
-        Calendar c = Calendar.getInstance();
+        long diff = date2.getTime() - date1.getTime();
+
+        return TimeUnit.MILLISECONDS.toMinutes(diff);
+        /*Calendar c = Calendar.getInstance();
         c.setTime(date2);
         long date2Millis = c.getTimeInMillis();
         c.setTime(date1);
@@ -129,7 +133,7 @@ public class AircraftRouteProvider implements RouteProvider<Airport> {
         
         long diff = date2Millis - date1Millis;
         long diffMinutes = diff / 60000;
-        return diffMinutes;
+        return diffMinutes;*/
     }
 
     private String getAirportCodeFromResponse(NearestAirportResponse response) {
