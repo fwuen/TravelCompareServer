@@ -8,6 +8,7 @@ import com.google.maps.model.*;
 import travelcompare.restapi.external.google.GeoApiContextFactory;
 import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.model.TrainStation;
+import travelcompare.restapi.provider.model.Transport;
 
 import java.io.IOException;
 import java.util.Date;
@@ -36,7 +37,8 @@ public class TrainRouteProvider implements RouteProvider<TrainStation> {
                 .setStart(start)
                 .setDestination(destination)
                 .setDuration((route.legs[0].duration.inSeconds) / 60)
-                .setRouteRepresentation(route);
+                .setRouteRepresentation(route)
+                .setTransport(Transport.TRAIN);
 
         if (route.fare != null) {
             returnRoute.setPrice(route.fare.value.doubleValue());

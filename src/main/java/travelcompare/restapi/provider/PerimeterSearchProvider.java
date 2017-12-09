@@ -15,16 +15,17 @@ import travelcompare.restapi.provider.model.TrainStation;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class TrainPerimeterSearchProvider {
+public class PerimeterSearchProvider {
 
-    public ArrayList<TrainStation> findTrainstations(Geo geoPosition, int radius) throws InterruptedException, ApiException, IOException {
+
+    public ArrayList<TrainStation> find(Geo geoPosition, int radius, PlaceType placeType) throws InterruptedException, ApiException, IOException {
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
 
         GeoApiContext geoApiContext = GeoApiContextFactory.getBasicGeoApiContext();
 
         NearbySearchRequest nearbySearchRequest = PlacesApi.nearbySearchQuery(geoApiContext, latLngPosition)
                 .radius(radius)
-                .type(PlaceType.TRAIN_STATION);
+                .type(placeType);
         PlacesSearchResponse response = nearbySearchRequest.await();
 
         ArrayList<PlacesSearchResult> responseList = Lists.newArrayList(response.results);
@@ -39,13 +40,13 @@ public class TrainPerimeterSearchProvider {
         return results;
     }
 
-    public ArrayList<TrainStation> findTrainstations(Geo geoPosition) throws InterruptedException, ApiException, IOException {
+    public ArrayList<TrainStation> find(Geo geoPosition, PlaceType placeType) throws InterruptedException, ApiException, IOException {
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
 
         GeoApiContext geoApiContext = GeoApiContextFactory.getBasicGeoApiContext();
 
         NearbySearchRequest nearbySearchRequest = PlacesApi.nearbySearchQuery(geoApiContext, latLngPosition)
-                .type(PlaceType.TRAIN_STATION)
+                .type(placeType)
                 .rankby(RankBy.DISTANCE);
         PlacesSearchResponse response = nearbySearchRequest.await();
 
