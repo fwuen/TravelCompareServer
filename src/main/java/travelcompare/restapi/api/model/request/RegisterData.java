@@ -2,8 +2,7 @@ package travelcompare.restapi.api.model.request;
 
 import lombok.*;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import travelcompare.restapi.api.configuration.ValidationConfiguration;
 import travelcompare.restapi.provider.model.Geo;
 
 
@@ -13,10 +12,6 @@ import travelcompare.restapi.provider.model.Geo;
 @ToString
 @EqualsAndHashCode
 public class RegisterData implements Validateable {
-
-    private static final int PASSWORD_MIN_LENGTH = 3;
-
-
 
     @NonNull private String firstName;
     @NonNull private String lastName;
@@ -46,8 +41,8 @@ public class RegisterData implements Validateable {
             return validation;
         }
 
-        if(password.length() < PASSWORD_MIN_LENGTH) {
-            validation.setError("Das Passwort muss mindestens " + PASSWORD_MIN_LENGTH + " Zeichen haben");
+        if(password.length() < ValidationConfiguration.PASSWORD_MIN_LENGTH) {
+            validation.setError("Das Passwort muss mindestens " + ValidationConfiguration.PASSWORD_MIN_LENGTH + " Zeichen haben");
             return validation;
         }
 

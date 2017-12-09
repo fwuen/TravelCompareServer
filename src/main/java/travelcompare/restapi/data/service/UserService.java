@@ -34,6 +34,38 @@ public class UserService {
         return repository.findFirstByEmailEqualsIgnoreCase(email);
     }
 
+    public Optional<User> getUserByID(long id) {
+        Preconditions.checkArgument(id > 0);
+
+        return repository.findFirstByIdEquals(id);
+    }
+
+    public User updateUser(@NonNull User user) {
+        Preconditions.checkArgument(repository.existsByIdEquals(user.getId()));
+
+        User oldUser = getUserByID(user.getId()).get();
+        user.setPassword(oldUser.getPassword());
+
+        return repository.save(user);
+    }
+
+    public void deleteUserByEmail(@NonNull String email) {
+        Preconditions.checkArgument(EmailValidator.getInstance().isValid(email));
+        Preconditions.checkArgument(userExistsByEmail(email));
+
+        repository.deleteByEmailIgnoreCase(email);
+    }
+
+    public boolean userExistsByID(long id) {
+        return repository.existsByIdEquals(id);
+    }
+
+    public boolean userExistsByEmail(@NonNull String email) {
+        Preconditions.checkArgument(EmailValidator.getInstance().isValid(email));
+
+        return repository.existsByEmailEqualsIgnoreCase(email);
+    }
+
     public User register(@NonNull RegisterData registerData) {
         Validation validation = registerData.valid();
 
