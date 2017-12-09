@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.TrainStation;
+import travelcompare.restapi.provider.perimeter.PerimeterSearchProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;

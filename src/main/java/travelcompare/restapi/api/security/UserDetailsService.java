@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import travelcompare.restapi.data.repository.UserRepository;
-import travelcompare.restapi.data.service.UserService;
 
 import java.util.Optional;
 

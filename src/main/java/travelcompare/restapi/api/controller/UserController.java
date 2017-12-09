@@ -9,7 +9,6 @@ import travelcompare.restapi.api.model.request.RegisterData;
 import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.service.UserService;
 
-import javax.xml.ws.Response;
 import java.security.Principal;
 import java.util.Optional;
 

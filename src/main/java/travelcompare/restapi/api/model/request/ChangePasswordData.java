@@ -1,7 +1,6 @@
 package travelcompare.restapi.api.model.request;
 
 import lombok.*;
-import org.apache.commons.validator.routines.EmailValidator;
 import travelcompare.restapi.api.configuration.ValidationConfiguration;
 
 @Getter

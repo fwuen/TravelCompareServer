@@ -9,7 +9,6 @@ import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.model.Transport;
 
 import java.util.ArrayList;
-
 import java.util.Date;
 
 public class CarRouteProvider implements RouteProvider<Geo> {

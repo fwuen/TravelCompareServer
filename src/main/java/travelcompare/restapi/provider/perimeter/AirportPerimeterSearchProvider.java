@@ -12,7 +12,6 @@ import com.google.maps.model.PlacesSearchResult;
 import travelcompare.restapi.external.google.GeoApiContextFactory;
 import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Geo;
-import travelcompare.restapi.provider.model.TrainStation;
 
 import java.util.ArrayList;
 import java.util.List;
