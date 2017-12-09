@@ -29,16 +29,4 @@ public class Route {
     @Setter
     private long duration;
 
-    @Getter
-    @Setter
-    @NonNull
-    private Transport transport;
-
-    @Getter
-    @Setter
-    private DirectionsRoute routeRepresentation;
-    
-    @Getter
-    @Setter
-    private List<FlightSegment> flightSegments;
 }
