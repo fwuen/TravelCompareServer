@@ -1,6 +1,5 @@
-package travelcompare.restapi.provider;
+package travelcompare.restapi.provider.route;
 
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
 import travelcompare.restapi.external.lufthansa.model.FlightSegment;
@@ -13,7 +12,6 @@ import travelcompare.restapi.provider.model.Route;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

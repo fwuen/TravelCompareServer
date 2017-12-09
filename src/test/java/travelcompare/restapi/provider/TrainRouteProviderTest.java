@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.model.TrainStation;
+import travelcompare.restapi.provider.route.TrainRouteProvider;
 
 import java.io.IOException;
 

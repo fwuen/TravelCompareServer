@@ -1,12 +1,11 @@
 package travelcompare.restapi.provider;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Route;
+import travelcompare.restapi.provider.route.AircraftRouteProvider;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 

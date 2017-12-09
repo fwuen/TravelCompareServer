@@ -1,4 +1,4 @@
-package travelcompare.restapi.provider;
+package travelcompare.restapi.provider.route;
 
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;

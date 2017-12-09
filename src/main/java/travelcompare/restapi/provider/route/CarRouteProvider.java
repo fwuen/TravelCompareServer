@@ -1,6 +1,5 @@
-package travelcompare.restapi.provider;
+package travelcompare.restapi.provider.route;
 
-import com.google.maps.model.DirectionsRoute;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.viamichelin.ViaMichelinConsumer;
 import travelcompare.restapi.external.viamichelin.model.RoadSheetStep;
