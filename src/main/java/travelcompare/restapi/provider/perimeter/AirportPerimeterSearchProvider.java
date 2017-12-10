@@ -10,6 +10,8 @@ import com.google.maps.model.PlaceType;
 import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
 import travelcompare.restapi.external.google.GeoApiContextFactory;
+import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
+import travelcompare.restapi.external.lufthansa.response.NearestAirportResponse;
 import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Geo;
 
@@ -41,6 +43,20 @@ public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<A
             results.add(airport);
         }
         return results;
+    }
+    
+    public List<Airport> findByLh(Geo geoPosition) throws Exception {
+        LufthansaConsumer consumer = new LufthansaConsumer();
+        NearestAirportResponse response = consumer.consumeNearestAirport("" + geoPosition.getLat(), "" + geoPosition.getLon());
+        List<Airport> airports = Lists.newArrayList();
+        
+        for(travelcompare.restapi.external.lufthansa.model.Airport airport : response.getNearestAirportResource().getAirports().getAirport()) {
+            Airport newAirport = new Airport(airport.getPosition().getCoordinate().getLatitude(), airport.getPosition().getCoordinate().getLongitude());
+            newAirport.setIdentifier(airport.getAirportCode());
+            newAirport.setName(airport.getNames().getNames().get(0).getName());
+        }
+        
+        return airports;
     }
 
 }
