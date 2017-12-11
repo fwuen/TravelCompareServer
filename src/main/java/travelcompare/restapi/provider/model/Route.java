@@ -20,10 +20,6 @@ public class Route {
 
     @Getter
     @Setter
-    private double price;
-
-    @Getter
-    @Setter
     private long duration;
 
     @Getter

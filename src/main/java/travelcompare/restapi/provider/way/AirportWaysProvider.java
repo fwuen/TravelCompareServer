@@ -80,10 +80,7 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
                 }
             }
         }
-        
-        for(Route route : way.getRoutes()) {
-            route.setPrice(Double.parseDouble(price)/way.getRoutes().size());
-        }
+        way.setPrice(Double.parseDouble(price));
         
         return way;
     }

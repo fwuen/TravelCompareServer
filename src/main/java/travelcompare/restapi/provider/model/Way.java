@@ -15,4 +15,7 @@ public class Way {
     @NonNull
     private List<Route> routes = Lists.newArrayList();
 
+    @Getter
+    @Setter
+    private double price;
 }
