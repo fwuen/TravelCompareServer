@@ -49,11 +49,10 @@ public class ViaMichelinConsumer extends Consumer {
      * @param latitudeStart  double
      * @param longitudeDest  double
      * @param latitudeDest   double
-     * @param itit           int
      * @return RouteResponse
      * @throws UnirestException Exception
      */
-     public RouteResponse getRoute(double longitudeStart, double latitudeStart, double longitudeDest, double latitudeDest, int itit, double fuelCosts) throws UnirestException {
+     public RouteResponse getRoute(double longitudeStart, double latitudeStart, double longitudeDest, double latitudeDest, double fuelCosts) throws UnirestException {
         String url = ViaMichelinConstants.BASE_URL + ViaMichelinConstants.ROUTE_URL;
 
         ViaMichelinHelper helper = new ViaMichelinHelper();
@@ -62,9 +61,6 @@ public class ViaMichelinConsumer extends Consumer {
         }
         String startCoordinates = helper.checkCoordinates(longitudeStart, latitudeStart);
         String endCoordinates = helper.checkCoordinates(longitudeDest, latitudeDest);
-        if (itit < 1 || itit > 4) {
-            return null;
-        }
 
         // Zur Not den Default Wert verwenden
         String fuelCost = "&fuelCost=" + fuelCosts;
@@ -74,8 +70,7 @@ public class ViaMichelinConsumer extends Consumer {
 
         HttpResponse httpResponse = Unirest.get(url +
                 ".xml/deu?steps=" + startCoordinates + ";" + endCoordinates
-                + "&itit=" + itit +
-                fuelCost +
+                + fuelCost +
                 "&authkey=" + ViaMichelinConstants.API_KEY).asString();
 
         JSONObject response = XML.toJSONObject(httpResponse.getBody().toString());

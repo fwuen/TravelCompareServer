@@ -22,7 +22,7 @@ public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<A
 
     @Override
     public List<Airport> find(Geo geoPosition, int radius) throws Exception {
-        Preconditions.checkArgument(radius <= 50000, "50000m Radius ist das Maximum.");
+        Preconditions.checkArgument(radius <= 50000, "50 Km Radius ist das Maximum.");
 
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
 

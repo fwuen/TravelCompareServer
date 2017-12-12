@@ -23,7 +23,7 @@ public class ViaMichelinConsumerTest extends SpringTest {
      */
     @Test
     public void TestGetRoute() throws UnirestException {
-        new ViaMichelinConsumer().getRoute(11.848444, 50.268186, 11.942030, 50.325067, 1, 1.20);
+        new ViaMichelinConsumer().getRoute(11.848444, 50.268186, 11.942030, 50.325067,  1.20);
     }
 }
 
