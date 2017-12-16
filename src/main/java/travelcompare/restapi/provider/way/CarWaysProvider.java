@@ -1,6 +1,9 @@
 package travelcompare.restapi.provider.way;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import travelcompare.restapi.external.tankerkoenig.TankerkoenigConsumer;
+import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 import travelcompare.restapi.external.viamichelin.ViaMichelinConsumer;
 import travelcompare.restapi.external.viamichelin.model.RoadSheetStep;
 import travelcompare.restapi.external.viamichelin.model.RouteResponse;
@@ -26,17 +29,23 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         consumer = new ViaMichelinConsumer();
     }
 
+    @Override
+    public List<Way> find(Geo start, Geo destination, Date date) {
+        return null;
+    }
+
     /**
      * @param start       Geo
      * @param destination Geo
      * @param date        Date
      * @return List<Way>
      */
-    @Override
-    public List<Way> find(Geo start, Geo destination, Date date) {
+    public List<Way> findWithFuelType(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
         if (start == null || destination == null || date == null) {
             return null;
         }
+        // TODO Hier noch den Spritpreis holen und mit einbeziehen
+
         List<Way> ways = new ArrayList<>();
         Way way = findCheapest(start, destination, date);
         if (way != null) {
@@ -51,17 +60,26 @@ public class CarWaysProvider implements WaysProvider<Geo> {
     }
 
     private Way findCheapest(Geo start, Geo destination, Date date) {
-        return findRoute(4, start, destination, date);
+        try {
+            return findRoute(4, start, destination, date);
+        } catch (UnirestException e) {
+            return null;
+        }
     }
 
     private Way findFastest(Geo start, Geo destination, Date date) {
-        return findRoute(1, start, destination, date);
+        try {
+            return findRoute(1, start, destination, date);
+        } catch (UnirestException e) {
+            return null;
+        }
     }
 
-    private Way findRoute(int itit, Geo start, Geo destination, Date date) {
+    private Way findRoute(int itit, Geo start, Geo destination, Date date) throws UnirestException {
         Way way = new Way();
 
-        // TODO den Wert über Tankerkönig holen
+        TankerkoenigConsumer consumer = new TankerkoenigConsumer();
+        RangeSearchResponse rangeSearchResponse = consumer.consume();
         double fuelCost = 1.20;
         RouteResponse response;
         try {

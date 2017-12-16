@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.Consumer;
+import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
 import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 
 public class TankerkoenigConsumer extends Consumer {
@@ -92,9 +93,7 @@ public class TankerkoenigConsumer extends Consumer {
         return "https://creativecommons.tankerkoenig.de/json/";
     }
 
-    public enum FUEL_TYPE {
-        e5, e10, diesel, all
-    }
+
 
     public enum SORT {
         price, dist
