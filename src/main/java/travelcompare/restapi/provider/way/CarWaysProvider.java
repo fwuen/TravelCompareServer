@@ -34,15 +34,40 @@ public class CarWaysProvider implements WaysProvider<Geo> {
      */
     @Override
     public List<Way> find(Geo start, Geo destination, Date date) {
+        if (start == null || destination == null || date == null) {
+            return null;
+        }
+        List<Way> ways = new ArrayList<>();
+        Way way = findCheapest(start, destination, date);
+        if (way != null) {
+            ways.add(way);
+        }
+        way = findFastest(start, destination, date);
+        if (way != null) {
+            ways.add(way);
+        }
+
+        return ways;
+    }
+
+    private Way findCheapest(Geo start, Geo destination, Date date) {
+        return findRoute(4, start, destination, date);
+    }
+
+    private Way findFastest(Geo start, Geo destination, Date date) {
+        return findRoute(1, start, destination, date);
+    }
+
+    private Way findRoute(int itit, Geo start, Geo destination, Date date) {
         Way way = new Way();
 
         // TODO den Wert über Tankerkönig holen
-        double fuelCost = 0.0;
+        double fuelCost = 1.20;
         RouteResponse response;
         try {
-            response = consumer.getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(),  fuelCost);
+            response = new ViaMichelinConsumer().getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, new Date());
             if (response == null || response.getIti() == null || response.getIti().getRoadSheet() == null || response.getIti().getRoadSheet().getRoadSheetStep() == null || response.getIti().getHeader() == null) {
-                return null; // TODO Was nun?
+                return null;
             }
         } catch (UnirestException exception) {
             return null;
@@ -56,13 +81,9 @@ public class CarWaysProvider implements WaysProvider<Geo> {
             route.setDestination(coordinates);
             route.setTransport(Transport.CAR);
             route.setDuration(roadSheetStep.getDuration());
-            //   route.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
             way.getRoutes().add(route);
         }
         way.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
-        List<Way> ways = new ArrayList<>();
-        ways.add(way);
-        return ways;
+        return way;
     }
-
 }

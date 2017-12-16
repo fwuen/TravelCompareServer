@@ -65,11 +65,11 @@ public class ViaMichelinHelper {
         }
         JSONObject roadSheetStepListJSON = jsonObject.getJSONObject("roadSheetStepList");
 
-        if (!roadSheetStepListJSON.has("roadSheetStep") || roadSheetStepListJSON.getJSONArray("roadSheetStep") == null) {
+        if (!roadSheetStepListJSON.has("roadSheetStep") || roadSheetStepListJSON.optJSONArray("roadSheetStep") == null) {
             return null;
         }
 
-        JSONArray roadSheetStepJSON = roadSheetStepListJSON.getJSONArray("roadSheetStep");
+        JSONArray roadSheetStepJSON = roadSheetStepListJSON.optJSONArray("roadSheetStep");
         ArrayList<RoadSheetStep> roadSheetStep = new ArrayList<>();
         for (int i = 0; i < roadSheetStepJSON.length(); i++) {
             RoadSheetStep step = new RoadSheetStep();
@@ -89,36 +89,31 @@ public class ViaMichelinHelper {
             step.setInstructions(item.getString("instructions"));
 
             if (item.has("mapDef")) {
-                if (!item.has("mapDef") || item.getJSONObject("mapDef") == null) {
-                    return null;
+                if (item.has("mapDef") && item.getJSONObject("mapDef") != null) {
+                    MapDef mapDef = this.parseMapDef(item.getJSONObject("mapDef"));
+                    step.setMapDef(mapDef);
                 }
-                MapDef mapDef = this.parseMapDef(item.getJSONObject("mapDef"));
-                step.setMapDef(mapDef);
-            }
-            if (!item.has("distance")) {
-                return null;
-            }
-            step.setDistance(item.getDouble("distance"));
 
-            if (!item.has("level")) {
-                return null;
             }
-            step.setLevel(item.getLong("level"));
+            if (item.has("distance")) {
+                step.setDistance(item.getDouble("distance"));
+            }
 
-            if (!item.has("partialDuration")) {
-                return null;
+            if (item.has("level")) {
+                step.setLevel(item.getLong("level"));
             }
-            step.setPartialDuration(item.getLong("partialDuration"));
 
-            if (!item.has("gathering")) {
-                return null;
+            if (item.has("partialDuration")) {
+                step.setPartialDuration(item.getLong("partialDuration"));
             }
-            step.setGathering(item.getLong("gathering"));
 
-            if (!item.has("partialDistance")) {
-                return null;
+            if (item.has("gathering")) {
+                step.setGathering(item.getLong("gathering"));
             }
-            step.setPartialDistance(item.getDouble("partialDistance"));
+
+            if (item.has("partialDistance")) {
+                step.setPartialDistance(item.getDouble("partialDistance"));
+            }
 
             if (!item.has("coords") || item.getJSONObject("coords") == null) {
                 return null;
@@ -137,10 +132,9 @@ public class ViaMichelinHelper {
             routeCoords.setLong_coordinate(routeCoordsJSON.getDouble("lon"));
             step.setCoords(routeCoords);
 
-            if (!item.has("picto") || item.getString("picto") == null) {
-                return null;
+            if (item.has("picto") && item.getString("picto") != null) {
+                step.setPicto(item.getString("picto"));
             }
-            step.setPicto(item.getString("picto"));
             roadSheetStep.add(step);
         }
         roadSheet.setRoadSheetStep(roadSheetStep);
@@ -155,37 +149,36 @@ public class ViaMichelinHelper {
     private RouteHeader parseRouteHeader(JSONObject jsonObject) {
         RouteHeader header = new RouteHeader();
 
-        if (!jsonObject.has("startMapDef") || this.parseMapDef(jsonObject.getJSONObject("startMapDef")) == null) {
-            return null;
+        if (jsonObject.has("startMapDef") && this.parseMapDef(jsonObject.getJSONObject("startMapDef")) != null) {
+            MapDef startMapDef = this.parseMapDef(jsonObject.getJSONObject("startMapDef"));
+            header.setStartMapDef(startMapDef);
         }
-        MapDef startMapDef = this.parseMapDef(jsonObject.getJSONObject("startMapDef"));
-        header.setStartMapDef(startMapDef);
 
-        if (!jsonObject.has("startMapDef") || this.parseMapDef(jsonObject.getJSONObject("startMapDef")) == null) {
-            return null;
-        }
-        MapDef destMapDef = this.parseMapDef(jsonObject.getJSONObject("destMapDef"));
-        header.setDestMapDef(destMapDef);
 
-        if (!jsonObject.has("itiType")) {
-            return null;
+        if (jsonObject.has("startMapDef") && this.parseMapDef(jsonObject.getJSONObject("startMapDef")) != null) {
+            MapDef destMapDef = this.parseMapDef(jsonObject.getJSONObject("destMapDef"));
+            header.setDestMapDef(destMapDef);
         }
-        header.setItiType(jsonObject.getLong("itiType"));
 
-        if (!jsonObject.has("itidate") || jsonObject.getString("itidate") == null) {
-            return null;
-        }
-        header.setItidate(jsonObject.getString("itidate"));
 
-        if (!jsonObject.has("idx")) {
-            return null;
-        }
-        header.setIdx(jsonObject.getLong("idx"));
+        if (jsonObject.has("itiType")) {
+            header.setItiType(jsonObject.getLong("itiType"));
 
-        if (!jsonObject.has("vehicle")) {
-            return null;
         }
-        header.setVehicle(jsonObject.getLong("vehicle"));
+
+        if (jsonObject.has("itidate") && jsonObject.getString("itidate") != null) {
+            header.setItidate(jsonObject.getString("itidate"));
+
+        }
+
+        if (jsonObject.has("idx")) {
+            header.setIdx(jsonObject.getLong("idx"));
+
+        }
+
+        if (jsonObject.has("vehicle")) {
+            header.setVehicle(jsonObject.getLong("vehicle"));
+        }
 
         if (!jsonObject.has("summaries") || jsonObject.getJSONObject("summaries") == null) {
             return null;
@@ -198,45 +191,39 @@ public class ViaMichelinHelper {
         JSONObject summaryJSON = summariesJSON.getJSONObject("summary");
         Summary summary = new Summary();
 
-        if (!summaryJSON.has("ecoTaxDist")) {
-            return null;
-        }
-        summary.setEcoTaxDist(summaryJSON.getDouble("ecoTaxDist"));
+        if (summaryJSON.has("ecoTaxDist")) {
+            summary.setEcoTaxDist(summaryJSON.getDouble("ecoTaxDist"));
 
-        if (!summaryJSON.has("fullMapDef") || summaryJSON.getJSONObject("fullMapDef") == null) {
-            return null;
         }
-        summary.setFullMapDef(this.parseMapDef(summaryJSON.getJSONObject("fullMapDef")));
 
-        if (!summaryJSON.has("motorwayTime")) {
-            return null;
+        if (summaryJSON.has("fullMapDef") && summaryJSON.getJSONObject("fullMapDef") != null) {
+            summary.setFullMapDef(this.parseMapDef(summaryJSON.getJSONObject("fullMapDef")));
         }
-        summary.setMotorwayTime(summaryJSON.getDouble("motorwayTime"));
 
-        if (!summaryJSON.has("pleasantDist")) {
-            return null;
+        if (summaryJSON.has("motorwayTime")) {
+            summary.setMotorwayTime(summaryJSON.getDouble("motorwayTime"));
         }
-        summary.setPleasentDist(summaryJSON.getDouble("pleasantDist"));
 
-        if (!summaryJSON.has("totalTime")) {
-            return null;
+        if (summaryJSON.has("pleasantDist")) {
+            summary.setPleasentDist(summaryJSON.getDouble("pleasantDist"));
         }
-        summary.setTotalTime(summaryJSON.getDouble("totalTime"));
 
-        if (!summaryJSON.has("pleasantTime")) {
-            return null;
+        if (summaryJSON.has("totalTime")) {
+            summary.setTotalTime(summaryJSON.getDouble("totalTime"));
         }
-        summary.setPleasentTime(summaryJSON.getDouble("pleasantTime"));
 
-        if (!summaryJSON.has("index")) {
-            return null;
+        if (summaryJSON.has("pleasantTime")) {
+            summary.setPleasentTime(summaryJSON.getDouble("pleasantTime"));
         }
-        summary.setIndex(summaryJSON.getLong("index"));
 
-        if (!summaryJSON.has("drivingTime")) {
-            return null;
+        if (summaryJSON.has("index")) {
+            summary.setIndex(summaryJSON.getLong("index"));
+
         }
-        summary.setDrivingDist(summaryJSON.getDouble("drivingTime"));
+
+        if (summaryJSON.has("drivingTime")) {
+            summary.setDrivingDist(summaryJSON.getDouble("drivingTime"));
+        }
 
         // TODO wichtig
         if (!summaryJSON.has("consumption")) {
@@ -244,53 +231,44 @@ public class ViaMichelinHelper {
         }
         summary.setConsumption(summaryJSON.getDouble("consumption"));
 
-        if (!summaryJSON.has("distanceByCountry")) {
-            return null;
+        if (summaryJSON.has("distanceByCountry")) {
+            summary.setDistanceByCountry(summaryJSON.getString("distanceByCountry"));
         }
-        summary.setDistanceByCountry(summaryJSON.getString("distanceByCountry"));
 
-        if (!summaryJSON.has("CCZCost") || summaryJSON.getJSONObject("CCZCost") == null || this.parseCost(summaryJSON.getJSONObject("CCZCost")) == null) {
-            return null;
+        if (summaryJSON.has("CCZCost") && summaryJSON.getJSONObject("CCZCost") != null && this.parseCost(summaryJSON.getJSONObject("CCZCost")) != null) {
+            summary.setCCZCost(this.parseCost(summaryJSON.getJSONObject("CCZCost")));
         }
-        summary.setCCZCost(this.parseCost(summaryJSON.getJSONObject("CCZCost")));
 
         // TODO wichtig
-        if (!summaryJSON.has("tollCost") || summaryJSON.getJSONObject("tollCost") == null || this.parseCost(summaryJSON.getJSONObject("tollCost")) == null) {
-            return null;
+        if (summaryJSON.has("tollCost") && summaryJSON.getJSONObject("tollCost") != null && this.parseCost(summaryJSON.getJSONObject("tollCost")) != null) {
+            summary.setTollCost(this.parseCost(summaryJSON.getJSONObject("tollCost")));
         }
-        summary.setTollCost(this.parseCost(summaryJSON.getJSONObject("tollCost")));
 
-        if (!summaryJSON.has("ecoTaxRepercussionRate")) {
-            return null;
+        if (summaryJSON.has("ecoTaxRepercussionRate")) {
+            summary.setEcoTaxRepercussionRate(summaryJSON.getDouble("ecoTaxRepercussionRate"));
         }
-        summary.setEcoTaxRepercussionRate(summaryJSON.getDouble("ecoTaxRepercussionRate"));
 
-        if (!summaryJSON.has("avoidClosedRoadUsed")) {
-            return null;
+        if (summaryJSON.has("avoidClosedRoadUsed")) {
+            summary.setAvoidClosedRoadUsed(summaryJSON.getBoolean("avoidClosedRoadUsed"));
         }
-        summary.setAvoidClosedRoadUsed(summaryJSON.getBoolean("avoidClosedRoadUsed"));
 
-        if (!summaryJSON.has("names") || summaryJSON.getJSONObject("names") == null) {
-            return null;
-        }
-        JSONObject namesJSON = summaryJSON.getJSONObject("names");
+        if (summaryJSON.has("names") && summaryJSON.getJSONObject("names") != null) {
+            JSONObject namesJSON = summaryJSON.getJSONObject("names");
 
-        if (!namesJSON.has("name") || namesJSON.getJSONArray("name") == null) {
-            return null;
-        }
-        JSONArray nameJSON = namesJSON.getJSONArray("name");
-        ArrayList<String> name = new ArrayList<>();
-        for (int i = 0; i < nameJSON.length(); i++) {
-            if (!nameJSON.isNull(i)) {
-                name.add(nameJSON.getString(i));
+            if (namesJSON.has("name") && namesJSON.optJSONArray("name") != null) {
+                JSONArray nameJSON = namesJSON.optJSONArray("name");
+                ArrayList<String> name = new ArrayList<>();
+                for (int i = 0; i < nameJSON.length(); i++) {
+                    if (!nameJSON.isNull(i)) {
+                        name.add(nameJSON.getString(i));
+                    }
+                }
+                summary.setNames(name);
             }
         }
-        summary.setNames(name);
-
-        if (!summaryJSON.has("eventTrafficDatabaseAvailable")) {
-            return null;
+        if (summaryJSON.has("eventTrafficDatabaseAvailable")) {
+            summary.setEventTrafficDatabaseAvailable(summaryJSON.getBoolean("eventTrafficDatabaseAvailable"));
         }
-        summary.setEventTrafficDatabaseAvailable(summaryJSON.getBoolean("eventTrafficDatabaseAvailable"));
 
         // TODO wichtig
         if (!summaryJSON.has("drivingDist")) {
@@ -304,15 +282,13 @@ public class ViaMichelinHelper {
         }
         summary.setTotalDist(summaryJSON.getDouble("totalDist"));
 
-        if (!summaryJSON.has("ecoTax")) {
-            return null;
+        if (summaryJSON.has("ecoTax")) {
+            summary.setEcoTax(summaryJSON.getDouble("ecoTax"));
         }
-        summary.setEcoTax(summaryJSON.getDouble("ecoTax"));
 
-        if (!summaryJSON.has("motorwayDist")) {
-            return null;
+        if (summaryJSON.has("motorwayDist")) {
+            summary.setMotorwayDist(summaryJSON.getDouble("motorwayDist"));
         }
-        summary.setMotorwayDist(summaryJSON.getDouble("motorwayDist"));
 
         header.setSummaries(summary);
 
@@ -332,7 +308,7 @@ public class ViaMichelinHelper {
         JSONObject size = jsonObject.getJSONObject("size");
         MapDef mapDef = new MapDef();
 
-        if (!jsonObject.has("id") || jsonObject.getString("id") == null) {
+        if (!jsonObject.has("id") && jsonObject.getString("id") == null) {
             return null;
         }
         mapDef.setId(jsonObject.getString("id"));
