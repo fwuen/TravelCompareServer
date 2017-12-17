@@ -18,9 +18,7 @@ import java.util.List;
 
 public class TrainPerimeterSearchProvider implements PerimeterSearchProvider<TrainStation> {
 
-    public List<TrainStation> find(Geo geoPosition, int radius) throws InterruptedException, ApiException, IOException {
-        Preconditions.checkArgument(radius <= 50000, "50000m Radius ist das Maximum.");
-
+    public List<TrainStation> findNearest(Geo geoPosition) throws InterruptedException, ApiException, IOException {
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
 
         GeoApiContext geoApiContext = GeoApiContextFactory.getBasicGeoApiContext();
