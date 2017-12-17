@@ -17,4 +17,12 @@ public class Way {
     @Getter
     @Setter
     private double price;
+
+    public Way combineWith(@NonNull Way way) {
+        this.routes.addAll(way.routes);
+        this.price = this.getPrice() + way.getPrice();
+
+        return this;
+    }
+
 }
