@@ -3,17 +3,14 @@ package travelcompare.restapi.external.viamichelin;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import javafx.scene.input.DataFormat;
 import org.json.JSONObject;
 import org.json.XML;
 import travelcompare.restapi.external.Consumer;
 import travelcompare.restapi.external.viamichelin.model.RouteResponse;
 import travelcompare.restapi.external.viamichelin.util.ViaMichelinHelper;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.zip.DataFormatException;
 
 
 public class ViaMichelinConsumer extends Consumer {
