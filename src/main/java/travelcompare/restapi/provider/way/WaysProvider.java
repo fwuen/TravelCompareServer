@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface WaysProvider<T extends Geo> {
 
-    public List<Way> find(T start, T destination, Date date);
+    public List<Way> find(T start, T destination, Date date) throws Exception;
 
 }
