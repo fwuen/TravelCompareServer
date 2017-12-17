@@ -34,7 +34,7 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
         try {
             allFares = getFaresFromStartToDestinationOnDate(start, destination, date);
         } catch (UnirestException e) {
-            return new ArrayList<>();
+            return Lists.newArrayList();
         }
     
         List<Way> ways = Lists.newArrayList();
