@@ -14,6 +14,7 @@ public class WayData implements Validateable {
     @NonNull private double lat_end;
     @NonNull private double lon_end;
     @NonNull private double distance;
+    @NonNull private long creatorId;
     private double price;
 
     @Override
