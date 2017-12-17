@@ -50,7 +50,6 @@ public class TrainWaysProvider implements WaysProvider<TrainStation> {
 
             }
         }
-
         return resultList;
     }
 
