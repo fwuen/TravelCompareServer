@@ -15,6 +15,7 @@ import travelcompare.restapi.provider.model.Way;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
         try {
             allFares = getFaresFromStartToDestinationOnDate(start, destination, date);
         } catch (UnirestException e) {
-            return null;
+            return new ArrayList<>();
         }
     
         List<Way> ways = Lists.newArrayList();
