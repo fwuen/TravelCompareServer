@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PerimeterSearchProvider<T extends Geo> {
 
-    public List<T> find(Geo position, int radius) throws Exception;
+    public List<T> findNearest(Geo position) throws Exception;
 
 }
