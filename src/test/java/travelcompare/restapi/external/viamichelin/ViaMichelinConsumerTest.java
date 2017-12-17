@@ -6,7 +6,6 @@ import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.way.CarWaysProvider;
 
-import java.time.DateTimeException;
 import java.util.Date;
 
 public class ViaMichelinConsumerTest extends SpringTest {
