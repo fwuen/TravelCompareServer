@@ -13,6 +13,7 @@ import travelcompare.restapi.data.service.WayService;
 import java.security.Principal;
 import java.util.Optional;
 
+//TODO: nochmal über Statuscodes schauen
 @RestController
 public class WayController {
 
@@ -70,6 +71,33 @@ public class WayController {
         return ResponseEntity.ok(
                 wayOptional.get()
         );
+    }
+
+    @DeleteMapping(RestURLs.WAY_DELETE)
+    public ResponseEntity<Void> delete(
+            @PathVariable("id") long id,
+            Principal principal
+    ) {
+        if(!userService.userExistsByEmail(principal.getName()))
+            return ResponseEntity.status(401).build();
+
+        Optional<User> loggedInUser = userService.getUserByEmail(principal.getName());
+
+        if(!loggedInUser.isPresent())
+            return ResponseEntity.status(403).build();
+
+        Optional<Way> wayToDelete = wayService.getWayById(id);
+
+        if(!wayToDelete.isPresent())
+            return ResponseEntity.status(400).build();
+
+        if(!(wayToDelete.get().getCreatorId() == loggedInUser.get().getId()))
+            return ResponseEntity.status(403).build();
+
+        wayService.deleteWayById(id);
+
+        return ResponseEntity.ok().build();
+
     }
 
 }

@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface WayRepository extends CrudRepository<Way, Long> {
     Optional<Way> findFirstByIdEquals(long id);
+    //TODO remove geht so noch nicht wahrscheinlich
+    void removeAllById(long id);
 }

@@ -50,4 +50,10 @@ public class WayService {
         return repository.save(way);
     }
 
+    public void deleteWayById(long id) {
+        Preconditions.checkArgument(id > 0);
+
+        repository.removeAllById(id);
+    }
+
 }
