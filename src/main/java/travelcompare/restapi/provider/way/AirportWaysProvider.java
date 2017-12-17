@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.lufthansa.LufthansaConsumer;
 import travelcompare.restapi.external.lufthansa.model.AirlineOffer;
-import travelcompare.restapi.external.lufthansa.model.ApplicableFlight;
 import travelcompare.restapi.external.lufthansa.model.FlightSegment;
 import travelcompare.restapi.external.lufthansa.model.FlightSegmentReference;
 import travelcompare.restapi.external.lufthansa.response.AirportsResponse;
@@ -16,7 +15,6 @@ import travelcompare.restapi.provider.model.Way;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
