@@ -1,6 +1,7 @@
 package travelcompare.restapi.external.tankerkoenig;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
@@ -63,6 +64,7 @@ public class TankerkoenigConsumerTest extends SpringTest {
     }
 
     @Test
+    @Ignore
     public void consume() throws Exception {
         RangeSearchResponse response = new TankerkoenigConsumer()
                 .consume();

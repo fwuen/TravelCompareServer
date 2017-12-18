@@ -9,12 +9,12 @@ import lombok.*;
 @EqualsAndHashCode
 public class WayData implements Validateable {
 
-    @NonNull private double lat_start;
-    @NonNull private double lon_start;
-    @NonNull private double lat_end;
-    @NonNull private double lon_end;
-    @NonNull private double distance;
-    @NonNull private long creatorId;
+    private double lat_start;
+    private double lon_start;
+    private double lat_end;
+    private double lon_end;
+    private double distance;
+    private long creatorId;
     private double price;
 
     @Override
