@@ -1,5 +1,6 @@
 package travelcompare.restapi.logic;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
 import travelcompare.restapi.provider.model.Geo;
@@ -14,6 +15,7 @@ public class CheapestWayProviderTest {
     private static final Geo DESTINATION = new Geo(52.500232, 13.310086);
 
     @Test
+    @Ignore
     public void blub() throws Exception {
         CheapestWayProvider provider = new CheapestWayProvider();
 
