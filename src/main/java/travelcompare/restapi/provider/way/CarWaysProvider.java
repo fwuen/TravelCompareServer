@@ -29,6 +29,13 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         consumer = new ViaMichelinConsumer();
     }
 
+    /**
+     *
+     * @param start
+     * @param destination
+     * @param date
+     * @return
+     */
     @Override
     public List<Way> find(Geo start, Geo destination, Date date) {
         return null;
@@ -78,8 +85,8 @@ public class CarWaysProvider implements WaysProvider<Geo> {
     private Way findRoute(int itit, Geo start, Geo destination, Date date) throws UnirestException {
         Way way = new Way();
 
-        TankerkoenigConsumer consumer = new TankerkoenigConsumer();
-        RangeSearchResponse rangeSearchResponse = consumer.consume();
+//        TankerkoenigConsumer consumer = new TankerkoenigConsumer();
+//        RangeSearchResponse rangeSearchResponse = consumer.consume();
         double fuelCost = 1.20;
         RouteResponse response;
         try {

@@ -13,7 +13,7 @@ public class GoogleAuthConstants {
     static final String USERINFO_URL = "/oauth2/v2/userinfo";
 
     /**
-     * ClientID für OAuth2
+     * ClientID für OAuth2 unseres Clients
      */
     static final String CLIENT_ID = "253237769892-72o9h4cvaia73n3i728vdee3k0iatfhi.apps.googleusercontent.com";
 

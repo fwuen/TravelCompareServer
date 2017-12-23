@@ -19,7 +19,7 @@ public class User {
     @Column
     @Getter
     @Setter
-    private long googleId;
+    private String googleId;
 
     @Column(nullable = false)
     @Getter

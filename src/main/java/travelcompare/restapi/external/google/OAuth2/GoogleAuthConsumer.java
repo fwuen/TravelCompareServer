@@ -39,7 +39,6 @@ public class GoogleAuthConsumer extends Consumer {
      * @throws IOException              exception
      * @throws GeneralSecurityException exception
      * @throws UnirestException         exception
-     * @todo Fehlerklassen anlegen für die möglicherweise auftretenden Fehler
      */
     public GoogleAuthResponse getUserInfo(String accessToken) throws IOException, GeneralSecurityException, UnirestException {
         HttpResponse httpResponse = Unirest.get(getBaseURL() + GoogleAuthConstants.USERINFO_URL).
@@ -67,10 +66,10 @@ public class GoogleAuthConsumer extends Consumer {
                 new NetHttpTransport(),
                 JacksonFactory.getDefaultInstance(),
                 "https://www.googleapis.com/oauth2/v4/token",
-                GoogleAuthConstants.CLIENT_ID,
+                GoogleAuthConstants.CLIENT_ID, // Die Id des Clients
                 GoogleAuthConstants.SECRET,
                 authCode,
-                "http://localhost:63342")  // Specify the same redirect URI that you use with your web app
+                "http://localhost:63343")  // Specify the same redirect URI that you use with your web app
                 .execute();
     }
 
