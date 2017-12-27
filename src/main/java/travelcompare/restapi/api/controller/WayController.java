@@ -87,7 +87,7 @@ public class WayController {
         if(!loggedInUser.isPresent())
             return ResponseEntity.status(403).build();
 
-        List<Optional<Way>> ways = wayService.getWayByUsername(loggedInUser.get().getEmail());
+        List<Optional<Way>> ways = wayService.getWaysByCreatorId(loggedInUser.get().getId());
 
         if(!(ways.size() > 0))
             return ResponseEntity.status(404).build();

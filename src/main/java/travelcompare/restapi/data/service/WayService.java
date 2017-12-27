@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import travelcompare.restapi.api.model.request.Validation;
 import travelcompare.restapi.api.model.request.WayData;
+import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.model.Way;
 import travelcompare.restapi.data.repository.UserRepository;
 import travelcompare.restapi.data.repository.WayRepository;
@@ -28,11 +29,10 @@ public class WayService {
         return repository.findFirstByIdEquals(id);
     }
 
-    public List<Optional<Way>> getWayByUsername(String name) {
-        Preconditions.checkNotNull(name);
-        Preconditions.checkArgument(name.length() > 0);
+    public List<Optional<Way>> getWaysByCreatorId(long creatorId) {
+        Preconditions.checkArgument(creatorId > 0);
 
-        return repository.findAllByUsername(name);
+        return repository.findAllByCreatorId(creatorId);
     }
 
     public Way createRoute(@NonNull WayData wayData) {
