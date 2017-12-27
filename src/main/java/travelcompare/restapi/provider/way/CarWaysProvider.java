@@ -1,9 +1,7 @@
 package travelcompare.restapi.provider.way;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import travelcompare.restapi.external.tankerkoenig.TankerkoenigConsumer;
 import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
-import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 import travelcompare.restapi.external.viamichelin.ViaMichelinConsumer;
 import travelcompare.restapi.external.viamichelin.model.RoadSheetStep;
 import travelcompare.restapi.external.viamichelin.model.RouteResponse;

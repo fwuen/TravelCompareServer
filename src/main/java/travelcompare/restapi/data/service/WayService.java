@@ -10,6 +10,7 @@ import travelcompare.restapi.data.model.Way;
 import travelcompare.restapi.data.repository.UserRepository;
 import travelcompare.restapi.data.repository.WayRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,13 @@ public class WayService {
         Preconditions.checkArgument(id > 0);
 
         return repository.findFirstByIdEquals(id);
+    }
+
+    public List<Optional<Way>> getWayByUsername(String name) {
+        Preconditions.checkNotNull(name);
+        Preconditions.checkArgument(name.length() > 0);
+
+        return repository.findAllByUsername(name);
     }
 
     public Way createRoute(@NonNull WayData wayData) {
