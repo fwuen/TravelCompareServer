@@ -17,13 +17,12 @@ import java.util.List;
 public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<Airport> {
 
     @Override
-    public List<Airport> findNearest(Geo geoPosition) throws Exception {
+    public List<Airport> findNearest(Geo geoPosition, boolean isDestination) throws Exception {
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
 
         GeoApiContext geoApiContext = GeoApiContextFactory.getBasicGeoApiContext();
 
         NearbySearchRequest nearbySearchRequest = PlacesApi.nearbySearchQuery(geoApiContext, latLngPosition)
-                .rankby(RankBy.DISTANCE)
                 .type(PlaceType.AIRPORT);
         PlacesSearchResponse response = nearbySearchRequest.await();
 
@@ -31,7 +30,8 @@ public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<A
         ArrayList<Airport> results = Lists.newArrayList();
 
 
-        int max = responseList.size() < 5 ? responseList.size() : 5;
+        // nur einen Bahnhof zurückgeben, wenn es das Ziel ist, ansonsten maximal 5
+        int max = isDestination ? 1 : (responseList.size() < 5 ? responseList.size() : 5);
         for (int i = 0; i < max; i++) {
             PlacesSearchResult current = responseList.get(i);
             Airport airport = new Airport(current.geometry.location.lat, current.geometry.location.lng);

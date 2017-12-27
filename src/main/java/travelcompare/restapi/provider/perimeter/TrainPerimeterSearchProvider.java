@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TrainPerimeterSearchProvider implements PerimeterSearchProvider<TrainStation> {
 
-    public List<TrainStation> findNearest(Geo geoPosition) throws InterruptedException, ApiException, IOException {
+    public List<TrainStation> findNearest(Geo geoPosition, boolean isDestination) throws InterruptedException, ApiException, IOException {
         LatLng latLngPosition = new LatLng(geoPosition.getLat(), geoPosition.getLon());
 
         GeoApiContext geoApiContext = GeoApiContextFactory.getBasicGeoApiContext();
@@ -30,7 +30,8 @@ public class TrainPerimeterSearchProvider implements PerimeterSearchProvider<Tra
         ArrayList<PlacesSearchResult> responseList = Lists.newArrayList(response.results);
         ArrayList<TrainStation> results = Lists.newArrayList();
 
-        int max = responseList.size() < 5 ? responseList.size() : 5;
+        // nur einen Bahnhof zurückgeben, wenn es das Ziel ist, ansonsten maximal 5
+        int max = isDestination ? 1 : (responseList.size() < 5 ? responseList.size() : 5);
         for (int i = 0; i < max; i++) {
             PlacesSearchResult current = responseList.get(i);
             TrainStation trainStation = new TrainStation(current.geometry.location.lat, current.geometry.location.lng)
