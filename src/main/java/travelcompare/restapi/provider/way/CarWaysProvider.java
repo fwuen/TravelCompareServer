@@ -30,7 +30,6 @@ public class CarWaysProvider implements WaysProvider<Geo> {
     }
 
     /**
-     *
      * @param start
      * @param destination
      * @param date
@@ -54,11 +53,11 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         // TODO Hier noch den Spritpreis holen und mit einbeziehen
 
         List<Way> ways = new ArrayList<>();
-        Way way = findCheapest(start, destination, date);
+        Way way = findCheapest(start, destination, date, fuelType);
         if (way != null) {
             ways.add(way);
         }
-        way = findFastest(start, destination, date);
+        way = findFastest(start, destination, date, fuelType);
         if (way != null) {
             ways.add(way);
         }
@@ -66,31 +65,32 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         return ways;
     }
 
-    private Way findCheapest(Geo start, Geo destination, Date date) {
+    private Way findCheapest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
         try {
-            return findRoute(4, start, destination, date);
+            return findRoute(4, start, destination, date, fuelType);
         } catch (UnirestException e) {
             return null;
         }
     }
 
-    private Way findFastest(Geo start, Geo destination, Date date) {
+    private Way findFastest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
         try {
-            return findRoute(1, start, destination, date);
+            return findRoute(1, start, destination, date, fuelType);
         } catch (UnirestException e) {
             return null;
         }
     }
 
-    private Way findRoute(int itit, Geo start, Geo destination, Date date) throws UnirestException {
+    private Way findRoute(int itit, Geo start, Geo destination, Date date, FUEL_TYPE fuelType) throws UnirestException {
         Way way = new Way();
 
 //        TankerkoenigConsumer consumer = new TankerkoenigConsumer();
+//        consumer.withFuelType(fuelType);
 //        RangeSearchResponse rangeSearchResponse = consumer.consume();
         double fuelCost = 1.20;
         RouteResponse response;
         try {
-            response = new ViaMichelinConsumer().getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, new Date());
+            response = new ViaMichelinConsumer().getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, date);
             if (response == null || response.getIti() == null || response.getIti().getRoadSheet() == null || response.getIti().getRoadSheet().getRoadSheetStep() == null || response.getIti().getHeader() == null) {
                 return null;
             }

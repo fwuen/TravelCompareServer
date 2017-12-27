@@ -11,6 +11,7 @@ public class GoogleOAuthData implements Validateable {
 
     // Auth-Code von Google über welchen der Nutzer sich verifizieren kann
     private String auth_code;
+    private String client_id;
 
     @Override
     public Validation valid() {
@@ -18,6 +19,10 @@ public class GoogleOAuthData implements Validateable {
 
         if (auth_code == null || auth_code.isEmpty()) {
             validation.setError("Der Google-Authentifizierungscode ist ungültig!");
+            return validation;
+        }
+        if (client_id == null || client_id.isEmpty()) {
+            validation.setError("Die Client-Id ist ungültig!");
             return validation;
         }
         return validation;
