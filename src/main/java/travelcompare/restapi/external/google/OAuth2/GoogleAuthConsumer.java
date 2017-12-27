@@ -60,16 +60,16 @@ public class GoogleAuthConsumer extends Consumer {
      * @return GoogleTokenResponse;
      * @throws IOException exception
      */
-    public GoogleTokenResponse redeemAuthToken(String authCode) throws IOException {
+    public GoogleTokenResponse redeemAuthToken(String authCode, String clientId) throws IOException {
 
         return new GoogleAuthorizationCodeTokenRequest(
                 new NetHttpTransport(),
                 JacksonFactory.getDefaultInstance(),
                 "https://www.googleapis.com/oauth2/v4/token",
-                GoogleAuthConstants.CLIENT_ID, // Die Id des Clients
+                clientId, // Die Id des Clients
                 GoogleAuthConstants.SECRET,
                 authCode,
-                "http://localhost:63343")  // Specify the same redirect URI that you use with your web app
+                "http://localhost:63342")  // Specify the same redirect URI that you use with your web app
                 .execute();
     }
 

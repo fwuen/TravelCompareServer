@@ -15,7 +15,7 @@ public class GoogleAuthConstants {
     /**
      * ClientID für OAuth2 unseres Clients
      */
-    static final String CLIENT_ID = "253237769892-72o9h4cvaia73n3i728vdee3k0iatfhi.apps.googleusercontent.com";
+    public static final String CLIENT_ID = "253237769892-72o9h4cvaia73n3i728vdee3k0iatfhi.apps.googleusercontent.com";
 
     /**
      * SecretID für OAuth2

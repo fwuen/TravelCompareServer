@@ -33,7 +33,7 @@ public class GoogleOAuthService {
         Preconditions.checkArgument(validation.isValid(), validation.getMessage());
         GoogleAuthConsumer consumer = new GoogleAuthConsumer();
         try {
-            GoogleTokenResponse response = consumer.redeemAuthToken(data.getAuth_code());
+            GoogleTokenResponse response = consumer.redeemAuthToken(data.getAuth_code(), data.getClient_id());
             return Optional.ofNullable(response);
         } catch (Exception e) {
             return Optional.empty();
