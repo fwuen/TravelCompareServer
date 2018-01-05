@@ -1,5 +1,6 @@
 package travelcompare.restapi.api.controller;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
@@ -18,9 +19,8 @@ import travelcompare.restapi.provider.model.Geo;
 
 import javax.xml.ws.Response;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
+import java.util.List;import java.text.SimpleDateFormat;
+import java.util.Date;import java.util.Optional;
 
 //TODO: nochmal über Statuscodes schauen
 @RestController
@@ -79,6 +79,38 @@ public class WayController {
 
         return ResponseEntity.ok(
                 wayOptional.get()
+        );
+    }
+
+    @GetMapping(RestURLs.WAYS_GET)
+    public ResponseEntity<List<Way>> get(
+            Principal principal
+    ) {
+        if(!userService.userExistsByEmail(principal.getName()))
+            return ResponseEntity.status(401).build();
+
+        Optional<User> loggedInUser = userService.getUserByEmail(principal.getName());
+
+        if(!loggedInUser.isPresent())
+            return ResponseEntity.status(403).build();
+
+        List<Optional<Way>> ways = wayService.getWaysByCreatorId(loggedInUser.get().getId());
+
+        if(!(ways.size() > 0))
+            return ResponseEntity.status(404).build();
+
+        for (Optional<Way> way : ways) {
+            if(!way.isPresent())
+                return ResponseEntity.status(404).build();
+        }
+
+        List<Way> finalWays = Lists.newArrayList();
+        for(Optional<Way> way : ways) {
+            finalWays.add(way.get());
+        }
+
+        return ResponseEntity.ok(
+                finalWays
         );
     }
 
