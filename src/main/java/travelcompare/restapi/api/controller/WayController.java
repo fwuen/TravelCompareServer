@@ -3,7 +3,6 @@ package travelcompare.restapi.api.controller;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
 import travelcompare.restapi.api.model.request.WAY_TYPE;
@@ -17,10 +16,10 @@ import travelcompare.restapi.logic.CheapestWayProvider;
 import travelcompare.restapi.logic.FastestWayProvider;
 import travelcompare.restapi.provider.model.Geo;
 
-import javax.xml.ws.Response;
 import java.security.Principal;
-import java.util.List;import java.text.SimpleDateFormat;
-import java.util.Date;import java.util.Optional;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 //TODO: nochmal über Statuscodes schauen
 @RestController
