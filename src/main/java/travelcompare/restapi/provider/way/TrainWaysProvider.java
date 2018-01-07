@@ -33,21 +33,21 @@ public class TrainWaysProvider implements WaysProvider<TrainStation> {
 
         List<Route> resultList = Lists.newArrayList();
 
-        for (DirectionsRoute route :
+        for (DirectionsRoute googleRoute :
                 requestResult.routes) {
-            Route way = new Route();
-            resultList.add(way);
+            Route route = new Route(Transport.TRAIN);
+            resultList.add(route);
             for (DirectionsStep step :
-                    route.legs[0].steps) {
-                Step wayStep = new Step();
+                    googleRoute.legs[0].steps) {
+                Step routeStep = new Step();
                 if (step.travelMode.equals(TravelMode.TRANSIT)) {
-                    wayStep.setTransport(Transport.TRAIN);
-                    wayStep.setDuration(step.duration.inSeconds/60);
-                    wayStep.setStart(new Geo(step.startLocation.lat, step.startLocation.lng));
-                    wayStep.setDestination(new Geo(step.endLocation.lat, step.endLocation.lng));
-                    way.getSteps().add(wayStep);
+                    routeStep.setTransport(Transport.TRAIN);
+                    routeStep.setDuration(step.duration.inSeconds/60);
+                    routeStep.setStart(new Geo(step.startLocation.lat, step.startLocation.lng));
+                    routeStep.setDestination(new TrainStation(step.endLocation.lat, step.endLocation.lng));
+                    routeStep.setDescription(step.htmlInstructions);
+                    route.addStep(routeStep);
                 }
-
             }
         }
         return resultList;

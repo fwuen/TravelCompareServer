@@ -2,7 +2,7 @@ package travelcompare.restapi.provider.way;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.tankerkoenig.TankerkoenigConsumer;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 import travelcompare.restapi.external.tankerkoenig.response.Station;
 import travelcompare.restapi.external.viamichelin.ViaMichelinConsumer;
@@ -47,7 +47,7 @@ public class CarWaysProvider implements WaysProvider<Geo> {
      * @param date        Date
      * @return List<Route>
      */
-    public List<Route> findWithFuelType(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
+    public List<Route> findWithFuelType(Geo start, Geo destination, Date date, FuelType fuelType) {
         if (start == null || destination == null || date == null) {
             return null;
         }
@@ -66,7 +66,7 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         return routes;
     }
 
-    private Route findCheapest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
+    private Route findCheapest(Geo start, Geo destination, Date date, FuelType fuelType) {
         try {
             return findRoute(4, start, destination, date, fuelType);
         } catch (UnirestException e) {
@@ -74,7 +74,7 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         }
     }
 
-    private Route findFastest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
+    private Route findFastest(Geo start, Geo destination, Date date, FuelType fuelType) {
         try {
             return findRoute(1, start, destination, date, fuelType);
         } catch (UnirestException e) {
@@ -82,8 +82,8 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         }
     }
 
-    private Route findRoute(int itit, Geo start, Geo destination, Date date, FUEL_TYPE fuelType) throws UnirestException {
-        Route route = new Route();
+    private Route findRoute(int itit, Geo start, Geo destination, Date date, FuelType fuelType) throws UnirestException {
+        Route route = new Route(Transport.CAR);
 
         TankerkoenigConsumer consumer = new TankerkoenigConsumer();
         consumer.withFuelType(fuelType);
@@ -119,7 +119,8 @@ public class CarWaysProvider implements WaysProvider<Geo> {
             step.setTransport(Transport.CAR);
             step.setDuration(roadSheetStep.getDuration());
             step.setDistance(roadSheetStep.getDistance());
-            route.getSteps().add(step);
+            step.setDescription(roadSheetStep.getInstructions());
+            route.addStep(step);
         }
         route.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
         return route;

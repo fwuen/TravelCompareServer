@@ -69,7 +69,7 @@ public class ViaMichelinHelper {
             if (!item.has("duration")) {
                 return null;
             }
-            step.setDuration(item.getLong("duration"));
+            step.setDuration(item.getDouble("duration") / 60);
 
             if (!item.has("instructions") || item.getString("instructions") == null) {
                 return null;

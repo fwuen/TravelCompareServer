@@ -20,7 +20,7 @@ public class Step {
 
     @Getter
     @Setter
-    private long duration;
+    private double duration;
 
     @Getter
     @Setter

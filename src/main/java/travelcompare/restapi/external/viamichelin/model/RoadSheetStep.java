@@ -11,7 +11,7 @@ public class RoadSheetStep {
 
     @Getter
     @Setter
-    private Long duration;
+    private double duration;
 
     @Getter
     @Setter

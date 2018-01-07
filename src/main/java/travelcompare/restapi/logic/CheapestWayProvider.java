@@ -3,7 +3,7 @@ package travelcompare.restapi.logic;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
@@ -31,7 +31,7 @@ public class CheapestWayProvider {
             @NonNull Geo destination,
             int radius,
             @NonNull Date date,
-            FUEL_TYPE fuelType
+            FuelType fuelType
     ) throws Exception {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
@@ -70,7 +70,7 @@ public class CheapestWayProvider {
             @NonNull Geo destination,
             int radius,
             @NonNull Date date,
-            FUEL_TYPE fuelType
+            FuelType fuelType
     ) throws Exception {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
@@ -112,7 +112,7 @@ public class CheapestWayProvider {
             @NonNull Geo destination,
             int radius,
             @NonNull Date date,
-            FUEL_TYPE fuelType
+            FuelType fuelType
     ) throws Exception {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
@@ -152,7 +152,7 @@ public class CheapestWayProvider {
             @NonNull Geo start,
             @NonNull Geo destination,
             @NonNull Date date,
-            FUEL_TYPE fuelType
+            FuelType fuelType
     ) {
         List<Route> carRoutes = Lists.newArrayList();
 

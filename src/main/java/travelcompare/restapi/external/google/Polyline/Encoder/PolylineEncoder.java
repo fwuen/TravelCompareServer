@@ -198,7 +198,7 @@ public class PolylineEncoder {
 
 	/**
 	 * @param points
-	 *            set the points that should be encoded all points have to be in
+	 *            set the points that should be encoded ALL points have to be in
 	 *            the following form: Latitude, longitude\n
 	 */
 	public static Track pointsToTrack(String points) {
@@ -215,7 +215,7 @@ public class PolylineEncoder {
 
 	/**
 	 * @param points
-	 *            set the points that should be encoded all points have to be in
+	 *            set the points that should be encoded ALL points have to be in
 	 *            the following form: Longitude,Latitude,Altitude"_"...
 	 */
 	public static Track kmlLineStringToTrack(String points) {

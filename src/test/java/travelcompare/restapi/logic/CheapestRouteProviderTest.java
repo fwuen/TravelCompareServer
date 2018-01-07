@@ -2,7 +2,7 @@ package travelcompare.restapi.logic;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
 
@@ -19,15 +19,15 @@ public class CheapestRouteProviderTest {
     public void blub() throws Exception {
         CheapestWayProvider provider = new CheapestWayProvider();
 
-        //Optional<Route> way = provider.findCheapestCarWay(START, DESTINATION, new Date(), FUEL_TYPE.all);
+        //Optional<Route> way = provider.findCheapestCarWay(START, DESTINATION, new Date(), FuelType.all);
 
         //System.out.println(way.isPresent() ? "car: " + way.get().toString() : "Kein Route gefunden");
 
-        //way = provider.findCheapestAirportWay(START, DESTINATION, 10000, new Date(), FUEL_TYPE.all);
+        //way = provider.findCheapestAirportWay(START, DESTINATION, 10000, new Date(), FuelType.all);
 
         //System.out.println(way.isPresent() ? "airport: " + way.get().toString() : "Kein Route gefunden");
 
-        Optional<Route> way = provider.findCheapestTrainWay(START, DESTINATION, 10000, new Date(), FUEL_TYPE.all);
+        Optional<Route> way = provider.findCheapestTrainWay(START, DESTINATION, 10000, new Date(), FuelType.ALL);
 
         System.out.println(way.isPresent() ? "train: " + way.get().toString() : "Kein Route gefunden");
     }

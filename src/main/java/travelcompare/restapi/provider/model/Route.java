@@ -21,7 +21,29 @@ public class Route {
     public Route combineWith(@NonNull Route route) {
         this.steps.addAll(route.steps);
         this.price = this.getPrice() + route.getPrice();
+        this.duration += route.getDuration();
+        this.distance += route.getDistance();
 
         return this;
     }
+
+    public void addStep(Step step) {
+        steps.add(step);
+        distance += step.getDistance();
+        duration += step.getDuration();
+    }
+
+    @Getter
+    @Setter
+    private double distance;
+
+    @Getter
+    @Setter
+    @NonNull
+    private Transport transport;
+
+    @Getter
+    @Setter
+    private double duration;
+
 }

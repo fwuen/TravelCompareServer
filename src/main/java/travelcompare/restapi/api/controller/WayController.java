@@ -5,19 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
-import travelcompare.restapi.api.model.request.WAY_TYPE;
 import travelcompare.restapi.api.model.request.WayData;
+import travelcompare.restapi.api.model.request.WayType;
 import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.model.Way;
 import travelcompare.restapi.data.service.UserService;
 import travelcompare.restapi.data.service.WayService;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
-import travelcompare.restapi.logic.CheapestWayProvider;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
+import travelcompare.restapi.logic.WayProvider;
 import travelcompare.restapi.logic.FastestWayProvider;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
 
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -37,11 +40,11 @@ public class WayController {
             @RequestBody WayData data,
             Principal principal
     ) {
-        if(!data.valid().isValid())
+        if (!data.valid().isValid())
             return ResponseEntity.status(400).build();
 
         long creatorId;
-        if(userService.getUserByEmail(principal.getName()).isPresent()) {
+        if (userService.getUserByEmail(principal.getName()).isPresent()) {
             creatorId = userService.getUserByEmail(principal.getName()).get().getId();
         } else {
             return ResponseEntity.status(401).build();
@@ -60,7 +63,7 @@ public class WayController {
     ) {
         Optional<User> loggedInUser = userService.getUserByEmail(principal.getName());
 
-        if(!loggedInUser.isPresent() || loggedInUser.get().getId() != way.getCreatorId())
+        if (!loggedInUser.isPresent() || loggedInUser.get().getId() != way.getCreatorId())
             return ResponseEntity.status(403).build();
 
         return ResponseEntity.ok(
@@ -74,7 +77,7 @@ public class WayController {
     ) {
         Optional<Way> wayOptional = wayService.getWayById(id);
 
-        if(!wayOptional.isPresent())
+        if (!wayOptional.isPresent())
             return ResponseEntity.status(404).build();
 
         return ResponseEntity.ok(
@@ -86,26 +89,26 @@ public class WayController {
     public ResponseEntity<List<Way>> get(
             Principal principal
     ) {
-        if(!userService.userExistsByEmail(principal.getName()))
+        if (!userService.userExistsByEmail(principal.getName()))
             return ResponseEntity.status(401).build();
 
         Optional<User> loggedInUser = userService.getUserByEmail(principal.getName());
 
-        if(!loggedInUser.isPresent())
+        if (!loggedInUser.isPresent())
             return ResponseEntity.status(403).build();
 
         List<Optional<Way>> ways = wayService.getWaysByCreatorId(loggedInUser.get().getId());
 
-        if(!(ways.size() > 0))
+        if (!(ways.size() > 0))
             return ResponseEntity.status(404).build();
 
         for (Optional<Way> way : ways) {
-            if(!way.isPresent())
+            if (!way.isPresent())
                 return ResponseEntity.status(404).build();
         }
 
         List<Way> finalWays = Lists.newArrayList();
-        for(Optional<Way> way : ways) {
+        for (Optional<Way> way : ways) {
             finalWays.add(way.get());
         }
 
@@ -119,20 +122,20 @@ public class WayController {
             @PathVariable("id") long id,
             Principal principal
     ) {
-        if(!userService.userExistsByEmail(principal.getName()))
+        if (!userService.userExistsByEmail(principal.getName()))
             return ResponseEntity.status(401).build();
 
         Optional<User> loggedInUser = userService.getUserByEmail(principal.getName());
 
-        if(!loggedInUser.isPresent())
+        if (!loggedInUser.isPresent())
             return ResponseEntity.status(403).build();
 
         Optional<Way> wayToDelete = wayService.getWayById(id);
 
-        if(!wayToDelete.isPresent())
+        if (!wayToDelete.isPresent())
             return ResponseEntity.status(400).build();
 
-        if(!(wayToDelete.get().getCreatorId() == loggedInUser.get().getId()))
+        if (!(wayToDelete.get().getCreatorId() == loggedInUser.get().getId()))
             return ResponseEntity.status(403).build();
 
         wayService.deleteWayById(id);
@@ -143,21 +146,21 @@ public class WayController {
 
     @GetMapping(RestURLs.WAY_FIND)
     public ResponseEntity<Route> find(
-            @PathVariable("start_lat") double start_lat,
-            @PathVariable("start_lon") double start_lon,
-            @PathVariable("dest_lat") double dest_lat,
-            @PathVariable("dest_lon") double dest_lon,
-            @PathVariable("date") String date,
-            @PathVariable(value = "radius", required = false) int radius,
-            @PathVariable(value = "fuel_type", required = false) String fuel_type,
-            @PathVariable(value = "way_category", required = false) String way_category,
+            @RequestParam("start_lat") double start_lat,
+            @RequestParam("start_lon") double start_lon,
+            @RequestParam("dest_lat") double dest_lat,
+            @RequestParam("dest_lon") double dest_lon,
+            @RequestParam("date") String date,
+            @RequestParam(value = "radius", required = false) Integer radius,
+            @RequestParam(value = "fuel_type", required = false) String fuel_type,
+            @RequestParam(value = "way_category", required = false) String way_category,
             Principal principal
     ) {
 
-        CheapestWayProvider cheapestWayProvider = new CheapestWayProvider();
+        WayProvider wayProvider = new WayProvider();
         FastestWayProvider fastestWayProvider = new FastestWayProvider();
 
-        if(!userService.userExistsByEmail(principal.getName()))
+        if (!userService.userExistsByEmail(principal.getName()))
             return ResponseEntity.status(401).build();
 
         Optional<User> loggedInUser = userService.getUserByEmail(principal.getName());
@@ -165,40 +168,21 @@ public class WayController {
         Geo start = new Geo(start_lat, start_lon);
         Geo dest = new Geo(dest_lat, dest_lon);
 
-        FUEL_TYPE fuelType = null;
-        WAY_TYPE wayType = null;
 
-        if (fuel_type == null) {
-            fuelType = FUEL_TYPE.all;
-        } else {
-            try {
-                fuelType = FUEL_TYPE.valueOf(fuel_type);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.status(400).build();
-            }
+        // 2008-09-09
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date formatted_date = null;
+        try {
+            formatted_date = dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        if (way_category == null) {
-            wayType = WAY_TYPE.FASTEST;
-        } else {
-            try {
-                wayType = WAY_TYPE.valueOf(way_category);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.status(400).build();
-            }
+        try {
+            return ResponseEntity.ok(wayProvider.find(start, dest, 50000, formatted_date, FuelType.E5, WayType.FASTEST).get()) ;
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
         }
-
-        Date formatted_date = new Date(date);
-
-        Optional<Route> returnWay = null;
-        if (wayType.equals(WAY_TYPE.CHEAPEST)) {
-            try {
-                returnWay = cheapestWayProvider.find(start, dest, radius, formatted_date, fuelType);
-            } catch (Exception e) {
-                return ResponseEntity.status(500).build();
-            }
-        }
-
-        return ResponseEntity.ok(returnWay.get());
     }
 }
