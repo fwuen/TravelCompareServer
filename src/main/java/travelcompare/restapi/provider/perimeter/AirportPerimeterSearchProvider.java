@@ -23,6 +23,7 @@ public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<A
         GeoApiContext geoApiContext = GeoApiContextFactory.getBasicGeoApiContext();
 
         NearbySearchRequest nearbySearchRequest = PlacesApi.nearbySearchQuery(geoApiContext, latLngPosition)
+                .radius(50000)
                 .type(PlaceType.AIRPORT);
         PlacesSearchResponse response = nearbySearchRequest.await();
 
