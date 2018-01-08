@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.SpringTest;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 
 public class TankerkoenigConsumerTest extends SpringTest {
@@ -52,7 +52,7 @@ public class TankerkoenigConsumerTest extends SpringTest {
     @Test(expected = IllegalStateException.class)
     public void withSortIsPriceWhileFuelTypeIsAll() {
         new TankerkoenigConsumer()
-                .withFuelType(FUEL_TYPE.all)
+                .withFuelType(FuelType.ALL)
                 .withSort(TankerkoenigConsumer.SORT.price);
     }
 
@@ -60,7 +60,7 @@ public class TankerkoenigConsumerTest extends SpringTest {
     public void withFuelTypeIsAllWhileSortIsPrice() {
         new TankerkoenigConsumer()
                 .withSort(TankerkoenigConsumer.SORT.price)
-                .withFuelType(FUEL_TYPE.all);
+                .withFuelType(FuelType.ALL);
     }
 
     @Test

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import travelcompare.restapi.external.Consumer;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 
 public class TankerkoenigConsumer extends Consumer {
@@ -17,7 +17,7 @@ public class TankerkoenigConsumer extends Consumer {
     private double latitude = 50.212932; /* Hof */
     private double longitude = 11.943976; /* Hof */
     private int radiusInKilometers = MAX_RADIUS_IN_KILOMETERS;
-    private FUEL_TYPE fuelType = FUEL_TYPE.all;
+    private FuelType fuelType = FuelType.ALL;
     private SORT sort = SORT.dist;
 
 
@@ -49,10 +49,10 @@ public class TankerkoenigConsumer extends Consumer {
         return this;
     }
 
-    public TankerkoenigConsumer withFuelType(FUEL_TYPE fuelType) {
+    public TankerkoenigConsumer withFuelType(FuelType fuelType) {
         Preconditions.checkNotNull(fuelType);
         Preconditions.checkState(!(
-                fuelType == FUEL_TYPE.all &&
+                fuelType == FuelType.ALL &&
                         this.sort == SORT.price
         ), "Du kannst nicht nach dem Preis sortieren wenn du alle Treibstoffarten gesetzt hast.");
 
@@ -64,7 +64,7 @@ public class TankerkoenigConsumer extends Consumer {
     public TankerkoenigConsumer withSort(SORT sort) {
         Preconditions.checkNotNull(sort);
         Preconditions.checkState(!(
-                this.fuelType == FUEL_TYPE.all &&
+                this.fuelType == FuelType.ALL &&
                         sort == SORT.price
         ), "Du kannst nicht nach dem Preis sortieren wenn du alle Treibstoffarten gesetzt hast.");
 
