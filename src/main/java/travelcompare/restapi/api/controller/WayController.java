@@ -5,27 +5,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
-import travelcompare.restapi.api.model.request.WAY_TYPE;
 import travelcompare.restapi.api.model.request.WayData;
 import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.model.Way;
 import travelcompare.restapi.data.service.UserService;
 import travelcompare.restapi.data.service.WayService;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
-import travelcompare.restapi.logic.CheapestWayProvider;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
+import travelcompare.restapi.logic.WayProvider;
 import travelcompare.restapi.logic.FastestWayProvider;
 import travelcompare.restapi.provider.model.Geo;
 
-import javax.xml.ws.Response;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static travelcompare.restapi.api.model.request.WAY_TYPE.CHEAPEST;
-import static travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE.e10;
 
 //TODO: nochmal über Statuscodes schauen
 @RestController
@@ -159,7 +155,7 @@ public class WayController {
             Principal principal
     ) {
 
-        CheapestWayProvider cheapestWayProvider = new CheapestWayProvider();
+        WayProvider wayProvider = new WayProvider();
         FastestWayProvider fastestWayProvider = new FastestWayProvider();
 
         if (!userService.userExistsByEmail(principal.getName()))
@@ -172,14 +168,17 @@ public class WayController {
 
 
         // 2008-09-09
-        LocalDate localDate = LocalDate.of(Integer.parseInt(date.substring(0, 4)),
-                Integer.parseInt(date.substring(5, 7)),
-                Integer.parseInt(date.substring(8, 10)));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        Date formatted_date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date formatted_date = null;
+        try {
+            formatted_date = dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         try {
-            return ResponseEntity.ok(cheapestWayProvider.find(start, dest, 50000, formatted_date, FUEL_TYPE.all).get()) ;
+            return ResponseEntity.ok(wayProvider.find(start, dest, 50000, formatted_date, FuelType.ALL).get()) ;
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }

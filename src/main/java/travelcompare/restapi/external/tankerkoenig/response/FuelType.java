@@ -1,5 +1,5 @@
 package travelcompare.restapi.external.tankerkoenig.response;
 
-public enum FUEL_TYPE {
-    e5, e10, diesel, all
+public enum FuelType {
+    E5, E10, DIESEL, ALL
 }

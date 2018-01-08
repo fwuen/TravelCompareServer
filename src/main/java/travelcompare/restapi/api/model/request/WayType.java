@@ -1,8 +1,5 @@
 package travelcompare.restapi.api.model.request;
 
-public enum WAY_TYPE {
-
+public enum WayType {
     FASTEST, CHEAPEST
-
-
 }
