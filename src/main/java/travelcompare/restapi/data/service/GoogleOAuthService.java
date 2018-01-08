@@ -33,7 +33,7 @@ public class GoogleOAuthService {
         Preconditions.checkArgument(validation.isValid(), validation.getMessage());
         GoogleAuthConsumer consumer = new GoogleAuthConsumer();
         try {
-            GoogleTokenResponse response = consumer.redeemAuthToken(data.getAuth_code(), data.getClient_id());
+            GoogleTokenResponse response = consumer.redeemAuthToken(data.getAuth_code(), data.getClient_id(), data.getRedirect_uri());
             return Optional.ofNullable(response);
         } catch (Exception e) {
             return Optional.empty();
@@ -80,8 +80,8 @@ public class GoogleOAuthService {
      */
     private String generate() {
         StringBuilder stringBuilder = new StringBuilder();
-        final char[] ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-+!$%&/()={}?".toCharArray();
-        int tokenLength = 64;
+        final char[] ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.*-_".toCharArray();
+        int tokenLength = 48;
         Random random = new Random();
         for (int i = 0; i < tokenLength; i++)
             stringBuilder.append(ALLOWED_CHARS[random.nextInt(ALLOWED_CHARS.length)]);

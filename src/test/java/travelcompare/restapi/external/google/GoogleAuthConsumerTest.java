@@ -23,7 +23,7 @@ public class GoogleAuthConsumerTest {
     @Ignore
     @Test
     public void TestRedeemAuthToken() throws IOException {
-        GoogleTokenResponse response = new GoogleAuthConsumer().redeemAuthToken(GoogleAuthConstants.AUTH_TOKEN, GoogleAuthConstants.CLIENT_ID);
+        GoogleTokenResponse response = new GoogleAuthConsumer().redeemAuthToken(GoogleAuthConstants.AUTH_TOKEN, GoogleAuthConstants.CLIENT_ID, "http://localhost:8081");
         System.out.print(response.getRefreshToken());
     }
 

@@ -60,7 +60,7 @@ public class GoogleAuthConsumer extends Consumer {
      * @return GoogleTokenResponse;
      * @throws IOException exception
      */
-    public GoogleTokenResponse redeemAuthToken(String authCode, String clientId) throws IOException {
+    public GoogleTokenResponse redeemAuthToken(String authCode, String clientId, String redirectUri) throws IOException {
 
         return new GoogleAuthorizationCodeTokenRequest(
                 new NetHttpTransport(),
@@ -69,7 +69,7 @@ public class GoogleAuthConsumer extends Consumer {
                 clientId, // Die Id des Clients
                 GoogleAuthConstants.SECRET,
                 authCode,
-                "http://localhost:63342")  // Specify the same redirect URI that you use with your web app
+                redirectUri)  // Specify the same redirect URI that you use with your web app
                 .execute();
     }
 

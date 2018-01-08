@@ -60,14 +60,13 @@ public class GoogleAuthController {
             return ResponseEntity.status(401).build();
         }
         Optional<User> userOptional = userService.getUserByEmail(googleAuthResponse.get().getEmail());
-        User user = null;
-        if (!userOptional.isPresent()) {
-            user = googleOAuthService.createGoogleUser(googleAuthResponse.get());
-        }
+        User user = userOptional.orElseGet(() -> googleOAuthService.createGoogleUser(googleAuthResponse.get()));
 
-        if (user == null) {
+        if (user == null || user.getEmail() == null) {
             return ResponseEntity.status(500).build();
         }
+
+
         // User manuell authentifizieren und den Token im Responseheader zurückgeben
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Lists.newArrayList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -78,7 +77,7 @@ public class GoogleAuthController {
                 .compact();
 
         HttpHeaders responseHeader = new HttpHeaders();
-        responseHeader.set("Authorization", SecurityConfiguration.TOKEN_PREFIX + token);
+        responseHeader.add("Authorization", SecurityConfiguration.TOKEN_PREFIX + token);
         return new ResponseEntity<>("", responseHeader, HttpStatus.OK);
     }
 }
