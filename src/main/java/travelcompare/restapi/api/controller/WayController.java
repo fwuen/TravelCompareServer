@@ -115,7 +115,7 @@ public class WayController {
 
     @DeleteMapping(RestURLs.WAY_DELETE)
     public ResponseEntity<Void> delete(
-            @PathVariable("id") long id,
+            @RequestBody Way way,
             Principal principal
     ) {
         if(!userService.userExistsByEmail(principal.getName()))
@@ -126,7 +126,7 @@ public class WayController {
         if(!loggedInUser.isPresent())
             return ResponseEntity.status(403).build();
 
-        Optional<Way> wayToDelete = wayService.getWayById(id);
+        Optional<Way> wayToDelete = wayService.getWayById(way.getId());
 
         if(!wayToDelete.isPresent())
             return ResponseEntity.status(400).build();
@@ -134,7 +134,7 @@ public class WayController {
         if(!(wayToDelete.get().getCreatorId() == loggedInUser.get().getId()))
             return ResponseEntity.status(403).build();
 
-        wayService.deleteWayById(id);
+        wayService.deleteWayById(way.getId());
 
         return ResponseEntity.ok().build();
 
