@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.api.model.request.RegisterData;
 import travelcompare.restapi.data.model.User;
-import travelcompare.restapi.provider.model.Geo;
 
 @Transactional
 public class UserServiceTest extends SpringTest {
@@ -17,7 +16,8 @@ public class UserServiceTest extends SpringTest {
     private static final String LAST_NAME = "Fuchs";
     private static final String EMAIL = "syntarex@gmail.com";
     private static final String PASSWORD = "test123";
-    private static final Geo GEO = new Geo(33.4, 21.2);
+    private static final double LAT = 33.4;
+    private static final double LON = 21.2;
 
     @Autowired
     private UserService userService;
@@ -56,7 +56,8 @@ public class UserServiceTest extends SpringTest {
         Assert.assertEquals(LAST_NAME, user.getLastName());
         Assert.assertEquals(EMAIL, user.getEmail());
         Assert.assertTrue(passwordEncoder.matches(PASSWORD, user.getPassword()));
-        Assert.assertEquals(GEO, user.getGeo());
+        Assert.assertEquals(LAT, user.getGeo().getLat(), 0);
+        Assert.assertEquals(LON, user.getGeo().getLon(), 0);
     }
 
     private RegisterData getInvalidRegisterData() {
@@ -66,7 +67,8 @@ public class UserServiceTest extends SpringTest {
                 .email("keine email")
                 .password(PASSWORD)
                 .password2(PASSWORD)
-                .location(GEO)
+                .lat(LAT)
+                .lon(LON)
                 .build();
     }
 
@@ -77,7 +79,8 @@ public class UserServiceTest extends SpringTest {
                 .email(EMAIL)
                 .password(PASSWORD)
                 .password2(PASSWORD)
-                .location(GEO)
+                .lat(LAT)
+                .lon(LON)
                 .build();
     }
 

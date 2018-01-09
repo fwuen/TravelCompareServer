@@ -11,6 +11,7 @@ import travelcompare.restapi.api.model.request.RegisterData;
 import travelcompare.restapi.api.model.request.Validation;
 import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.repository.UserRepository;
+import travelcompare.restapi.provider.model.Geo;
 
 import java.util.Optional;
 
@@ -90,7 +91,7 @@ public class UserService {
         user.setFirstName(registerData.getFirstName());
         user.setLastName(registerData.getLastName());
         user.setEmail(registerData.getEmail());
-        user.setGeo(registerData.getLocation());
+        user.setGeo(new Geo(registerData.getLat(), registerData.getLon()));
         user.setPassword(passwordEncoder.encode(registerData.getPassword()));
 
         return repository.save(user);

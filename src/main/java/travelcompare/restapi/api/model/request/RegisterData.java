@@ -18,7 +18,8 @@ public class RegisterData implements Validateable {
     @NonNull private String email;
     @NonNull private String password;
     @NonNull private String password2;
-    private Geo location;
+    private double lat;
+    private double lon;
 
     @Override
     public Validation valid() {
