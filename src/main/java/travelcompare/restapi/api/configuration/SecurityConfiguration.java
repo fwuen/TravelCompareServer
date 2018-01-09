@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import travelcompare.restapi.api.RestURLs;
 import travelcompare.restapi.api.security.JWTAuthenticationFilter;
 import travelcompare.restapi.api.security.JWTAuthorizationFilter;
@@ -62,7 +65,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.applyPermitDefaultValues();
+        configuration.addAllowedHeader("Authorization");
+        configuration.addExposedHeader("Authorization");
+
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
