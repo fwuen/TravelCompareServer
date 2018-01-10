@@ -5,18 +5,8 @@ import lombok.Setter;
 
 public class RouteHeader {
     public RouteHeader() {
-        startMapDef = new MapDef();
-        destMapDef = new MapDef();
         summaries = new Summary();
     }
-
-    @Getter
-    @Setter
-    private MapDef startMapDef;
-
-    @Getter
-    @Setter
-    private MapDef destMapDef;
 
     @Getter
     @Setter

@@ -6,7 +6,6 @@ import lombok.Setter;
 public class RoadSheetStep {
 
     public RoadSheetStep() {
-        mapDef = new MapDef();
         coords = new RouteCoords();
     }
 
@@ -17,10 +16,6 @@ public class RoadSheetStep {
     @Getter
     @Setter
     private String instructions;
-
-    @Getter
-    @Setter
-    private MapDef mapDef;
 
     @Getter
     @Setter
