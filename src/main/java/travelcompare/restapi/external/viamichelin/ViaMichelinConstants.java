@@ -5,7 +5,7 @@ class ViaMichelinConstants {
     /**
      * Api Key der ViaMichelin Api
      */
-    static final String API_KEY = "RESTGP20171120101655543984364494";
+    static final String API_KEY = "RESTGP20180110180829543526761213";
 
     /**
      * Base Url der ViaMichelinApi

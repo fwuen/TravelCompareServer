@@ -24,6 +24,10 @@ public class Route {
 
     @Getter
     @Setter
+    private long distance;
+
+    @Getter
+    @Setter
     @NonNull
     private Transport transport;
 

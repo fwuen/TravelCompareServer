@@ -24,7 +24,7 @@ public class RoadSheetStep {
 
     @Getter
     @Setter
-    private Double distance;
+    private Long distance;
 
     @Getter
     @Setter

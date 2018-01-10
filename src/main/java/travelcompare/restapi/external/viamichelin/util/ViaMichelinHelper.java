@@ -77,7 +77,7 @@ public class ViaMichelinHelper {
             step.setInstructions(item.getString("instructions"));
 
             if (item.has("distance")) {
-                step.setDistance(item.getDouble("distance"));
+                step.setDistance(item.getLong("distance"));
             }
 
             if (!item.has("coords") || item.getJSONObject("coords") == null) {
@@ -142,7 +142,7 @@ public class ViaMichelinHelper {
 
         return header;
     }
-    
+
     /**
      * Überprüfen der Koordinaten
      *

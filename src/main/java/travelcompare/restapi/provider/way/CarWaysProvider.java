@@ -104,6 +104,7 @@ public class CarWaysProvider implements WaysProvider<Geo> {
             route.setDestination(coordinates);
             route.setTransport(Transport.CAR);
             route.setDuration(roadSheetStep.getDuration());
+            route.setDistance(roadSheetStep.getDistance());
             way.getRoutes().add(route);
         }
         way.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
