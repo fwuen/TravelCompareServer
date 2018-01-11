@@ -1,7 +1,10 @@
 package travelcompare.restapi.provider.way;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import travelcompare.restapi.external.tankerkoenig.TankerkoenigConsumer;
 import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
+import travelcompare.restapi.external.tankerkoenig.response.Station;
 import travelcompare.restapi.external.viamichelin.ViaMichelinConsumer;
 import travelcompare.restapi.external.viamichelin.model.RoadSheetStep;
 import travelcompare.restapi.external.viamichelin.model.RouteResponse;
@@ -82,10 +85,16 @@ public class CarWaysProvider implements WaysProvider<Geo> {
     private Way findRoute(int itit, Geo start, Geo destination, Date date, FUEL_TYPE fuelType) throws UnirestException {
         Way way = new Way();
 
-//        TankerkoenigConsumer consumer = new TankerkoenigConsumer();
-//        consumer.withFuelType(fuelType);
-//        RangeSearchResponse rangeSearchResponse = consumer.consume();
+        TankerkoenigConsumer consumer = new TankerkoenigConsumer();
+        consumer.withFuelType(fuelType);
+        consumer.withSort(TankerkoenigConsumer.SORT.price);
+        RangeSearchResponse rangeSearchResponse = consumer.consume();
         double fuelCost = 1.20;
+        if (rangeSearchResponse.isOk())
+        {
+            Station bestPrice = rangeSearchResponse.getStations().get(0);
+            fuelCost = bestPrice.getPrice();
+        }
         RouteResponse response;
         try {
             response = new ViaMichelinConsumer().getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, date);

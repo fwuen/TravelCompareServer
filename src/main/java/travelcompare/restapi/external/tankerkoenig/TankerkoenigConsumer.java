@@ -9,7 +9,7 @@ import travelcompare.restapi.external.tankerkoenig.response.RangeSearchResponse;
 
 public class TankerkoenigConsumer extends Consumer {
 
-    private static final String API_KEY = "57bdc10a-38e9-21e8-f0c9-e7fd65234e42";
+    private static final String API_KEY = "61635f2c-08ac-2bf5-83c6-99108d45c152";
     private static final int MAX_RADIUS_IN_KILOMETERS = 25;
 
 

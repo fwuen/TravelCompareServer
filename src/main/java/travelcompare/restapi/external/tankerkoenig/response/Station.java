@@ -52,4 +52,7 @@ public class Station {
     @JsonProperty
     private boolean isOpen = false;
 
+    @JsonProperty
+    private double price;
+
 }

@@ -64,7 +64,6 @@ public class TankerkoenigConsumerTest extends SpringTest {
     }
 
     @Test
-    @Ignore
     public void consume() throws Exception {
         RangeSearchResponse response = new TankerkoenigConsumer()
                 .consume();
