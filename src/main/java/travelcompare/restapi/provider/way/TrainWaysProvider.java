@@ -43,11 +43,11 @@ public class TrainWaysProvider implements WaysProvider<TrainStation> {
                 if (step.travelMode.equals(TravelMode.TRANSIT)) {
                     wayRoute.setTransport(Transport.TRAIN);
                     wayRoute.setDuration(step.duration.inSeconds/60);
-                    wayRoute.setStart(new Geo(step.startLocation.lat, step.startLocation.lng));
-                    wayRoute.setDestination(new Geo(step.endLocation.lat, step.endLocation.lng));
+                    wayRoute.setDistance(step.distance.inMeters / 1000);
+                    wayRoute.setStart(new TrainStation(step.startLocation.lat, step.startLocation.lng));
+                    wayRoute.setDestination(new TrainStation(step.endLocation.lat, step.endLocation.lng));
                     way.getRoutes().add(wayRoute);
                 }
-
             }
         }
         return resultList;

@@ -24,7 +24,7 @@ public class Route {
 
     @Getter
     @Setter
-    private long distance;
+    private double distance;
 
     @Getter
     @Setter

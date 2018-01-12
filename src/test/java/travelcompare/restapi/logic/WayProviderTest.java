@@ -2,6 +2,7 @@ package travelcompare.restapi.logic;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import travelcompare.restapi.api.model.request.WayType;
 import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Way;
@@ -27,7 +28,7 @@ public class WayProviderTest {
 
         //System.out.println(way.isPresent() ? "airport: " + way.get().toString() : "Kein Way gefunden");
 
-        Optional<Way> way = provider.findTrainWay(START, DESTINATION, 10000, new Date(), FuelType.ALL);
+        Optional<Way> way = provider.findTrainWay(START, DESTINATION, 10000, new Date(), FuelType.ALL, WayType.FASTEST);
 
         System.out.println(way.isPresent() ? "train: " + way.get().toString() : "Kein Way gefunden");
     }

@@ -13,6 +13,7 @@ import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.model.Transport;
 import travelcompare.restapi.provider.model.Way;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +49,12 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
 
     private AllFaresResponse getFaresFromStartToDestinationOnDate(Airport start, Airport destination, Date date) throws UnirestException {
         consumer = new LufthansaConsumer();
-        return consumer.consumeAllFares("EW", start.getIdentifier(), destination.getIdentifier(), date.toString());
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String formatted_date = dateFormat.format(date);
+
+        return consumer.consumeAllFares("EW", start.getIdentifier(), destination.getIdentifier(), formatted_date);
     }
     
     private List<Way> buildWaysFromResponse(AllFaresResponse response) throws UnirestException, ParseException {

@@ -179,7 +179,7 @@ public class WayController {
         }
 
         try {
-            return ResponseEntity.ok(wayProvider.find(start, dest, 50000, formatted_date, FuelType.ALL, WayType.FASTEST).get()) ;
+            return ResponseEntity.ok(wayProvider.find(start, dest, 50000, formatted_date, FuelType.E5, WayType.FASTEST).get()) ;
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }

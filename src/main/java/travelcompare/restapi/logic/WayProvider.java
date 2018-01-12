@@ -93,9 +93,9 @@ public class WayProvider {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
 
-        List<Airport> startAirports = airportPerimeterSearchProvider.findNearest(start, false);
+        List<Airport> startAirports = airportPerimeterSearchProvider.findByLh(start, false);
 
-        List<Airport> destinationAirports = airportPerimeterSearchProvider.findNearest(destination, true);
+        List<Airport> destinationAirports = airportPerimeterSearchProvider.findByLh(destination, true);
 
         Way cheapestWay = null;
 
