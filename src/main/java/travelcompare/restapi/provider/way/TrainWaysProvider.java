@@ -46,7 +46,7 @@ public class TrainWaysProvider implements WaysProvider<TrainStation> {
                     wayRoute.setDistance(step.distance.inMeters / 1000);
                     wayRoute.setStart(new TrainStation(step.startLocation.lat, step.startLocation.lng));
                     wayRoute.setDestination(new TrainStation(step.endLocation.lat, step.endLocation.lng));
-                    way.getRoutes().add(wayRoute);
+                    way.addRoute(wayRoute);
                 }
             }
         }

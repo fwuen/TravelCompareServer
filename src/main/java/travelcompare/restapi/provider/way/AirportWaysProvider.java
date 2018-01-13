@@ -80,7 +80,7 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
                     route.setDestination(destination);
                     route.setTransport(Transport.AIRCRAFT);
                     route.setDuration(getTimeDifferenceInMinutesFromDates(convertStringToDate(segment.getDeparture().getTime()), convertStringToDate(segment.getArrival().getTime())));
-                    way.getRoutes().add(route);
+                    way.addRoute(route);
                 }
             }
         }

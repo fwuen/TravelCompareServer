@@ -2,7 +2,7 @@ package travelcompare.restapi.provider;
 
 import io.jsonwebtoken.lang.Assert;
 import org.junit.Test;
-import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
+import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Way;
 import travelcompare.restapi.provider.way.CarWaysProvider;
@@ -18,7 +18,7 @@ public class CarWaysProviderTest {
     public void TestCarWaysProvider() {
 
         List<Way> ways = null;
-        ways = new CarWaysProvider().findWithFuelType(new Geo(50.268186, 11.848444), new Geo(52.520645, 13.409779), new Date(), FUEL_TYPE.diesel);
+        ways = new CarWaysProvider().findWithFuelType(new Geo(50.268186, 11.848444), new Geo(52.520645, 13.409779), new Date(), FuelType.DIESEL);
         Assert.notNull(ways);
         Assert.notEmpty(ways);
         Assert.isTrue(ways.size() == 2);

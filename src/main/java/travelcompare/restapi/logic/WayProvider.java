@@ -97,10 +97,14 @@ public class WayProvider {
 
         List<Airport> destinationAirports = airportPerimeterSearchProvider.findByLh(destination, true);
 
-        Way cheapestWay = null;
+        // warten, weil sonst das Sekundenlimit der LH überschritten wird
+        Thread.sleep(1500);
+
+        Way way = null;
 
         for(Airport startAirport : startAirports) {
             for(Airport destinationAirport : destinationAirports) {
+                Thread.sleep(300);
                 List<Way> waysFromStartAirportToDestinationAirport = airportWaysProvider.find(startAirport, destinationAirport, date);
 
                 if (wayType.equals(WayType.CHEAPEST)) {
@@ -111,8 +115,8 @@ public class WayProvider {
                         if(carWayToStartAirport.isPresent() && carWayToDestination.isPresent()) {
                             Way combinedWay = carWayToStartAirport.get().combineWith(wayFromStartAirportToDestinationAirport).combineWith(carWayToDestination.get());
 
-                            if (cheapestWay == null || combinedWay.getPrice() < cheapestWay.getPrice()) {
-                                cheapestWay = combinedWay;
+                            if (way == null || combinedWay.getPrice() < way.getPrice()) {
+                                way = combinedWay;
                             }
                         }
                     }
@@ -124,8 +128,8 @@ public class WayProvider {
                         if(carWayToStartAirport.isPresent() && carWayToDestination.isPresent()) {
                             Way fastestWay = carWayToStartAirport.get().combineWith(wayFromStartAirportToDestinationAirport).combineWith(carWayToDestination.get());
 
-                            if (cheapestWay == null || fastestWay.getDuration() < cheapestWay.getDuration()) {
-                                cheapestWay = fastestWay;
+                            if ((way == null || fastestWay.getDuration() < way.getDuration()) || (fastestWay.getDuration() == way.getDuration() && fastestWay.getPrice() < way.getPrice())) {
+                                way = fastestWay;
                             }
                         }
                     }
@@ -133,8 +137,8 @@ public class WayProvider {
             }
         }
 
-        if(cheapestWay != null) {
-            return Optional.of(cheapestWay);
+        if(way != null) {
+            return Optional.of(way);
         }
 
         return Optional.empty();

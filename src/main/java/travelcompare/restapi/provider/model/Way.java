@@ -22,12 +22,19 @@ public class Way {
     @Setter
     private long duration;
 
+
     public Way combineWith(@NonNull Way way) {
         this.routes.addAll(way.routes);
         this.price = this.getPrice() + way.getPrice();
         this.duration = this.getDuration() + way.getDuration();
 
         return this;
+    }
+
+    // daRoute - Sandstorm ;DD
+    public void addRoute(Route route) {
+        routes.add(route);
+        duration += route.getDuration();
     }
 
 }

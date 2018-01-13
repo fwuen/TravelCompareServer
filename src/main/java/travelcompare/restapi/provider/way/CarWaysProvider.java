@@ -117,9 +117,9 @@ public class CarWaysProvider implements WaysProvider<Geo> {
             coordinates = new Geo(roadSheetStep.getCoords().getLat_coordinate(), roadSheetStep.getCoords().getLong_coordinate());
             route.setDestination(coordinates);
             route.setTransport(Transport.CAR);
-            route.setDuration(roadSheetStep.getDuration());
+            route.setDuration(roadSheetStep.getDuration()/60);
             route.setDistance(roadSheetStep.getDistance());
-            way.getRoutes().add(route);
+            way.addRoute(route);
         }
         way.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
         return way;
