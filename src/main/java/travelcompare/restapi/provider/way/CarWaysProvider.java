@@ -88,13 +88,18 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         TankerkoenigConsumer consumer = new TankerkoenigConsumer();
         consumer.withFuelType(fuelType);
         consumer.withSort(TankerkoenigConsumer.SORT.price);
-        RangeSearchResponse rangeSearchResponse = consumer.consume();
+        RangeSearchResponse rangeSearchResponse = null;
         double fuelCost = 1.20;
-        if (rangeSearchResponse.isOk())
-        {
-            Station bestPrice = rangeSearchResponse.getStations().get(0);
-            fuelCost = bestPrice.getPrice();
+        try {
+            rangeSearchResponse = consumer.consume();
+            if (rangeSearchResponse.isOk()) {
+                Station bestPrice = rangeSearchResponse.getStations().get(0);
+                fuelCost = bestPrice.getPrice();
+            }
+        }catch (Exception e){
+            // Ignorieren und Standardwert nehmen
         }
+
         RouteResponse response;
         try {
             response = new ViaMichelinConsumer().getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, date);
