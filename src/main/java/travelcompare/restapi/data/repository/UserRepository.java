@@ -14,5 +14,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findFirstByIdEquals(long id);
     boolean existsByEmailEqualsIgnoreCase(@NonNull String email);
     boolean existsByIdEquals(long id);
-    void removeAllByEmailEqualsIgnoreCase(@NonNull String email);
 }

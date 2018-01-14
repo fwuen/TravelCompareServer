@@ -1,6 +1,7 @@
 package travelcompare.restapi.data.service;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Verify;
 import lombok.NonNull;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,11 @@ public class UserService {
         Preconditions.checkArgument(EmailValidator.getInstance().isValid(email));
         Preconditions.checkArgument(userExistsByEmail(email));
 
-        repository.removeAllByEmailEqualsIgnoreCase(email);
+        Optional<User> user = getUserByEmail(email);
+
+        Verify.verify(user.isPresent(), "Der Benutzer mit dieser E-Mail Adresse konnte nicht gefunden werden.");
+
+        repository.delete(user.get());
     }
 
     public boolean userExistsByID(long id) {

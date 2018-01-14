@@ -1,5 +1,6 @@
 package travelcompare.restapi.api.configuration;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,6 +71,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.applyPermitDefaultValues();
         configuration.addAllowedHeader("Authorization");
         configuration.addExposedHeader("Authorization");
+        configuration.setAllowedMethods(Lists.newArrayList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowedOrigins(Lists.newArrayList("http://localhost:5000"));
 
         source.registerCorsConfiguration("/**", configuration);
         return source;
