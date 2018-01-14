@@ -97,14 +97,10 @@ public class WayProvider {
 
         List<Airport> destinationAirports = airportPerimeterSearchProvider.findByLh(destination, true);
 
-        // warten, weil sonst das Sekundenlimit der LH überschritten wird
-        Thread.sleep(1500);
-
         Way way = null;
 
         for(Airport startAirport : startAirports) {
             for(Airport destinationAirport : destinationAirports) {
-                Thread.sleep(300);
                 List<Way> waysFromStartAirportToDestinationAirport = airportWaysProvider.find(startAirport, destinationAirport, date);
 
                 if (wayType.equals(WayType.CHEAPEST)) {

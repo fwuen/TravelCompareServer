@@ -23,6 +23,10 @@ import java.util.concurrent.TimeUnit;
 
 public class AirportWaysProvider implements WaysProvider<Airport> {
     private LufthansaConsumer consumer;
+    private String startCodeOfSegmentBefore = null;
+    private String destCodeOfSegmentBefore = null;
+    private Airport startAirportBefore = null;
+    private Airport destAirportBefore = null;
     
     public AirportWaysProvider() {
         consumer = new LufthansaConsumer();
@@ -48,8 +52,6 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
     }
 
     private AllFaresResponse getFaresFromStartToDestinationOnDate(Airport start, Airport destination, Date date) throws UnirestException {
-        consumer = new LufthansaConsumer();
-
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String formatted_date = dateFormat.format(date);
@@ -70,17 +72,33 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
     
     private Way addRoutesToWay(String price, List<FlightSegmentReference> references, List<FlightSegment> flightSegments) throws UnirestException, ParseException {
         Way way = new Way();
+        
         for(FlightSegmentReference reference : references) {
             for(FlightSegment segment : flightSegments) {
                 if(reference.getRef().equals(segment.getSegmentKey())) {
-                    Airport start = getAirportFromIdentifier(segment.getDeparture().getAirportCode());
-                    Airport destination = getAirportFromIdentifier(segment.getArrival().getAirportCode());
+                    Airport start;
+                    if(startCodeOfSegmentBefore == null || !startCodeOfSegmentBefore.equals(segment.getDeparture().getAirportCode())) {
+                        start = getAirportFromIdentifier(segment.getDeparture().getAirportCode());
+                    } else {
+                        start = new Airport(startAirportBefore.getLat(), startAirportBefore.getLon());
+                    }
+                    Airport destination;
+                    if(destCodeOfSegmentBefore == null || !destCodeOfSegmentBefore.equals(segment.getArrival().getAirportCode())) {
+                        destination = getAirportFromIdentifier(segment.getArrival().getAirportCode());
+                    } else {
+                        destination = new Airport(destAirportBefore.getLat(), destAirportBefore.getLon());
+                    }
                     Route route = new Route();
                     route.setStart(start);
                     route.setDestination(destination);
                     route.setTransport(Transport.AIRCRAFT);
                     route.setDuration(getTimeDifferenceInMinutesFromDates(convertStringToDate(segment.getDeparture().getTime()), convertStringToDate(segment.getArrival().getTime())));
                     way.addRoute(route);
+                    
+                    startCodeOfSegmentBefore = segment.getDeparture().getAirportCode();
+                    startAirportBefore = start;
+                    destCodeOfSegmentBefore = segment.getArrival().getAirportCode();
+                    destAirportBefore = destination;
                 }
             }
         }

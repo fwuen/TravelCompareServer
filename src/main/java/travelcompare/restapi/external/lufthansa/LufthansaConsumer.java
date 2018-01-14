@@ -8,6 +8,7 @@ import travelcompare.restapi.external.lufthansa.response.*;
 import java.util.Calendar;
 import java.util.Date;
 
+@SuppressWarnings("Duplicates")
 public class LufthansaConsumer extends Consumer {
 
     public static final String clientId = "utj2w984ec8utsps5jky9fxp";
@@ -120,18 +121,30 @@ public class LufthansaConsumer extends Consumer {
     }
 
     private boolean publicStillAuthenticated() {
-        if(publicLastAuthenticated != null && getTimestampFromDate(publicLastAuthenticated) + publicExpiresIn < getTimestampFromDate(new Date())) {
-            return true;
-        } else {
+        if(publicLastAuthenticated == null) {
             return false;
         }
+        long timeStampLastAuthenticated = getTimestampFromDate(publicLastAuthenticated);
+        long timeStampExpiresAt = timeStampLastAuthenticated + publicExpiresIn;
+        long timeStampNow = getTimestampFromDate(new Date());
+        boolean isAuthenticated = timeStampExpiresAt > timeStampNow;
+        if(isAuthenticated) {
+            return true;
+        }
+        return false;
     }
     
     private boolean partnerStillAuthenticated() {
-        if(partnerLastAuthenticated != null && getTimestampFromDate(partnerLastAuthenticated) + partnerExpiresIn < getTimestampFromDate(new Date())) {
-            return true;
-        } else {
+        if(partnerLastAuthenticated == null) {
             return false;
         }
+        long timeStampLastAuthenticated = getTimestampFromDate(partnerLastAuthenticated);
+        long timeStampExpiresAt = timeStampLastAuthenticated + partnerExpiresIn;
+        long timeStampNow = getTimestampFromDate(new Date());
+        boolean isAuthenticated = timeStampExpiresAt > timeStampNow;
+        if(isAuthenticated) {
+            return true;
+        }
+        return false;
     }
 }
