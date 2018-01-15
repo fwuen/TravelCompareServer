@@ -10,8 +10,8 @@ import travelcompare.restapi.external.lufthansa.response.AirportsResponse;
 import travelcompare.restapi.external.lufthansa.response.AllFaresResponse;
 import travelcompare.restapi.provider.model.Airport;
 import travelcompare.restapi.provider.model.Route;
+import travelcompare.restapi.provider.model.Step;
 import travelcompare.restapi.provider.model.Transport;
-import travelcompare.restapi.provider.model.Way;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
     }
 
     @Override
-    public List<Way> find(Airport start, Airport destination, Date date) {
+    public List<Route> find(Airport start, Airport destination, Date date) {
         AllFaresResponse allFares;
         try {
             allFares = getFaresFromStartToDestinationOnDate(start, destination, date);
@@ -36,14 +36,14 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
             return Lists.newArrayList();
         }
     
-        List<Way> ways = Lists.newArrayList();
+        List<Route> routes = Lists.newArrayList();
         try {
-            ways = buildWaysFromResponse(allFares);
+            routes = buildWaysFromResponse(allFares);
         } catch (Exception e) {
             e.printStackTrace();
         }
     
-        return ways;
+        return routes;
     }
 
     private AllFaresResponse getFaresFromStartToDestinationOnDate(Airport start, Airport destination, Date date) throws UnirestException {
@@ -51,36 +51,36 @@ public class AirportWaysProvider implements WaysProvider<Airport> {
         return consumer.consumeAllFares("EW", start.getIdentifier(), destination.getIdentifier(), date.toString());
     }
     
-    private List<Way> buildWaysFromResponse(AllFaresResponse response) throws UnirestException, ParseException {
-        List<Way> ways = Lists.newArrayList();
+    private List<Route> buildWaysFromResponse(AllFaresResponse response) throws UnirestException, ParseException {
+        List<Route> routes = Lists.newArrayList();
         
         for(AirlineOffer offer : response.getFaresResponse().getAirShoppingResponse().getOffersGroup().getAirlineOffers().getAirlineOfferList()) {
-            Way newWayForOffer = addRoutesToWay(offer.getTotalPrice().getDetailCurrencyPrice().getTotal().getValue(), offer.getPricedOffer().getAssociations().getApplicableFlight().getFlightSegmentReference(), response.getFaresResponse().getAirShoppingResponse().getDataLists().getFlightSegmentList().getFlightSegments());
-            ways.add(newWayForOffer);
+            Route newRouteForOffer = addRoutesToWay(offer.getTotalPrice().getDetailCurrencyPrice().getTotal().getValue(), offer.getPricedOffer().getAssociations().getApplicableFlight().getFlightSegmentReference(), response.getFaresResponse().getAirShoppingResponse().getDataLists().getFlightSegmentList().getFlightSegments());
+            routes.add(newRouteForOffer);
         }
         
-        return ways;
+        return routes;
     }
     
-    private Way addRoutesToWay(String price, List<FlightSegmentReference> references, List<FlightSegment> flightSegments) throws UnirestException, ParseException {
-        Way way = new Way();
+    private Route addRoutesToWay(String price, List<FlightSegmentReference> references, List<FlightSegment> flightSegments) throws UnirestException, ParseException {
+        Route route = new Route();
         for(FlightSegmentReference reference : references) {
             for(FlightSegment segment : flightSegments) {
                 if(reference.getRef().equals(segment.getSegmentKey())) {
                     Airport start = getAirportFromIdentifier(segment.getDeparture().getAirportCode());
                     Airport destination = getAirportFromIdentifier(segment.getArrival().getAirportCode());
-                    Route route = new Route();
-                    route.setStart(start);
-                    route.setDestination(destination);
-                    route.setTransport(Transport.AIRCRAFT);
-                    route.setDuration(getTimeDifferenceInMinutesFromDates(convertStringToDate(segment.getDeparture().getTime()), convertStringToDate(segment.getArrival().getTime())));
-                    way.getRoutes().add(route);
+                    Step step = new Step();
+                    step.setStart(start);
+                    step.setDestination(destination);
+                    step.setTransport(Transport.AIRCRAFT);
+                    step.setDuration(getTimeDifferenceInMinutesFromDates(convertStringToDate(segment.getDeparture().getTime()), convertStringToDate(segment.getArrival().getTime())));
+                    route.getSteps().add(step);
                 }
             }
         }
-        way.setPrice(Double.parseDouble(price));
+        route.setPrice(Double.parseDouble(price));
         
-        return way;
+        return route;
     }
     
     private Date convertStringToDate(String dateString) throws ParseException {

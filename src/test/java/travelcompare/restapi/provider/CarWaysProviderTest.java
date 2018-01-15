@@ -4,7 +4,7 @@ import io.jsonwebtoken.lang.Assert;
 import org.junit.Test;
 import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
 import travelcompare.restapi.provider.model.Geo;
-import travelcompare.restapi.provider.model.Way;
+import travelcompare.restapi.provider.model.Route;
 import travelcompare.restapi.provider.way.CarWaysProvider;
 
 import java.util.Date;
@@ -17,19 +17,19 @@ public class CarWaysProviderTest {
     @Test
     public void TestCarWaysProvider() {
 
-        List<Way> ways = null;
-        ways = new CarWaysProvider().findWithFuelType(new Geo(50.268186, 11.848444), new Geo(52.520645, 13.409779), new Date(), FUEL_TYPE.diesel);
-        Assert.notNull(ways);
-        Assert.notEmpty(ways);
-        Assert.isTrue(ways.size() == 2);
-        Assert.notNull(ways.get(0).getRoutes());
-        Assert.notEmpty(ways.get(0).getRoutes());
-        Assert.isTrue(ways.get(0).getRoutes().size() > 0);
-        Assert.isTrue(ways.get(0).getPrice() > 0);
-        Assert.notNull(ways.get(1).getRoutes());
-        Assert.notEmpty(ways.get(1).getRoutes());
-        Assert.isTrue(ways.get(1).getRoutes().size() > 0);
-        Assert.isTrue(ways.get(1).getPrice() > 0);
+        List<Route> routes = null;
+        routes = new CarWaysProvider().findWithFuelType(new Geo(50.268186, 11.848444), new Geo(52.520645, 13.409779), new Date(), FUEL_TYPE.diesel);
+        Assert.notNull(routes);
+        Assert.notEmpty(routes);
+        Assert.isTrue(routes.size() == 2);
+        Assert.notNull(routes.get(0).getSteps());
+        Assert.notEmpty(routes.get(0).getSteps());
+        Assert.isTrue(routes.get(0).getSteps().size() > 0);
+        Assert.isTrue(routes.get(0).getPrice() > 0);
+        Assert.notNull(routes.get(1).getSteps());
+        Assert.notEmpty(routes.get(1).getSteps());
+        Assert.isTrue(routes.get(1).getSteps().size() > 0);
+        Assert.isTrue(routes.get(1).getPrice() > 0);
 
     }
 }

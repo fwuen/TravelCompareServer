@@ -1,34 +1,27 @@
 package travelcompare.restapi.provider.model;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import com.google.common.collect.Lists;
+import lombok.*;
 
-@Accessors(chain = true)
+import java.util.List;
+
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
 public class Route {
 
     @Getter
-    @Setter
     @NonNull
-    private Geo start;
+    private List<Step> steps = Lists.newArrayList();
 
     @Getter
     @Setter
-    @NonNull
-    private Geo destination;
+    private double price;
 
-    @Getter
-    @Setter
-    private long duration;
+    public Route combineWith(@NonNull Route route) {
+        this.steps.addAll(route.steps);
+        this.price = this.getPrice() + route.getPrice();
 
-    @Getter
-    @Setter
-    private long distance;
-
-    @Getter
-    @Setter
-    @NonNull
-    private Transport transport;
-
+        return this;
+    }
 }

@@ -24,7 +24,7 @@ public class ViaMichelinConsumer extends Consumer {
     }
 
     /**
-     * /route Request der Michelin Api zur Berechnung der Route zwischen zwei Zielen
+     * /route Request der Michelin Api zur Berechnung der Step zwischen zwei Zielen
      * Liefert neben den codierten Strecke auch Daten zur Zeit und den Kosten zurück
      *
      * @param longitudeStart double

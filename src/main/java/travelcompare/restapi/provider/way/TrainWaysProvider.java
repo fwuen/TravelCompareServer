@@ -17,7 +17,7 @@ import java.util.List;
 public class TrainWaysProvider implements WaysProvider<TrainStation> {
 
     @Override
-    public List<Way> find(TrainStation start, TrainStation destination, Date date) throws InterruptedException, ApiException, IOException {
+    public List<Route> find(TrainStation start, TrainStation destination, Date date) throws InterruptedException, ApiException, IOException {
         GeoApiContext context = GeoApiContextFactory.getBasicGeoApiContext();
 
 
@@ -31,21 +31,21 @@ public class TrainWaysProvider implements WaysProvider<TrainStation> {
 
         DirectionsResult requestResult = request.await();
 
-        List<Way> resultList = Lists.newArrayList();
+        List<Route> resultList = Lists.newArrayList();
 
         for (DirectionsRoute route :
                 requestResult.routes) {
-            Way way = new Way();
+            Route way = new Route();
             resultList.add(way);
             for (DirectionsStep step :
                     route.legs[0].steps) {
-                Route wayRoute = new Route();
+                Step wayStep = new Step();
                 if (step.travelMode.equals(TravelMode.TRANSIT)) {
-                    wayRoute.setTransport(Transport.TRAIN);
-                    wayRoute.setDuration(step.duration.inSeconds/60);
-                    wayRoute.setStart(new Geo(step.startLocation.lat, step.startLocation.lng));
-                    wayRoute.setDestination(new Geo(step.endLocation.lat, step.endLocation.lng));
-                    way.getRoutes().add(wayRoute);
+                    wayStep.setTransport(Transport.TRAIN);
+                    wayStep.setDuration(step.duration.inSeconds/60);
+                    wayStep.setStart(new Geo(step.startLocation.lat, step.startLocation.lng));
+                    wayStep.setDestination(new Geo(step.endLocation.lat, step.endLocation.lng));
+                    way.getSteps().add(wayStep);
                 }
 
             }

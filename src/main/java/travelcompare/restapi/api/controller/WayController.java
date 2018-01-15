@@ -15,6 +15,7 @@ import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
 import travelcompare.restapi.logic.CheapestWayProvider;
 import travelcompare.restapi.logic.FastestWayProvider;
 import travelcompare.restapi.provider.model.Geo;
+import travelcompare.restapi.provider.model.Route;
 
 import java.security.Principal;
 import java.util.Date;
@@ -141,7 +142,7 @@ public class WayController {
     }
 
     @GetMapping(RestURLs.WAY_FIND)
-    public ResponseEntity<travelcompare.restapi.provider.model.Way> find(
+    public ResponseEntity<Route> find(
             @PathVariable("start_lat") double start_lat,
             @PathVariable("start_lon") double start_lon,
             @PathVariable("dest_lat") double dest_lat,
@@ -189,7 +190,7 @@ public class WayController {
 
         Date formatted_date = new Date(date);
 
-        Optional<travelcompare.restapi.provider.model.Way> returnWay = null;
+        Optional<Route> returnWay = null;
         if (wayType.equals(WAY_TYPE.CHEAPEST)) {
             try {
                 returnWay = cheapestWayProvider.find(start, dest, radius, formatted_date, fuelType);

@@ -10,8 +10,8 @@ import travelcompare.restapi.external.viamichelin.model.RoadSheetStep;
 import travelcompare.restapi.external.viamichelin.model.RouteResponse;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
+import travelcompare.restapi.provider.model.Step;
 import travelcompare.restapi.provider.model.Transport;
-import travelcompare.restapi.provider.model.Way;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +37,7 @@ public class CarWaysProvider implements WaysProvider<Geo> {
      * @return
      */
     @Override
-    public List<Way> find(Geo start, Geo destination, Date date) {
+    public List<Route> find(Geo start, Geo destination, Date date) {
         return null;
     }
 
@@ -45,28 +45,28 @@ public class CarWaysProvider implements WaysProvider<Geo> {
      * @param start       Geo
      * @param destination Geo
      * @param date        Date
-     * @return List<Way>
+     * @return List<Route>
      */
-    public List<Way> findWithFuelType(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
+    public List<Route> findWithFuelType(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
         if (start == null || destination == null || date == null) {
             return null;
         }
         // TODO Hier noch den Spritpreis holen und mit einbeziehen
 
-        List<Way> ways = new ArrayList<>();
-        Way way = findCheapest(start, destination, date, fuelType);
-        if (way != null) {
-            ways.add(way);
+        List<Route> routes = new ArrayList<>();
+        Route route = findCheapest(start, destination, date, fuelType);
+        if (route != null) {
+            routes.add(route);
         }
-        way = findFastest(start, destination, date, fuelType);
-        if (way != null) {
-            ways.add(way);
+        route = findFastest(start, destination, date, fuelType);
+        if (route != null) {
+            routes.add(route);
         }
 
-        return ways;
+        return routes;
     }
 
-    private Way findCheapest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
+    private Route findCheapest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
         try {
             return findRoute(4, start, destination, date, fuelType);
         } catch (UnirestException e) {
@@ -74,7 +74,7 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         }
     }
 
-    private Way findFastest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
+    private Route findFastest(Geo start, Geo destination, Date date, FUEL_TYPE fuelType) {
         try {
             return findRoute(1, start, destination, date, fuelType);
         } catch (UnirestException e) {
@@ -82,8 +82,8 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         }
     }
 
-    private Way findRoute(int itit, Geo start, Geo destination, Date date, FUEL_TYPE fuelType) throws UnirestException {
-        Way way = new Way();
+    private Route findRoute(int itit, Geo start, Geo destination, Date date, FUEL_TYPE fuelType) throws UnirestException {
+        Route route = new Route();
 
         TankerkoenigConsumer consumer = new TankerkoenigConsumer();
         consumer.withFuelType(fuelType);
@@ -111,17 +111,17 @@ public class CarWaysProvider implements WaysProvider<Geo> {
         }
         Geo coordinates = start;
         for (RoadSheetStep roadSheetStep : response.getIti().getRoadSheet().getRoadSheetStep()) {
-            Route route = new Route();
-            route.setStart(coordinates);
+            Step step = new Step();
+            step.setStart(coordinates);
             // Zielkoordinaten ablegen
             coordinates = new Geo(roadSheetStep.getCoords().getLat_coordinate(), roadSheetStep.getCoords().getLong_coordinate());
-            route.setDestination(coordinates);
-            route.setTransport(Transport.CAR);
-            route.setDuration(roadSheetStep.getDuration());
-            route.setDistance(roadSheetStep.getDistance());
-            way.getRoutes().add(route);
+            step.setDestination(coordinates);
+            step.setTransport(Transport.CAR);
+            step.setDuration(roadSheetStep.getDuration());
+            step.setDistance(roadSheetStep.getDistance());
+            route.getSteps().add(step);
         }
-        way.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
-        return way;
+        route.setPrice(response.getIti().getHeader().getSummaries().getConsumption());
+        return route;
     }
 }
