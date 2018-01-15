@@ -2,6 +2,7 @@ package travelcompare.restapi.provider;
 
 import io.jsonwebtoken.lang.Assert;
 import org.junit.Test;
+import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.external.tankerkoenig.response.FUEL_TYPE;
 import travelcompare.restapi.provider.model.Geo;
 import travelcompare.restapi.provider.model.Route;
@@ -10,7 +11,7 @@ import travelcompare.restapi.provider.way.CarWaysProvider;
 import java.util.Date;
 import java.util.List;
 
-public class CarWaysProviderTest {
+public class CarWaysProviderTest extends SpringTest{
     /**
      * Test für den CarWaysProvider
      */
