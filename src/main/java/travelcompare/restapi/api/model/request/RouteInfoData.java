@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class WayData implements Validateable {
+public class RouteInfoData implements Validateable {
 
     private double lat_start;
     private double lon_start;

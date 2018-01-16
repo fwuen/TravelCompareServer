@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @ToString
 @EqualsAndHashCode
-public class Way {
+public class RouteInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

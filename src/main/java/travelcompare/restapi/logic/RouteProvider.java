@@ -3,27 +3,26 @@ package travelcompare.restapi.logic;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
-import travelcompare.restapi.api.model.request.WayType;
+import travelcompare.restapi.api.model.request.RouteType;
 import travelcompare.restapi.external.tankerkoenig.response.FuelType;
 import travelcompare.restapi.provider.model.*;
 import travelcompare.restapi.provider.perimeter.AirportPerimeterSearchProvider;
 import travelcompare.restapi.provider.perimeter.TrainPerimeterSearchProvider;
-import travelcompare.restapi.provider.way.AirportWaysProvider;
-import travelcompare.restapi.provider.way.CarWaysProvider;
-import travelcompare.restapi.provider.way.TrainWaysProvider;
-
+import travelcompare.restapi.provider.route.AirportRoutesProvider;
+import travelcompare.restapi.provider.route.CarRoutesProvider;
+import travelcompare.restapi.provider.route.TrainRoutesProvider;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("Duplicates")
-public class WayProvider {
+public class RouteProvider {
 
     private AirportPerimeterSearchProvider airportPerimeterSearchProvider = new AirportPerimeterSearchProvider();
     private TrainPerimeterSearchProvider trainPerimeterSearchProvider = new TrainPerimeterSearchProvider();
-    private AirportWaysProvider airportWaysProvider = new AirportWaysProvider();
-    private CarWaysProvider carRoutesProvider = new CarWaysProvider();
-    private TrainWaysProvider trainWaysProvider = new TrainWaysProvider();
+    private AirportRoutesProvider airportRoutesProvider = new AirportRoutesProvider();
+    private CarRoutesProvider carRoutesProvider = new CarRoutesProvider();
+    private TrainRoutesProvider trainRoutesProvider = new TrainRoutesProvider();
 
     public Optional<Route> find(
             @NonNull Geo start,
@@ -31,43 +30,43 @@ public class WayProvider {
             int radius,
             @NonNull Date date,
             FuelType fuelType,
-            WayType wayType
+            RouteType routeType
     ) throws Exception {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
 
-        Optional<Route> airportWay = findAirportWay(start, destination, radius, date, fuelType, wayType);
-        Optional<Route> carWay = findCarWay(start, destination, date, fuelType, wayType);
-        Optional<Route> trainWay = findTrainWay(start, destination, radius, date, fuelType, wayType);
+        Optional<Route> airportRoute = findAirportRoute(start, destination, radius, date, fuelType, routeType);
+        Optional<Route> carRoute = findCarRoute(start, destination, date, fuelType, routeType);
+        Optional<Route> trainRoute = findTrainRoute(start, destination, radius, date, fuelType, routeType);
 
         Route route = null;
 
-        if(airportWay.isPresent()) {
-            route = airportWay.get();
+        if(airportRoute.isPresent()) {
+            route = airportRoute.get();
         }
 
-        if (wayType.equals(WayType.CHEAPEST)) {
-            if(carWay.isPresent()) {
-                if(route == null || route.getPrice() > carWay.get().getPrice()) {
-                    route = carWay.get();
+        if (routeType.equals(RouteType.CHEAPEST)) {
+            if(carRoute.isPresent()) {
+                if(route == null || route.getPrice() > carRoute.get().getPrice()) {
+                    route = carRoute.get();
                 }
             }
 
-            if(trainWay.isPresent()) {
-                if(route == null || route.getPrice() > trainWay.get().getPrice()) {
-                    route = trainWay.get();
+            if(trainRoute.isPresent()) {
+                if(route == null || route.getPrice() > trainRoute.get().getPrice()) {
+                    route = trainRoute.get();
                 }
             }
         } else {
-            if(carWay.isPresent()) {
-                if(route == null || route.getDuration() > carWay.get().getDuration()) {
-                    route = carWay.get();
+            if(carRoute.isPresent()) {
+                if(route == null || route.getDuration() > carRoute.get().getDuration()) {
+                    route = carRoute.get();
                 }
             }
 
-            if(trainWay.isPresent()) {
-                if(route == null || route.getDuration() > trainWay.get().getDuration()) {
-                    route = trainWay.get();
+            if(trainRoute.isPresent()) {
+                if(route == null || route.getDuration() > trainRoute.get().getDuration()) {
+                    route = trainRoute.get();
                 }
             }
         }
@@ -79,13 +78,13 @@ public class WayProvider {
         return Optional.empty();
     }
 
-    public Optional<Route> findAirportWay(
+    public Optional<Route> findAirportRoute(
             @NonNull Geo start,
             @NonNull Geo destination,
             int radius,
             @NonNull Date date,
             FuelType fuelType,
-            WayType wayType
+            RouteType routeType
     ) throws Exception {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
@@ -98,15 +97,15 @@ public class WayProvider {
 
         for(Airport startAirport : startAirports) {
             for(Airport destinationAirport : destinationAirports) {
-                List<Route> routesFromStartAirportToDestinationAirport = airportWaysProvider.find(startAirport, destinationAirport, date);
+                List<Route> routesFromStartAirportToDestinationAirport = airportRoutesProvider.find(startAirport, destinationAirport, date);
 
-                if (wayType.equals(WayType.CHEAPEST)) {
+                if (routeType.equals(RouteType.CHEAPEST)) {
                     for (Route routeFromStartAirportToDestinationAirport : routesFromStartAirportToDestinationAirport) {
-                        Optional<Route> carWayToStartAirport = findCarWay(start, startAirport, date, fuelType, WayType.CHEAPEST);
-                        Optional<Route> carWayToDestination = findCarWay(destinationAirport, destination, date, fuelType, WayType.CHEAPEST);
+                        Optional<Route> carRouteToStartAirport = findCarRoute(start, startAirport, date, fuelType, RouteType.CHEAPEST);
+                        Optional<Route> carRouteToDestination = findCarRoute(destinationAirport, destination, date, fuelType, RouteType.CHEAPEST);
 
-                        if(carWayToStartAirport.isPresent() && carWayToDestination.isPresent()) {
-                            Route combinedRoute = carWayToStartAirport.get().combineWith(routeFromStartAirportToDestinationAirport).combineWith(carWayToDestination.get());
+                        if(carRouteToStartAirport.isPresent() && carRouteToDestination.isPresent()) {
+                            Route combinedRoute = carRouteToStartAirport.get().combineWith(routeFromStartAirportToDestinationAirport).combineWith(carRouteToDestination.get());
 
                             if (route == null || combinedRoute.getPrice() < route.getPrice()) {
                                 route = combinedRoute;
@@ -115,11 +114,11 @@ public class WayProvider {
                     }
                 } else {
                     for (Route routeFromStartAirportToDestinationAirport : routesFromStartAirportToDestinationAirport) {
-                        Optional<Route> carWayToStartAirport = findCarWay(start, startAirport, date, fuelType, WayType.FASTEST);
-                        Optional<Route> carWayToDestination = findCarWay(destinationAirport, destination, date, fuelType, WayType.FASTEST);
+                        Optional<Route> carRouteToStartAirport = findCarRoute(start, startAirport, date, fuelType, RouteType.FASTEST);
+                        Optional<Route> carRouteToDestination = findCarRoute(destinationAirport, destination, date, fuelType, RouteType.FASTEST);
 
-                        if(carWayToStartAirport.isPresent() && carWayToDestination.isPresent()) {
-                            Route fastestRoute = carWayToStartAirport.get().combineWith(routeFromStartAirportToDestinationAirport).combineWith(carWayToDestination.get());
+                        if(carRouteToStartAirport.isPresent() && carRouteToDestination.isPresent()) {
+                            Route fastestRoute = carRouteToStartAirport.get().combineWith(routeFromStartAirportToDestinationAirport).combineWith(carRouteToDestination.get());
 
                             if ((route == null || fastestRoute.getDuration() < route.getDuration()) || (fastestRoute.getDuration() == route.getDuration() && fastestRoute.getPrice() < route.getPrice())) {
                                 route = fastestRoute;
@@ -137,13 +136,13 @@ public class WayProvider {
         return Optional.empty();
     }
 
-    public Optional<Route> findTrainWay(
+    public Optional<Route> findTrainRoute(
             @NonNull Geo start,
             @NonNull Geo destination,
             int radius,
             @NonNull Date date,
             FuelType fuelType,
-            WayType wayType
+            RouteType routeType
     ) throws Exception {
         Preconditions.checkArgument(radius > 0, "Der Radius muss positiv sein.");
         Preconditions.checkArgument(radius <= 50000, "Der Radius darf maximal 50000m betragen.");
@@ -155,12 +154,12 @@ public class WayProvider {
 
         for(TrainStation startTrainStation : startTrainStations) {
             for(TrainStation destinationTrainStation : destinationTrainStations) {
-                List<Route> waysFromStartTrainStationToDestinationTrainStation = trainWaysProvider.find(startTrainStation, destinationTrainStation, date);
+                List<Route> routesFromStartTrainStationToDestinationTrainStation = trainRoutesProvider.find(startTrainStation, destinationTrainStation, date);
 
-                if (wayType.equals(WayType.CHEAPEST)) {
-                    for (Route routeFromStartTrainStationToDestinationTrainStation : waysFromStartTrainStationToDestinationTrainStation) {
-                        Optional<Route> carRouteToStartTrainStation = findCarWay(start, startTrainStation, date, fuelType, WayType.CHEAPEST);
-                        Optional<Route> carRouteToDestinationTrainStation = findCarWay(destinationTrainStation, destination, date, fuelType, WayType.CHEAPEST);
+                if (routeType.equals(RouteType.CHEAPEST)) {
+                    for (Route routeFromStartTrainStationToDestinationTrainStation : routesFromStartTrainStationToDestinationTrainStation) {
+                        Optional<Route> carRouteToStartTrainStation = findCarRoute(start, startTrainStation, date, fuelType, RouteType.CHEAPEST);
+                        Optional<Route> carRouteToDestinationTrainStation = findCarRoute(destinationTrainStation, destination, date, fuelType, RouteType.CHEAPEST);
 
                         if(carRouteToStartTrainStation.isPresent() && carRouteToDestinationTrainStation.isPresent()) {
                             Route combinedRoute = carRouteToStartTrainStation.get().combineWith(routeFromStartTrainStationToDestinationTrainStation).combineWith(carRouteToDestinationTrainStation.get());
@@ -171,12 +170,12 @@ public class WayProvider {
                         }
                     }
                 } else {
-                    for (Route routeFromStartTrainStationToDestinationTrainStation : waysFromStartTrainStationToDestinationTrainStation) {
-                        Optional<Route> carWayToStartTrainStation = findCarWay(start, startTrainStation, date, fuelType, WayType.FASTEST);
-                        Optional<Route> carWayToDestinationTrainStation = findCarWay(destinationTrainStation, destination, date, fuelType, WayType.FASTEST);
+                    for (Route routeFromStartTrainStationToDestinationTrainStation : routesFromStartTrainStationToDestinationTrainStation) {
+                        Optional<Route> carRouteToStartTrainStation = findCarRoute(start, startTrainStation, date, fuelType, RouteType.FASTEST);
+                        Optional<Route> carRouteToDestinationTrainStation = findCarRoute(destinationTrainStation, destination, date, fuelType, RouteType.FASTEST);
 
-                        if(carWayToStartTrainStation.isPresent() && carWayToDestinationTrainStation.isPresent()) {
-                            Route fastestRoute = carWayToStartTrainStation.get().combineWith(routeFromStartTrainStationToDestinationTrainStation).combineWith(carWayToDestinationTrainStation.get());
+                        if(carRouteToStartTrainStation.isPresent() && carRouteToDestinationTrainStation.isPresent()) {
+                            Route fastestRoute = carRouteToStartTrainStation.get().combineWith(routeFromStartTrainStationToDestinationTrainStation).combineWith(carRouteToDestinationTrainStation.get());
 
                             if (route == null || fastestRoute.getDuration() < route.getDuration()) {
                                 route = fastestRoute;
@@ -194,12 +193,12 @@ public class WayProvider {
         return Optional.empty();
     }
 
-    public Optional<Route> findCarWay(
+    public Optional<Route> findCarRoute(
             @NonNull Geo start,
             @NonNull Geo destination,
             @NonNull Date date,
             FuelType fuelType,
-            WayType wayType
+            RouteType routeType
     ) {
         List<Route> carRoutes = Lists.newArrayList();
 
@@ -211,7 +210,7 @@ public class WayProvider {
 
         Route route = null;
 
-        if (wayType.equals(WayType.CHEAPEST)) {
+        if (routeType.equals(RouteType.CHEAPEST)) {
             for(Route carRoute: carRoutes) {
                 if(route == null || carRoute.getPrice() < route.getPrice()) {
                     route = carRoute;

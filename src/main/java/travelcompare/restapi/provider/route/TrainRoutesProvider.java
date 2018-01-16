@@ -1,4 +1,4 @@
-package travelcompare.restapi.provider.way;
+package travelcompare.restapi.provider.route;
 
 import com.google.common.collect.Lists;
 import com.google.maps.DirectionsApi;
@@ -6,7 +6,9 @@ import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.DateTime;
+import travelcompare.restapi.external.bahnprice.BahnPriceConsumer;
 import travelcompare.restapi.external.google.GeoApiContextFactory;
 import travelcompare.restapi.provider.model.*;
 
@@ -14,10 +16,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public class TrainWaysProvider implements WaysProvider<TrainStation> {
+public class TrainRoutesProvider implements RoutesProvider<TrainStation> {
 
     @Override
-    public List<Route> find(TrainStation start, TrainStation destination, Date date) throws InterruptedException, ApiException, IOException {
+    public List<Route> find(TrainStation start, TrainStation destination, Date date) throws InterruptedException, ApiException, IOException, UnirestException {
         GeoApiContext context = GeoApiContextFactory.getBasicGeoApiContext();
 
 
@@ -47,10 +49,22 @@ public class TrainWaysProvider implements WaysProvider<TrainStation> {
                     routeStep.setDestination(new TrainStation(step.endLocation.lat, step.endLocation.lng));
                     routeStep.setDescription(step.htmlInstructions);
                     route.addStep(routeStep);
+                    route.setPrice(new BahnPriceConsumer().getBahnPrice(route.getDistance() + "", getType(step.htmlInstructions)));
                 }
             }
         }
         return resultList;
+    }
+
+    private String getType(String name) {
+        name = name.toLowerCase();
+        if (name.matches("commuter.*")) {
+            return "rx";
+        } else if (name.matches("high speed train.*")) {
+            return "ice";
+        } else {
+            return "ic";
+        }
     }
 
 }

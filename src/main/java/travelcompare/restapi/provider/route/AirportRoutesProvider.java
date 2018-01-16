@@ -1,4 +1,4 @@
-package travelcompare.restapi.provider.way;
+package travelcompare.restapi.provider.route;
 
 import com.google.common.collect.Lists;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -20,14 +20,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AirportWaysProvider implements WaysProvider<Airport> {
+public class AirportRoutesProvider implements RoutesProvider<Airport> {
     private LufthansaConsumer consumer;
     private String startCodeOfSegmentBefore = null;
     private String destCodeOfSegmentBefore = null;
     private Airport startAirportBefore = null;
     private Airport destAirportBefore = null;
     
-    public AirportWaysProvider() {
+    public AirportRoutesProvider() {
         consumer = new LufthansaConsumer();
     }
 
