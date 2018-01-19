@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import travelcompare.restapi.api.RestURLs;
 import travelcompare.restapi.api.model.request.RouteType;
 import travelcompare.restapi.data.service.UserService;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@RestController
 public class RouteController {
 
     @Autowired
@@ -35,7 +37,7 @@ public class RouteController {
             @RequestParam(value = "fuel_type", required = false) String fuel_type,
             @RequestParam(value = "route_category", required = false) String route_category,
             Principal principal
-    ) {
+    ) throws Exception {
 
         RouteProvider routeProvider = new RouteProvider();
 
@@ -50,18 +52,22 @@ public class RouteController {
         if (radius != null) {
             rad = radius;
         }
-        if (fuel_type.equals("e10")) {
+
+        if (fuel_type == null) {
+            fuelType = FuelType.ALL;
+        } else if (fuel_type.equals("e10")) {
             fuelType = FuelType.E10;
         } else if (fuel_type.equals("e5")) {
             fuelType = FuelType.E5;
         } else if (fuel_type.equals("diesel")) {
             fuelType = FuelType.DIESEL;
         }
-        if (route_category.equals("cheapest")) {
+
+        if (route_category == null) {
+            routeType = RouteType.FASTEST;
+        } else if (route_category.equals("cheapest")) {
             routeType = RouteType.CHEAPEST;
         }
-
-
 
         Geo start = new Geo(start_lat, start_lon);
         Geo dest = new Geo(dest_lat, dest_lon);
@@ -79,11 +85,11 @@ public class RouteController {
             return ResponseEntity.ok(routeProvider.find(start, dest, rad, formatted_date, fuelType, routeType).get());
         } catch (UnirestException | ApiException e) {
             return ResponseEntity.status(503).build();
-        } catch (IllegalArgumentException e) {
+        } /*catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
-        }
+        }*/
     }
 
 }
