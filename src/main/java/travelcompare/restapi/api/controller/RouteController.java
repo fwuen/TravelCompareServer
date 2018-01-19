@@ -80,12 +80,12 @@ public class RouteController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+    
         try {
             return ResponseEntity.ok(routeProvider.find(start, dest, rad, formatted_date, fuelType, routeType).get());
         } catch (UnirestException | ApiException e) {
             return ResponseEntity.status(503).build();
-        } /* catch (IllegalArgumentException e) {
+        }/* catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
