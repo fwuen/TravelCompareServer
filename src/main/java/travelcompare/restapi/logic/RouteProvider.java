@@ -9,7 +9,6 @@ import travelcompare.restapi.provider.model.*;
 import travelcompare.restapi.provider.perimeter.AirportPerimeterSearchProvider;
 import travelcompare.restapi.provider.perimeter.TrainPerimeterSearchProvider;
 import travelcompare.restapi.provider.route.AirportRoutesProvider;
-import travelcompare.restapi.provider.route.CarRoutesProvider;
 import travelcompare.restapi.provider.route.TrainRoutesProvider;
 import java.util.Date;
 import java.util.List;
