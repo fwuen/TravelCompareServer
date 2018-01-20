@@ -51,7 +51,7 @@ public class TrainRoutesProvider implements RoutesProvider<TrainStation> {
                     routeStep.setDistance(step.distance.inMeters);
                     routeStep.setDescription(step.htmlInstructions);
                     route.addStep(routeStep);
-                    price+=new BahnPriceConsumer().getBahnPrice(step.distance + "", getType(step.htmlInstructions));
+                    price+=new BahnPriceConsumer().getBahnPrice((step.distance.inMeters/1000) + "", getType(step.htmlInstructions));
                 }
             }
             route.setPrice(price);

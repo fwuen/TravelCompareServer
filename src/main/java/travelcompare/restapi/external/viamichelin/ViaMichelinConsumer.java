@@ -61,7 +61,7 @@ public class ViaMichelinConsumer extends Consumer {
         }
         HttpResponse httpResponse = Unirest.get(url +
                 ".xml/deu?steps=" + startCoordinates + ";" + endCoordinates
-                + ititString + fuelCost +
+                + ititString + fuelCost +  dateString +
                 "&authkey=" + ViaMichelinConstants.API_KEY).asString();
 
         JSONObject response = XML.toJSONObject(httpResponse.getBody().toString());

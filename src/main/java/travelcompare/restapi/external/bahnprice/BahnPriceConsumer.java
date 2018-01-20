@@ -16,6 +16,6 @@ public class BahnPriceConsumer extends Consumer {
         String price = Unirest.get(getBaseURL() + "price").
                 queryString("distance", distance).
                 queryString("type", type).asString().getBody();
-        return 50.0;
+        return Double.parseDouble(price);
     }
 }
