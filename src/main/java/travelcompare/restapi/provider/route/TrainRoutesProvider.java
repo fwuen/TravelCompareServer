@@ -39,6 +39,7 @@ public class TrainRoutesProvider implements RoutesProvider<TrainStation> {
                 requestResult.routes) {
             Route route = new Route(Transport.TRAIN);
             resultList.add(route);
+            double price = 0;
             for (DirectionsStep step :
                     googleRoute.legs[0].steps) {
                 Step routeStep = new Step();
@@ -47,11 +48,13 @@ public class TrainRoutesProvider implements RoutesProvider<TrainStation> {
                     routeStep.setDuration(step.duration.inSeconds/60);
                     routeStep.setStart(new Geo(step.startLocation.lat, step.startLocation.lng));
                     routeStep.setDestination(new TrainStation(step.endLocation.lat, step.endLocation.lng));
+                    routeStep.setDistance(step.distance.inMeters);
                     routeStep.setDescription(step.htmlInstructions);
                     route.addStep(routeStep);
-                    route.setPrice(new BahnPriceConsumer().getBahnPrice(route.getDistance() + "", getType(step.htmlInstructions)));
+                    price+=new BahnPriceConsumer().getBahnPrice((step.distance.inMeters/1000) + "", getType(step.htmlInstructions));
                 }
             }
+            route.setPrice(price);
         }
         return resultList;
     }
@@ -59,11 +62,11 @@ public class TrainRoutesProvider implements RoutesProvider<TrainStation> {
     private String getType(String name) {
         name = name.toLowerCase();
         if (name.matches("commuter.*")) {
-            return "rx";
+            return "RX";
         } else if (name.matches("high speed train.*")) {
-            return "ice";
+            return "ICE";
         } else {
-            return "ic";
+            return "IC";
         }
     }
 

@@ -42,7 +42,7 @@ public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<A
         return results;
     }
     
-    public List<Airport> findByLh(Geo geoPosition, boolean isDestination) throws Exception {
+    public List<Airport> findByLh(Geo geoPosition) throws Exception {
         LufthansaConsumer consumer = new LufthansaConsumer();
         NearestAirportResponse response = consumer.consumeNearestAirport("" + geoPosition.getLat(), "" + geoPosition.getLon());
         List<Airport> airports = Lists.newArrayList();
@@ -53,12 +53,10 @@ public class AirportPerimeterSearchProvider implements PerimeterSearchProvider<A
             newAirport.setName(airport.getNames().getNames().get(0).getName());
             airports.add(newAirport);
         }
-
-        if (isDestination) {
-            Airport airport = airports.get(0);
-            airports = new ArrayList<>();
-            airports.add(airport);
-        }
+        
+        Airport airport = airports.get(0);
+        airports = Lists.newArrayList();
+        airports.add(airport);
 
         return airports;
     }
