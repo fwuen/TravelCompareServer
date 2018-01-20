@@ -99,6 +99,7 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
                         start = new Airport(response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLatitude(), response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLongitude());
                         start.setIdentifier(segment.getDeparture().getAirportCode());
                         start.setName(segment.getDeparture().getAirportCode());
+                        airports.add(start);
                     }
                     
                     if(destination == null) {
@@ -106,6 +107,7 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
                         destination = new Airport(response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLatitude(), response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLongitude());
                         destination.setIdentifier(segment.getArrival().getAirportCode());
                         destination.setName(segment.getArrival().getAirportCode());
+                        airports.add(destination);
                     }
                     /*
                     Airport start;
