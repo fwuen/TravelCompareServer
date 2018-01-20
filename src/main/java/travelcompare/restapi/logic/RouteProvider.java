@@ -9,10 +9,12 @@ import travelcompare.restapi.provider.model.*;
 import travelcompare.restapi.provider.perimeter.AirportPerimeterSearchProvider;
 import travelcompare.restapi.provider.perimeter.TrainPerimeterSearchProvider;
 import travelcompare.restapi.provider.route.AirportRoutesProvider;
+import travelcompare.restapi.provider.route.CarRoutesProvider;
 import travelcompare.restapi.provider.route.TrainRoutesProvider;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 
 @SuppressWarnings("Duplicates")
 public class RouteProvider {
@@ -92,6 +94,10 @@ public class RouteProvider {
 
         List<Airport> destinationAirports = airportPerimeterSearchProvider.findByLh(destination);
 
+        if (startAirports.get(0).equals(destinationAirports.get(0))) {
+            return Optional.empty();
+        }
+
         Route route = null;
 
         for(Airport startAirport : startAirports) {
@@ -129,6 +135,7 @@ public class RouteProvider {
         }
 
         if(route != null) {
+            route.setTransport(Transport.AIRCRAFT);
             return Optional.of(route);
         }
 
@@ -175,7 +182,6 @@ public class RouteProvider {
 
                         if(carRouteToStartTrainStation.isPresent() && carRouteToDestinationTrainStation.isPresent()) {
                             Route fastestRoute = carRouteToStartTrainStation.get().combineWith(routeFromStartTrainStationToDestinationTrainStation).combineWith(carRouteToDestinationTrainStation.get());
-
                             if (route == null || fastestRoute.getDuration() < route.getDuration()) {
                                 route = fastestRoute;
                             }
@@ -186,6 +192,7 @@ public class RouteProvider {
         }
 
         if(route != null) {
+            route.setTransport(Transport.TRAIN);
             return Optional.of(route);
         }
 
