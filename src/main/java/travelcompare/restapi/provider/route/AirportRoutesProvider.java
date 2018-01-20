@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,11 +27,12 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
     private String destCodeOfSegmentBefore = null;
     private Airport startAirportBefore = null;
     private Airport destAirportBefore = null;
+    private List<Airport> airports = Lists.newArrayList();
     
     public AirportRoutesProvider() {
         consumer = new LufthansaConsumer();
     }
-
+    
     @Override
     public List<Route> find(Airport start, Airport destination, Date date) {
         AllFaresResponse allFares;
@@ -39,29 +41,29 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
         } catch (UnirestException e) {
             return Lists.newArrayList();
         }
-    
+        
         List<Route> routes = Lists.newArrayList();
         try {
             routes = buildRoutesFromResponse(allFares);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+        
         return routes;
     }
-
+    
     private AllFaresResponse getFaresFromStartToDestinationOnDate(Airport start, Airport destination, Date date) throws UnirestException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+        
         String formatted_date = dateFormat.format(date);
-
+        
         return consumer.consumeAllFares("EW", start.getIdentifier(), destination.getIdentifier(), formatted_date);
     }
     
     private List<Route> buildRoutesFromResponse(AllFaresResponse response) throws UnirestException, ParseException {
         List<Route> routes = Lists.newArrayList();
         
-        for(AirlineOffer offer : response.getFaresResponse().getAirShoppingResponse().getOffersGroup().getAirlineOffers().getAirlineOfferList()) {
+        for (AirlineOffer offer : response.getFaresResponse().getAirShoppingResponse().getOffersGroup().getAirlineOffers().getAirlineOfferList()) {
             Route newRouteForOffer = addStepsToRoute(offer.getTotalPrice().getDetailCurrencyPrice().getTotal().getValue(), offer.getPricedOffer().getAssociations().getApplicableFlight().getFlightSegmentReference(), response.getFaresResponse().getAirShoppingResponse().getDataLists().getFlightSegmentList().getFlightSegments());
             routes.add(newRouteForOffer);
         }
@@ -72,9 +74,40 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
     private Route addStepsToRoute(String price, List<FlightSegmentReference> references, List<FlightSegment> flightSegments) throws UnirestException, ParseException {
         Route route = new Route(Transport.AIRCRAFT);
         
-        for(FlightSegmentReference reference : references) {
-            for(FlightSegment segment : flightSegments) {
-                if(reference.getRef().equals(segment.getSegmentKey())) {
+        for (FlightSegmentReference reference : references) {
+            for (FlightSegment segment : flightSegments) {
+                if (reference.getRef().equals(segment.getSegmentKey())) {
+                    String airportCodeDeparture = segment.getDeparture().getAirportCode();
+                    String airportCodeDestination = segment.getArrival().getAirportCode();
+                    Airport start = null;
+                    Airport destination = null;
+                    
+                    for (Airport airport : airports) {
+                        if (airport.getIdentifier().equals(airportCodeDeparture)) {
+                            start = new Airport(airport.getLat(), airport.getLon());
+                            start.setIdentifier(airport.getIdentifier());
+                            start.setName(airport.getName());
+                        } else if (airport.getIdentifier().equals(airportCodeDestination)) {
+                            destination = new Airport(airport.getLat(), airport.getLon());
+                            destination.setIdentifier(airport.getIdentifier());
+                            destination.setName(airport.getName());
+                        }
+                    }
+                    
+                    if(start == null) {
+                        AirportsResponse response = consumer.consumeAirports(segment.getDeparture().getAirportCode());
+                        start = new Airport(response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLatitude(), response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLongitude());
+                        start.setIdentifier(segment.getDeparture().getAirportCode());
+                        start.setName(segment.getDeparture().getAirportCode());
+                    }
+                    
+                    if(destination == null) {
+                        AirportsResponse response = consumer.consumeAirports(segment.getArrival().getAirportCode());
+                        destination = new Airport(response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLatitude(), response.getAirportResource().getAirports().getAirport().get(0).getPosition().getCoordinate().getLongitude());
+                        destination.setIdentifier(segment.getArrival().getAirportCode());
+                        destination.setName(segment.getArrival().getAirportCode());
+                    }
+                    /*
                     Airport start;
                     if(startCodeOfSegmentBefore == null || !startCodeOfSegmentBefore.equals(segment.getDeparture().getAirportCode())) {
                         AirportsResponse response = consumer.consumeAirports(segment.getDeparture().getAirportCode());
@@ -98,7 +131,7 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
                         destination = new Airport(destAirportBefore.getLat(), destAirportBefore.getLon());
                         destination.setName(destAirportBefore.getName());
                         destination.setIdentifier(destAirportBefore.getIdentifier());
-                    }
+                    }*/
                     Step step = new Step();
                     step.setStart(start);
                     step.setDestination(destination);
@@ -107,10 +140,11 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
                     step.setDescription("Flug von " + start.getIdentifier() + " nach " + destination.getIdentifier() + " am " + segment.getDeparture().getDate() + " um " + segment.getDeparture().getTime());
                     route.addStep(step);
                     
+                    /*
                     startCodeOfSegmentBefore = segment.getDeparture().getAirportCode();
                     startAirportBefore = start;
                     destCodeOfSegmentBefore = segment.getArrival().getAirportCode();
-                    destAirportBefore = destination;
+                    destAirportBefore = destination;*/
                 }
             }
         }
@@ -129,5 +163,5 @@ public class AirportRoutesProvider implements RoutesProvider<Airport> {
         
         return TimeUnit.MILLISECONDS.toSeconds(diff) / 60;
     }
-
+    
 }
