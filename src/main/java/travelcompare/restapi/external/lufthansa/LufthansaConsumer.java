@@ -74,8 +74,14 @@ public class LufthansaConsumer extends Consumer {
                 asObject(LowestFaresResponse.class).
                 getBody();
     }
-
+    
+    //Thread.sleep()-Aufruf, da ansonsten das sehr restriktive Request-Limit der LH überschritten wird
     public AirportsResponse consumeAirports(String airportCode) throws UnirestException {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            //continue method
+        }
         if(!publicStillAuthenticated()) authenticate(false);
         return Unirest.get(getBaseURL() + "references/airports/" + airportCode).
                 header("Authorization", tokenType + " " + publicAccessToken).
