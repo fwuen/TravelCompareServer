@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         HttpMethod.POST, RestURLs.USER_REGISTER, RestURLs.OAUTH
                 ).permitAll()
                 .antMatchers(
-                        HttpMethod.GET, RestURLs.USER_GET, "/test"
+                        HttpMethod.GET, RestURLs.USER_GET, RestURLs.ROUTE_FIND
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()

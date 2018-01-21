@@ -36,15 +36,10 @@ public class RouteController {
             @RequestParam("date") String date,
             @RequestParam(value = "radius", required = false) Integer radius,
             @RequestParam(value = "fuel_type", required = false) String fuel_type,
-            @RequestParam(value = "route_category", required = false) String route_category,
-            Principal principal
+            @RequestParam(value = "route_category", required = false) String route_category
     ) throws Exception {
 
         RouteProvider routeProvider = new RouteProvider();
-
-        if (!userService.userExistsByEmail(principal.getName())) {
-            return ResponseEntity.status(401).build();
-        }
 
         FuelType fuelType = FuelType.ALL;
         int rad = 50000;
