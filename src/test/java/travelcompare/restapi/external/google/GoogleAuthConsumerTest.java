@@ -26,11 +26,4 @@ public class GoogleAuthConsumerTest {
         GoogleTokenResponse response = new GoogleAuthConsumer().redeemAuthToken(GoogleAuthConstants.AUTH_TOKEN, GoogleAuthConstants.CLIENT_ID, "http://localhost:8081");
         System.out.print(response.getRefreshToken());
     }
-
-    @Ignore
-    @Test
-    public void TestGetNewAccessToken() throws IOException, GeneralSecurityException, UnirestException {
-        String accessToken = new GoogleAuthConsumer().refreshAccessToken(GoogleAuthConstants.TEST_REFRESH_TOKEN);
-        System.out.print(accessToken);
     }
-}

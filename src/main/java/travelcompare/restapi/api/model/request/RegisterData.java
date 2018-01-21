@@ -3,7 +3,6 @@ package travelcompare.restapi.api.model.request;
 import lombok.*;
 import org.apache.commons.validator.routines.EmailValidator;
 import travelcompare.restapi.api.configuration.ValidationConfiguration;
-import travelcompare.restapi.provider.model.Geo;
 
 
 @Getter

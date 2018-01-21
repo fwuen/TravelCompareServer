@@ -4,11 +4,11 @@ import com.google.common.base.Preconditions;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import travelcompare.restapi.api.model.request.Validation;
 import travelcompare.restapi.api.model.request.RouteInfoData;
+import travelcompare.restapi.api.model.request.Validation;
 import travelcompare.restapi.data.model.RouteInfo;
-import travelcompare.restapi.data.repository.UserRepository;
 import travelcompare.restapi.data.repository.RouteInfoRepository;
+import travelcompare.restapi.data.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

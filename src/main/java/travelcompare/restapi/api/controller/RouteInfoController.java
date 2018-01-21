@@ -6,21 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
 import travelcompare.restapi.api.model.request.RouteInfoData;
-import travelcompare.restapi.api.model.request.RouteType;
 import travelcompare.restapi.data.model.RouteInfo;
 import travelcompare.restapi.data.model.User;
-import travelcompare.restapi.data.service.UserService;
 import travelcompare.restapi.data.service.RouteInfoService;
-import travelcompare.restapi.external.tankerkoenig.response.FuelType;
-import travelcompare.restapi.logic.RouteProvider;
-import travelcompare.restapi.provider.model.Geo;
-import travelcompare.restapi.provider.model.Route;
+import travelcompare.restapi.data.service.UserService;
 
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

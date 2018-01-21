@@ -1,8 +1,6 @@
 package travelcompare.restapi.external.google.OAuth2;
 
-import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -40,7 +38,7 @@ public class GoogleAuthConsumer extends Consumer {
      * @throws GeneralSecurityException exception
      * @throws UnirestException         exception
      */
-    public GoogleAuthResponse getUserInfo(String accessToken) throws IOException, GeneralSecurityException, UnirestException {
+    public GoogleAuthResponse getUserInfo(String accessToken) throws UnirestException {
         HttpResponse httpResponse = Unirest.get(getBaseURL() + GoogleAuthConstants.USERINFO_URL).
                 header("Authorization", GoogleAuthConstants.TOKEN_TYPE + " " + accessToken).
                 header("Content-length", "0").
@@ -71,37 +69,5 @@ public class GoogleAuthConsumer extends Consumer {
                 authCode,
                 redirectUri)  // Specify the same redirect URI that you use with your web app
                 .execute();
-    }
-
-    /**
-     * Refreshen des AccessTokens durch den gespeicherten RefreshToken
-     *
-     * @param refreshToken String
-     * @return String
-     */
-    public String refreshAccessToken(String refreshToken) throws UnirestException, IOException, GeneralSecurityException {
-
-        GoogleCredential credential = createCredentialWithRefreshToken(new NetHttpTransport(), new JacksonFactory(), new TokenResponse().setRefreshToken(refreshToken));
-        credential.refreshToken();
-
-        return credential.getAccessToken();
-    }
-
-
-    /**
-     * Erstellen der GoogleCredentials anhand des gespeicherten RefreshTokens
-     *
-     * @param transport     NetHttptTransport
-     * @param jsonFactory   JacksonFactory
-     * @param tokenResponse TokenResponse
-     * @return GoogleCredential
-     */
-    private GoogleCredential createCredentialWithRefreshToken(NetHttpTransport transport,
-                                                              JacksonFactory jsonFactory, TokenResponse tokenResponse) {
-        return new GoogleCredential.Builder().setTransport(transport)
-                .setJsonFactory(jsonFactory)
-                .setClientSecrets(GoogleAuthConstants.CLIENT_ID, GoogleAuthConstants.SECRET)
-                .build()
-                .setFromTokenResponse(tokenResponse);
     }
 }

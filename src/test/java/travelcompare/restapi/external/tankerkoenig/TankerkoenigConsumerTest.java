@@ -1,7 +1,6 @@
 package travelcompare.restapi.external.tankerkoenig;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import travelcompare.restapi.SpringTest;
 import travelcompare.restapi.external.tankerkoenig.response.FuelType;
