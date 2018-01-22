@@ -2,6 +2,7 @@ package travelcompare.restapi.api.controller;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
@@ -14,6 +15,7 @@ import travelcompare.restapi.data.service.UserService;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 //TODO: nochmal über Statuscodes schauen
 @RestController
@@ -70,9 +72,7 @@ public class RouteInfoController {
         if (!routeInfoOptional.isPresent())
             return ResponseEntity.status(404).build();
 
-        return ResponseEntity.ok(
-                routeInfoOptional.get()
-        );
+        return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(routeInfoOptional.get());
     }
 
     @GetMapping(RestURLs.ROUTE_INFOS_GET)
@@ -102,9 +102,7 @@ public class RouteInfoController {
             finalRouteInfos.add(routeInfo.get());
         }
 
-        return ResponseEntity.ok(
-                finalRouteInfos
-        );
+        return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(finalRouteInfos);
     }
 
     @DeleteMapping(RestURLs.ROUTE_INFO_DELETE)

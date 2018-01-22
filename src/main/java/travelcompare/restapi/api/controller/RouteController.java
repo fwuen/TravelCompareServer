@@ -3,6 +3,7 @@ package travelcompare.restapi.api.controller;
 import com.google.maps.errors.ApiException;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class RouteController {
@@ -78,7 +80,9 @@ public class RouteController {
         }
     
         try {
-            return ResponseEntity.ok(routeProvider.find(start, dest, rad, formatted_date, fuelType, routeType).get());
+            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(
+                    routeProvider.find(start, dest, rad, formatted_date, fuelType, routeType).get()
+            );
         } catch (UnirestException | ApiException e) {
             return ResponseEntity.status(503).build();
         } catch (IllegalArgumentException e) {
