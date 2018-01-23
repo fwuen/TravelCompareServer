@@ -1,6 +1,7 @@
 package travelcompare.restapi.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
@@ -11,6 +12,7 @@ import travelcompare.restapi.data.service.UserService;
 
 import java.security.Principal;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class UserController {
@@ -44,7 +46,7 @@ public class UserController {
         if(!userOptional.isPresent())
             return ResponseEntity.status(404).build();
 
-        return ResponseEntity.ok(userOptional.get());
+        return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(userOptional.get());
     }
 
     @PutMapping(RestURLs.USER_PUT)

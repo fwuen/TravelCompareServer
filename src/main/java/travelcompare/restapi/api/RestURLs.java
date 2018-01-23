@@ -10,11 +10,11 @@ public class RestURLs {
 
     public static final String OAUTH = "/user/oauth";
 
-    public static final String ROUTE_INFO_POST = "/route";
-    public static final String ROUTE_INFO_PUT = "/route";
-    public static final String ROUTE_INFO_DELETE = "/route/{id}";
-    public static final String ROUTE_INFO_GET = "/route/{id}";
-    public static final String ROUTE_INFOS_GET = "/routes";
+    public static final String ROUTE_INFO_POST = "/route_info";
+    public static final String ROUTE_INFO_PUT = "/route_info";
+    public static final String ROUTE_INFO_DELETE = "/route_info/{id}";
+    public static final String ROUTE_INFO_GET = "/route_info/{id}";
+    public static final String ROUTE_INFOS_GET = "/route_infos";
 
-    public static final String ROUTE_FIND = "/route/find";
+    public static final String ROUTE_FIND = "/route";
 }
