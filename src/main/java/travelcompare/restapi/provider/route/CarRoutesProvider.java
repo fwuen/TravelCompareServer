@@ -57,60 +57,6 @@ public class CarRoutesProvider implements RoutesProvider<Geo> {
         if (start == null || destination == null || date == null) {
             return null;
         }
-        List<Route> routes = new ArrayList<>();
-        Route route = findCheapest(start, destination, date, fuelType);
-        if (route != null) {
-            routes.add(route);
-        }
-        route = findFastest(start, destination, date, fuelType);
-        if (route != null) {
-            routes.add(route);
-        }
-
-        return routes;
-    }
-
-    /**
-     * Suchen der günstigsten Route
-     *
-     * @param start       Start-Koordinaten
-     * @param destination Ziel-Koordinaten
-     * @param date        Tag
-     * @param fuelType    Art des Kraftstoffes
-     * @return List<Route>
-     */
-    private Route findCheapest(Geo start, Geo destination, Date date, FuelType fuelType) {
-        return findRoute(4, start, destination, date, fuelType);
-
-    }
-
-    /**
-     * Suchen der schnellsten Route
-     *
-     * @param start       Start-Koordinaten
-     * @param destination Ziel-Koordinaten
-     * @param date        Tag
-     * @param fuelType    Art des Kraftstoffes
-     * @return List<Route>
-     */
-    private Route findFastest(Geo start, Geo destination, Date date, FuelType fuelType) {
-        return findRoute(1, start, destination, date, fuelType);
-
-    }
-
-    /**
-     * Ansprechen der Tankerkönig Api für Spritpreise und der Via Michelin Api um eine Autoroute zu erhalten
-     *
-     * @param itit        Art wie Michelin die Abfrage behandeln soll(schnellste oder günstigste Route)
-     * @param start       Start-Koordinaten
-     * @param destination Ziel-Koordinaten
-     * @param date        Tag
-     * @param fuelType    Art des Kraftstoffes
-     * @return List<Route>
-     */
-    private Route findRoute(int itit, Geo start, Geo destination, Date date, FuelType fuelType) {
-        Route route = new Route(Transport.CAR);
-
         TankerkoenigConsumer consumer = new TankerkoenigConsumer();
         consumer.withFuelType(fuelType);
         if (!FuelType.ALL.equals(fuelType)) {
@@ -127,9 +73,62 @@ public class CarRoutesProvider implements RoutesProvider<Geo> {
             // Ignorieren und Standardwert nehmen
         }
 
+        List<Route> routes = new ArrayList<>();
+        Route route = findCheapest(start, destination, date, fuelCost);
+        if (route != null) {
+            routes.add(route);
+        }
+        route = findFastest(start, destination, date, fuelCost);
+        if (route != null) {
+            routes.add(route);
+        }
+
+        return routes;
+    }
+
+    /**
+     * Suchen der günstigsten Route
+     *
+     * @param start       Start-Koordinaten
+     * @param destination Ziel-Koordinaten
+     * @param date        Tag
+     * @param fuelCost    Kosten des Kraftstoffes für einen Liter
+     * @return List<Route>
+     */
+    private Route findCheapest(Geo start, Geo destination, Date date, double fuelCost) {
+        return findRoute(4, start, destination, date, fuelCost);
+
+    }
+
+    /**
+     * Suchen der schnellsten Route
+     *
+     * @param start       Start-Koordinaten
+     * @param destination Ziel-Koordinaten
+     * @param date        Tag
+     * @param fuelCost    Kosten des Kraftstoffes für einen Liter
+     * @return List<Route>
+     */
+    private Route findFastest(Geo start, Geo destination, Date date, double fuelCost) {
+        return findRoute(1, start, destination, date, fuelCost);
+
+    }
+
+    /**
+     * Ansprechen der Tankerkönig Api für Spritpreise und der Via Michelin Api um eine Autoroute zu erhalten
+     *
+     * @param itit        Art wie Michelin die Abfrage behandeln soll(schnellste oder günstigste Route)
+     * @param start       Start-Koordinaten
+     * @param destination Ziel-Koordinaten
+     * @param date        Tag
+     * @param fuelCost    Kosten des Kraftstoffes für einen Liter
+     * @return List<Route>
+     */
+    private Route findRoute(int itit, Geo start, Geo destination, Date date, double fuelCost) {
+        Route route = new Route(Transport.CAR);
         RouteResponse response;
         try {
-            response = new ViaMichelinConsumer().getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, date);
+            response = consumer.getRoute(start.getLon(), start.getLat(), destination.getLon(), destination.getLat(), itit, fuelCost, date);
             if (response == null
                     || response.getIti() == null
                     || response.getIti().getRoadSheet() == null
