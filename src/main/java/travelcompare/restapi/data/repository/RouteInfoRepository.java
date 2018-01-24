@@ -12,5 +12,5 @@ public interface RouteInfoRepository extends CrudRepository<RouteInfo, Long> {
     Optional<RouteInfo> findFirstByIdEquals(long id);
     //TODO remove geht so noch nicht wahrscheinlich
     void removeAllById(long id);
-    List<Optional<RouteInfo>> findAllByCreatorId(long creatorId);
+    List<RouteInfo> findAllByCreatorId(long creatorId);
 }

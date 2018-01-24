@@ -12,7 +12,9 @@ import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.service.RouteInfoService;
 import travelcompare.restapi.data.service.UserService;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -87,24 +89,17 @@ public class RouteInfoController {
         if (!loggedInUser.isPresent())
             return ResponseEntity.status(403).build();
 
-        List<Optional<RouteInfo>> routeInfos = routeInfoService.getRouteInfosByCreatorId(loggedInUser.get().getId());
+        List<RouteInfo> routeInfos = routeInfoService.getRouteInfosByCreatorId(loggedInUser.get().getId());
 
         if (!(routeInfos.size() > 0))
             return ResponseEntity.status(404).build();
 
-        for (Optional<RouteInfo> routeInfo : routeInfos) {
-            if (!routeInfo.isPresent())
-                return ResponseEntity.status(404).build();
-        }
 
-        List<RouteInfo> finalRouteInfos = Lists.newArrayList();
-        for (Optional<RouteInfo> routeInfo : routeInfos) {
-            finalRouteInfos.add(routeInfo.get());
-        }
 
-        return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(finalRouteInfos);
+        return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS)).body(routeInfos);
     }
 
+    @Transactional
     @DeleteMapping(RestURLs.ROUTE_INFO_DELETE)
     public ResponseEntity<Void> delete(
             @PathVariable("id") long id,
