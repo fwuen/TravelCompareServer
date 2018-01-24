@@ -28,7 +28,7 @@ public class RouteInfoService {
         return repository.findFirstByIdEquals(id);
     }
 
-    public List<Optional<RouteInfo>> getRouteInfosByCreatorId(long creatorId) {
+    public List<RouteInfo> getRouteInfosByCreatorId(long creatorId) {
         Preconditions.checkArgument(creatorId > 0);
 
         return repository.findAllByCreatorId(creatorId);
