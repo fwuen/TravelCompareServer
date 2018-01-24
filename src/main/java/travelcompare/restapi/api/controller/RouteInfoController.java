@@ -47,7 +47,7 @@ public class RouteInfoController {
         data.setCreatorId(creatorId);
         RouteInfo routeInfo = routeInfoService.createRoute(data);
 
-        return ResponseEntity.ok(routeInfo);
+        return ResponseEntity.status(201).build();
     }
 
     @PutMapping(RestURLs.ROUTE_INFO_PUT)
