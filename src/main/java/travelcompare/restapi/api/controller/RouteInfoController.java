@@ -37,17 +37,12 @@ public class RouteInfoController {
         if (!data.valid().isValid())
             return ResponseEntity.status(400).build();
 
-        long creatorId;
-        if (userService.getUserByEmail(principal.getName()).isPresent()) {
-            creatorId = userService.getUserByEmail(principal.getName()).get().getId();
-        } else {
-            return ResponseEntity.status(401).build();
-        }
+        Optional<User> user = userService.getUserByEmail(principal.getName());
 
-        data.setCreatorId(creatorId);
-        RouteInfo routeInfo = routeInfoService.createRoute(data);
+        if(!user.isPresent() || user.get().getId() != data.getCreatorId())
+            return ResponseEntity.status(403).build();
 
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(201).body(routeInfoService.createRoute(data));
     }
 
     @PutMapping(RestURLs.ROUTE_INFO_PUT)
@@ -116,7 +111,7 @@ public class RouteInfoController {
         Optional<RouteInfo> routeInfoToDelete = routeInfoService.getRouteInfoById(id);
 
         if (!routeInfoToDelete.isPresent())
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(404).build();
 
         if (!(routeInfoToDelete.get().getCreatorId() == loggedInUser.get().getId()))
             return ResponseEntity.status(403).build();
