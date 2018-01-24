@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import travelcompare.restapi.api.model.request.RouteInfoData;
 import travelcompare.restapi.api.model.request.Validation;
 import travelcompare.restapi.data.model.RouteInfo;
 import travelcompare.restapi.data.repository.RouteInfoRepository;
@@ -34,7 +33,7 @@ public class RouteInfoService {
         return repository.findAllByCreatorId(creatorId);
     }
 
-    public RouteInfo createRoute(@NonNull RouteInfoData routeInfoData) {
+    public RouteInfo createRoute(@NonNull RouteInfo routeInfoData) {
         Validation validation = routeInfoData.valid();
 
         Preconditions.checkArgument(validation.isValid(), validation.getMessage());

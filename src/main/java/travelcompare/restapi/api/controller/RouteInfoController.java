@@ -1,12 +1,10 @@
 package travelcompare.restapi.api.controller;
 
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travelcompare.restapi.api.RestURLs;
-import travelcompare.restapi.api.model.request.RouteInfoData;
 import travelcompare.restapi.data.model.RouteInfo;
 import travelcompare.restapi.data.model.User;
 import travelcompare.restapi.data.service.RouteInfoService;
@@ -14,7 +12,6 @@ import travelcompare.restapi.data.service.UserService;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +28,7 @@ public class RouteInfoController {
 
     @PostMapping(RestURLs.ROUTE_INFO_POST)
     public ResponseEntity<RouteInfo> post(
-            @RequestBody RouteInfoData data,
+            @RequestBody RouteInfo data,
             Principal principal
     ) {
         if (!data.valid().isValid())
